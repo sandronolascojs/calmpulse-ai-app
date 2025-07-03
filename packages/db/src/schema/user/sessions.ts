@@ -13,3 +13,4 @@ userId: text('user_id').notNull().references(()=> users.id, { onDelete: 'cascade
 createdAt: createdAtField,
 updatedAt: updatedAtField
 });
+

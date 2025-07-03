@@ -19,11 +19,8 @@ export const workspaces = pgTable('workspaces', {
   updatedAt: updatedAtField
 });
 
-export const workspaceRelations = relations(workspaces, ({ one, many }) => ({
-  workspaceTokens: one(workspaceTokens, {
-    fields: [workspaces.workspaceId],
-    references: [workspaceTokens.workspaceId],
-  }),
+export const workspaceRelations = relations(workspaces, ({ many }) => ({
+  workspaceTokens: many(workspaceTokens),
   workspaceMembers: many(workspaceMembers)
 }));
 
