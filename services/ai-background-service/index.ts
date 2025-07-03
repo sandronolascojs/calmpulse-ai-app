@@ -1,4 +1,3 @@
-
 import { fastifySchedule } from '@fastify/schedule';
 import fastify from 'fastify';
 import { env } from './src/config/env.config';
@@ -6,9 +5,7 @@ import { env } from './src/config/env.config';
 const server = fastify();
 server.register(fastifySchedule);
 
-server.ready().then(async () => {
- 
-});
+server.ready().then(async () => {});
 
 server.get('/health', () => {
   return {

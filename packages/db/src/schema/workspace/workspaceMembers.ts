@@ -1,21 +1,25 @@
-import { index, pgTable, text } from "drizzle-orm/pg-core";
-import { workspaces } from "./workspaces";
-import { generateIdField } from "../utils/id";
-import { createdAtField, updatedAtField } from "../utils/timestamp";
-import { relations } from "drizzle-orm";
+import { relations } from 'drizzle-orm';
+import { index, pgTable, text } from 'drizzle-orm/pg-core';
+import { generateIdField } from '../utils/id';
+import { createdAtField, updatedAtField } from '../utils/timestamp';
+import { workspaces } from './workspaces';
 
-export const workspaceMembers = pgTable("workspace_members", {
-  workspaceMemberId: generateIdField({ name: "workspace_member_id" }),
-  workspaceId: text("workspace_id").notNull().references(() => workspaces.workspaceId),
-  name: text("name").notNull(),
-  email: text("email").notNull(),
-  title: text("title"),
-  avatarUrl: text("avatar_url"),
-  createdAt: createdAtField,
-  updatedAt: updatedAtField,
-}, (table) => [
-  index('workspace_member_workspace_id_idx').on(table.workspaceId),
-]);
+export const workspaceMembers = pgTable(
+  'workspace_members',
+  {
+    workspaceMemberId: generateIdField({ name: 'workspace_member_id' }),
+    workspaceId: text('workspace_id')
+      .notNull()
+      .references(() => workspaces.workspaceId),
+    name: text('name').notNull(),
+    email: text('email').notNull(),
+    title: text('title'),
+    avatarUrl: text('avatar_url'),
+    createdAt: createdAtField,
+    updatedAt: updatedAtField,
+  },
+  (table) => [index('workspace_member_workspace_id_idx').on(table.workspaceId)],
+);
 
 export const workspaceMemberRelations = relations(workspaceMembers, ({ one }) => ({
   workspace: one(workspaces, {
