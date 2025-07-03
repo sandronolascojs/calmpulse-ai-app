@@ -1,0 +1,30 @@
+{
+  "name": "@calmpulse-app/config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --config ./.prettierrc --write --ignore-path .gitignore ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "prettier-package-json": "^2.8.0",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "eslint": "catalog:",
+    "eslint-config-next": "15.3.2",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "prettier": "catalog:",
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss": "catalog:",
+    "tw-animate-css": "^1.3.0",
+    "typescript": "catalog:"
+  }
+}

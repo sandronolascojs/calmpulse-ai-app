@@ -1,0 +1,36 @@
+{
+  "dependencies": {
+    "turbo": "^2.5.3"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "eslint . --ext .js,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
+    "watch": "turbo watch dev",
+    "format": "prettier --write --ignore-path .gitignore --config packages/config/.prettierrc .",
+    "typecheck": "pnpm -r --if-present run typecheck",
+    "prepare": "husky install"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "services/*"
+  ],
+  "packageManager": "pnpm@10.11.0",
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "eslint": "^9.27.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^16.0.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx,jsx,json,css,md,yaml,yml}": [
+      "pnpm format"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@calmpulse-app/utils",
+  "author": "Blocks AI",
+  "version": "1.0.0",
+  "description": "Utils for the project",
+  "main": "index.ts",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch index.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "echo 'build'",
+    "lint": "eslint . --ext .ts,.tsx --config ../config/.eslintrc.base.js",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix --config ../config/.eslintrc.base.js",
+    "format": "prettier --config ../config/.prettierrc --write --ignore-path .gitignore . && prettier-package-json --write ./package.json"
+  },
+  "dependencies": {
+    "zod": "catalog:",
+    "@calmpulse-app/config": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "tsx": "catalog:",
+    "prettier": "catalog:",
+    "eslint": "catalog:",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "prettier-package-json": "^2.8.0",
+    "pino": "catalog:",
+    "pino-pretty": "catalog:"
+  }
+}

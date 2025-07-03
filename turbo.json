@@ -1,0 +1,21 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build", "typecheck", "format"],
+      "outputs": ["dist/**", "build/**", ".next/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "interruptible": true,
+      "outputs": ["dist/**", "build/**", ".next/**"]
+    },
+    "typecheck": { "outputs": [] },
+    "format": { "outputs": [] }
+  },
+  "globalDependencies": [],
+  "concurrency": "10",
+  "globalEnv": [],
+  "ui": "tui"
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@calmpulse-app/types",
+  "version": "1.0.0",
+  "description": "Types for the Mentor Glide AI project (schemas, etc.)",
+  "main": "index.ts",
+  "author": "Mentor Glide AI",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsx watch index.ts",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write --ignore-path .gitignore --config ../config/.prettierrc . && prettier-package-json --write ./package.json",
+    "lint": "eslint . --ext .ts,.tsx --config ../config/.eslintrc.base.js",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix --config ../config/.eslintrc.base.js"
+  },
+  "dependencies": {
+    "zod": "catalog:",
+    "tsx": "catalog:",
+    "@calmpulse-app/utils": "workspace:*",
+    "@calmpulse-app/config": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "prettier": "catalog:",
+    "eslint": "catalog:",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "prettier-package-json": "^2.8.0"
+  }
+}
