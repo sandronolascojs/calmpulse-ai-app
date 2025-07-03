@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
++set -euo pipefail
 
-pnpx lint-staged
-pnpm lint:fix
+pnpm lint:fix          # fix whole repo first
+git add -u             # restage possible fixes
+pnpx lint-staged       # run staged-only checks
 pnpm typecheck
