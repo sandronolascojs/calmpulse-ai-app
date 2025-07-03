@@ -1,8 +1,8 @@
-import { index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { workspaceMembers } from "../workspace";
-import { createdAtField } from "../utils/timestamp";
-import { generateIdField } from "../utils/id";
-import { relations } from "drizzle-orm";
+import { relations } from 'drizzle-orm';
+import { index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { generateIdField } from '../utils/id';
+import { createdAtField } from '../utils/timestamp';
+import { workspaceMembers } from '../workspace';
 
 /**
  * Temporary storage for raw Slack events, purged daily
@@ -22,7 +22,7 @@ export const slackTemporalRawEvents = pgTable(
   (table) => [
     index('slack_event_id_idx').on(table.slackEventId),
     index('workspace_member_id_idx').on(table.workspaceMemberId),
-  ]
+  ],
 );
 
 export const slackTemporalRawEventsRelations = relations(slackTemporalRawEvents, ({ one }) => ({

@@ -1,4 +1,4 @@
 export enum WorkspaceExternalProviderType {
-  Slack = "Slack",
-  MicrosoftTeams = "Microsoft Teams",
+  Slack = 'Slack',
+  MicrosoftTeams = 'Microsoft Teams',
 }

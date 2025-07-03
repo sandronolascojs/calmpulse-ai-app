@@ -1,11 +1,10 @@
-import { betterAuth } from "better-auth";
-import { db } from "@calmpulse-app/db";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { users, accounts, sessions, verifications } from "@calmpulse-app/db/src/schema";
-import { env } from "./config/env.config";
+import { db } from '@calmpulse-app/db';
+import { accounts, sessions, users, verifications } from '@calmpulse-app/db/src/schema';
+import { betterAuth } from 'better-auth';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+import { env } from './config/env.config';
 
-export interface CreateAuthOptions {
-}
+export interface CreateAuthOptions {}
 
 export const createAuth = (_options?: CreateAuthOptions) =>
   betterAuth({

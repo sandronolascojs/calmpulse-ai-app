@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 import { env } from './src/config/env.config';
 import * as schema from './src/schema';
-import { Pool } from 'pg';
 
 const MAX_POOL_CONNECTIONS = 30;
 const IDLE_TIMEOUT = 10000;

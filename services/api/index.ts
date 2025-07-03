@@ -2,23 +2,19 @@ import { errorHandlerPlugin } from '@/plugins/errorHandler.plugin';
 import { requestHandlerPlugin } from '@/plugins/requestHandler.plugin';
 import cors from '@fastify/cors';
 //import { initServer } from '@ts-rest/fastify';
+import { logger } from '@/utils/logger.instance';
 import fastify from 'fastify';
 import { env } from './src/config/env.config';
-import { logger } from '@/utils/logger.instance';
 
 const server = fastify();
 //const tsRestServer = initServer();
 
 server.register(cors, {
   origin: env.ALLOWED_ORIGINS.split(',').map((origin) => origin.trim()),
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: [
-    "Content-Type",
-    "Authorization",
-    "X-Requested-With"
-  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: true,
-  maxAge: 86400
+  maxAge: 86400,
 });
 
 server.get('/health', () => {

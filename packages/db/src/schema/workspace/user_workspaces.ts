@@ -1,18 +1,22 @@
+import { UserRole } from '@calmpulse-app/types';
+import { relations } from 'drizzle-orm';
 import { pgEnum, pgTable, text } from 'drizzle-orm/pg-core';
 import { users } from '../user/users';
-import { UserRole } from '@calmpulse-app/types';
-import { workspaces } from './workspaces';
 import { createdAtField, updatedAtField } from '../utils/timestamp';
-import { relations } from 'drizzle-orm';
+import { workspaces } from './workspaces';
 
 const userRolesEnum = pgEnum('user_roles', [UserRole.OWNER, UserRole.USER]);
 
 export const userWorkspaces = pgTable('user_workspaces', {
-  userId: text('user_id').notNull().references(() => users.id),
-  workspaceId: text('workspace_id').notNull().references(() => workspaces.workspaceId),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id),
+  workspaceId: text('workspace_id')
+    .notNull()
+    .references(() => workspaces.workspaceId),
   role: userRolesEnum('role').notNull().default(UserRole.USER),
   createdAt: createdAtField,
-  updatedAt: updatedAtField
+  updatedAt: updatedAtField,
 });
 
 export const userWorkspaceRelations = relations(userWorkspaces, ({ one }) => ({
