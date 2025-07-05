@@ -1,10 +1,10 @@
 import { env } from '@/config/env.config';
 import type { AuthenticatedUser } from '@/plugins/auth.plugin';
 import { ConflictError } from '@/utils/errors/ConflictError';
-import { logger } from '@/utils/logger.instance';
-import { db } from '@calmpulse-app/db';
+import type { DB } from '@calmpulse-app/db';
 import { generateSlug } from '@calmpulse-app/shared';
 import { WorkspaceExternalProviderType } from '@calmpulse-app/types';
+import type { Logger } from '@calmpulse-app/utils';
 import crypto from 'node:crypto';
 import { SlackRepository } from '../repositories/slackRepository';
 import { SlackWebClientService } from './slackWebClient.service';
@@ -15,7 +15,7 @@ export class SlackService {
   private workspaceService: WorkspaceService;
   private slackWebClientService: SlackWebClientService;
 
-  constructor() {
+  constructor(db: DB, logger: Logger) {
     this.slackRepository = new SlackRepository(db, logger);
     this.workspaceService = new WorkspaceService(db, logger);
     this.slackWebClientService = new SlackWebClientService();
