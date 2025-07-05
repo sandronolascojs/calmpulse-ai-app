@@ -26,7 +26,10 @@ export async function registerAuthController(fastify: FastifyInstance) {
 
         reply.send(response.body ? await response.text() : null);
       } catch (error) {
-        logger.error('Better Auth Handler Error:', { error: JSON.stringify(error) });
+        logger.error('Better Auth Handler Error:', { 
+          error: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined 
+        });
         reply.status(500).send({
           error: 'Internal authentication error',
           code: 'AUTH_HANDLER_FAILURE',
