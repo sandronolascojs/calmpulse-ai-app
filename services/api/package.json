@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@calmpulse-app/ai": "workspace:*",
+    "@calmpulse-app/auth": "workspace:*",
     "@calmpulse-app/config": "workspace:*",
     "@calmpulse-app/db": "workspace:*",
     "@calmpulse-app/shared": "workspace:*",
@@ -29,6 +30,7 @@
     "dotenv-cli": "catalog:",
     "drizzle-orm": "catalog:",
     "fastify": "catalog:",
+    "fastify-plugin": "^5.0.1",
     "tsx": "catalog:",
     "zod": "catalog:"
   },

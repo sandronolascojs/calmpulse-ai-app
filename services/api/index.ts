@@ -1,13 +1,17 @@
+import { registerAuthController } from '@/controllers/auth.controller';
+import { publicController } from '@/controllers/public.controller';
+import { slackController } from '@/controllers/slack.controller';
+import { authPlugin } from '@/plugins/auth.plugin';
 import { errorHandlerPlugin } from '@/plugins/errorHandler.plugin';
 import { requestHandlerPlugin } from '@/plugins/requestHandler.plugin';
-import cors from '@fastify/cors';
-//import { initServer } from '@ts-rest/fastify';
 import { logger } from '@/utils/logger.instance';
+import cors from '@fastify/cors';
+import { initServer } from '@ts-rest/fastify';
 import fastify from 'fastify';
 import { env } from './src/config/env.config';
 
 const server = fastify();
-//const tsRestServer = initServer();
+const tsRestServer = initServer();
 
 server.register(cors, {
   origin: env.ALLOWED_ORIGINS.split(',').map((origin) => origin.trim()),
@@ -25,6 +29,16 @@ server.get('/health', () => {
 
 server.register(requestHandlerPlugin);
 server.register(errorHandlerPlugin);
+registerAuthController(server);
+
+// Public routes
+server.register(tsRestServer.plugin(publicController));
+
+// Auth routes
+server.register(async (fastify) => {
+  await fastify.register(authPlugin);
+  fastify.register(tsRestServer.plugin(slackController));
+});
 
 server.listen({ port: env.PORT }, (err) => {
   logger.info(`Server is running on port ${env.PORT}`);

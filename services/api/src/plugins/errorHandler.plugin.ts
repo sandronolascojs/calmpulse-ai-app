@@ -10,6 +10,7 @@ export const errorHandlerPlugin: FastifyPluginAsync = async (fastify) => {
       });
       logger.error(error.message, {
         path: request.url,
+        userId: request.user?.id,
         statusCode: error.statusCode,
         error: error.message,
         requestId: request.id,

@@ -12,8 +12,8 @@ export const workspaces = pgTable('workspaces', {
   name: text('name').notNull(),
   slug: text('slug').notNull(),
   logoUrl: text('logo_url'),
-  description: text('description'),
-  externalId: text('external_id'),
+  externalId: text('external_id').notNull(),
+  domain: text('domain'),
   externalProviderType: workspaceExternalProviderType('external_provider_type')
     .notNull()
     .default(WorkspaceExternalProviderType.Slack),

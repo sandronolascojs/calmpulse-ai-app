@@ -1,4 +1,6 @@
-import { drizzle } from 'drizzle-orm/node-postgres';
+import type { ExtractTablesWithRelations } from 'drizzle-orm';
+import { drizzle, NodePgQueryResultHKT } from 'drizzle-orm/node-postgres';
+import { PgTransaction } from 'drizzle-orm/pg-core';
 import { Pool } from 'pg';
 import { env } from './src/config/env.config';
 import * as schema from './src/schema';
@@ -14,6 +16,14 @@ const postgresPool = new Pool({
   connectionTimeoutMillis: CONNECTION_TIMEOUT,
 });
 
-export const db = drizzle(postgresPool, { schema });
+export const db = drizzle(postgresPool, { schema: { ...schema } });
 
-export type DB = typeof db;
+export type DrizzleDB = typeof db;
+export type DrizzleTx = PgTransaction<
+  NodePgQueryResultHKT,
+  typeof schema,
+  ExtractTablesWithRelations<typeof schema>
+>;
+export type DB = DrizzleDB | DrizzleTx;
+
+export * as schema from './src/schema';
