@@ -36,6 +36,11 @@ export const authPlugin = fp(async (fastify: FastifyInstance) => {
           return reply.status(401).send({ message: 'Unauthorized' });
         }
 
+        if (!session.user.id) {
+          logger.error('Invalid session structure: missing user.id', { session });
+          return reply.status(401).send({ message: 'Unauthorized' });
+        }
+
         const workspace = await workspaceService.getWorkspaceByUserId({ userId: session.user.id });
 
         request.user = {
