@@ -1,34 +1,29 @@
-import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import fp from "fastify-plugin";
-import { auth } from "@/auth/auth";
-import { UserService } from "@/services/user.service";
-import { db } from "@calmpulse-app/db";
-import { logger } from "@/utils/logger.instance";
-import type { UserRole } from "@calmpulse-app/types";
-
-export interface WorkspaceUser {
-  id: string;
-  email: string;
-  name: string;
-  image: string | null;
-  emailVerified: boolean;
-  createdAt: Date;
-  role: UserRole;
-  workspaceId: string;
-  workspaceName: string;
-  workspaceLogoUrl: string | null;
-  workspaceSlug: string;
-}
+import { auth } from '@/auth/auth';
+import { WorkspaceService } from '@/services/workspace.service';
+import { logger } from '@/utils/logger.instance';
+import { db } from '@calmpulse-app/db';
+import type { SelectUser, SelectWorkspace } from '@calmpulse-app/db/src/schema';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import fp from 'fastify-plugin';
 
 export interface AuthenticatedRequest extends FastifyRequest {
-  user: WorkspaceUser;
+  user: SelectUser;
+  workspace: SelectWorkspace | undefined;
 }
 
+export type AuthenticatedUser = {
+  user: SelectUser;
+  workspace: SelectWorkspace | undefined;
+};
+
+const workspaceService = new WorkspaceService(db, logger);
+
 export const authPlugin = fp(async (fastify: FastifyInstance) => {
-  fastify.decorateRequest("user", null as unknown as WorkspaceUser);
+  fastify.decorateRequest('user', null as unknown as SelectUser);
+  fastify.decorateRequest('workspace', null as unknown as SelectWorkspace);
 
   fastify.decorate(
-    "authenticate",
+    'authenticate',
     async function (request: FastifyRequest, reply: FastifyReply): Promise<void> {
       try {
         const headers = new Headers();
@@ -38,35 +33,34 @@ export const authPlugin = fp(async (fastify: FastifyInstance) => {
 
         const session = await auth.api.getSession({ headers });
         if (!session || !session.user) {
-          return reply.status(401).send({ message: "Unauthorized" });
+          return reply.status(401).send({ message: 'Unauthorized' });
         }
 
-        const userService = new UserService(db, logger);
-        const user = await userService.getUserById({ userId: session.user.id });
-        if (!user) {
-          return reply.status(401).send({ message: "Unauthorized" });
-        }
+        const workspace = await workspaceService.getWorkspaceByUserId({ userId: session.user.id });
 
-        request.user = user;
+        request.user = {
+          ...session.user,
+          image: session.user.image || null,
+        };
+
+        request.workspace = workspace;
       } catch (error) {
-        fastify.log.error("Authentication Error:", error);
+        fastify.log.error('Authentication Error:', error);
         return reply.status(500).send({
-          error: "Internal authentication error",
-          code: "AUTH_FAILURE",
+          error: 'Internal authentication error',
+          code: 'AUTH_FAILURE',
         });
       }
-    }
+    },
   );
 });
 
-declare module "fastify" {
+declare module 'fastify' {
   interface FastifyInstance {
-    authenticate: (
-      request: FastifyRequest,
-      reply: FastifyReply
-    ) => Promise<void>;
+    authenticate: (request: FastifyRequest, reply: FastifyReply) => Promise<void>;
   }
   interface FastifyRequest {
-    user: WorkspaceUser;
+    user: SelectUser;
+    workspace: SelectWorkspace | undefined;
   }
 }

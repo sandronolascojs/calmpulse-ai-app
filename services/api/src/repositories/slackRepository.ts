@@ -1,14 +1,14 @@
-import { schema } from "@calmpulse-app/db";
-import { BaseRepository } from "@calmpulse-app/shared";
-import { WorkspaceExternalProviderType } from "@calmpulse-app/types";
-import { eq } from "drizzle-orm";
+import { schema } from '@calmpulse-app/db';
+import { BaseRepository } from '@calmpulse-app/shared';
+import { WorkspaceExternalProviderType } from '@calmpulse-app/types';
+import { eq } from 'drizzle-orm';
 
 export class SlackRepository extends BaseRepository {
   async upsertWorkspaceToken(
     workspaceId: string,
     accessToken: string,
     refreshToken: string | null,
-    expiresAt: Date | null
+    expiresAt: Date | null,
   ) {
     const workspaceToken = await this.db
       .insert(schema.workspaceTokens)

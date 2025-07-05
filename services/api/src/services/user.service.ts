@@ -1,6 +1,6 @@
-import { UserRepository } from "@/repositories/userRepository";
-import type { DB } from "@calmpulse-app/db";
-import type { Logger } from "@calmpulse-app/utils";
+import { UserRepository } from '@/repositories/userRepository';
+import type { DB } from '@calmpulse-app/db';
+import type { Logger } from '@calmpulse-app/utils';
 
 export class UserService {
   private readonly userRepository: UserRepository;

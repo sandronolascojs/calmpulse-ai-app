@@ -8,6 +8,7 @@ export const requestHandlerPlugin: FastifyPluginAsync = async (fastify) => {
       method: request.method,
       requestId: request.id,
       ip: request.ip,
+      userId: request.user?.id,
     });
   });
 
@@ -17,6 +18,7 @@ export const requestHandlerPlugin: FastifyPluginAsync = async (fastify) => {
       method: request.method,
       requestId: request.id,
       ip: request.ip,
+      userId: request.user?.id,
     });
     reply.status(404).send({ message: 'Not Found' });
   });

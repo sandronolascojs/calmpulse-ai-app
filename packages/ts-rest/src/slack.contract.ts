@@ -1,6 +1,6 @@
+import { errorsSchema } from '@calmpulse-app/utils';
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
-import { errorsSchema } from '@calmpulse-app/utils';
 
 const oauthErrorCodes = z.union([
   z.literal('bad_client_secret'),
@@ -43,14 +43,12 @@ export const slack = c.router({
   install: {
     method: 'GET',
     path: '/slack/install',
-    query: z.object({ redirect_uri: z.string().url() }),
     responses: {
       302: z.void(),
       400: z.string(),
       500: z.string(),
     },
   },
-
   oauthCallback: {
     method: 'GET',
     path: '/slack/oauth/callback',
@@ -58,7 +56,7 @@ export const slack = c.router({
     responses: {
       200: z.undefined(),
       400: oauthFailure,
-      ...errorsSchema
+      ...errorsSchema,
     },
   },
 });

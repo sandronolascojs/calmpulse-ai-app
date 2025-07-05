@@ -1,6 +1,6 @@
-import { FastifyInstance } from 'fastify';
-import { logger } from '@/utils/logger.instance';
 import { auth } from '@/auth/auth';
+import { logger } from '@/utils/logger.instance';
+import { FastifyInstance } from 'fastify';
 
 export async function registerAuthController(fastify: FastifyInstance) {
   fastify.route({
@@ -26,9 +26,9 @@ export async function registerAuthController(fastify: FastifyInstance) {
 
         reply.send(response.body ? await response.text() : null);
       } catch (error) {
-        logger.error('Better Auth Handler Error:', { 
+        logger.error('Better Auth Handler Error:', {
           error: error instanceof Error ? error.message : String(error),
-          stack: error instanceof Error ? error.stack : undefined 
+          stack: error instanceof Error ? error.stack : undefined,
         });
         reply.status(500).send({
           error: 'Internal authentication error',
@@ -37,4 +37,4 @@ export async function registerAuthController(fastify: FastifyInstance) {
       }
     },
   });
-} 
+}
