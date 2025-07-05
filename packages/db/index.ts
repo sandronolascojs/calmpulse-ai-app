@@ -14,6 +14,7 @@ const postgresPool = new Pool({
   connectionTimeoutMillis: CONNECTION_TIMEOUT,
 });
 
-export const db = drizzle(postgresPool, { schema });
+export const db = drizzle(postgresPool, { schema: { ...schema } });
 
 export type DB = typeof db;
+export * as schema from './src/schema';
