@@ -8,7 +8,7 @@ export const slackOauthStoreState = pgTable('slack_oauth_store_state', {
   oauthStoreStateId: generateIdField({
     name: 'oauth_store_state_id',
   }),
-  state: text('state').notNull(),
+  state: text('state').notNull().unique(),
   userId: text('user_id').references(() => users.id),
   createdAt: createdAtField,
   updatedAt: updatedAtField,
