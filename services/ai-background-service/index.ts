@@ -9,7 +9,10 @@ server.ready().then(async () => {});
 
 server.get('/health', () => {
   return {
-    status: 'ok',
+    status: 200,
+    body: {
+      message: 'AI Background Service is running',
+    },
   };
 });
 

@@ -3,7 +3,19 @@ import { z } from 'zod';
 
 const contract = initContract();
 
-export const publicContract = contract.router({
+export const publicRouter = contract.router({
+  health: {
+    method: 'GET',
+    path: '/health',
+    responses: {
+      200: z.object({
+        message: z.string(),
+      }),
+      500: z.object({
+        message: z.string(),
+      }),
+    },
+  },
   events: {
     method: 'POST',
     path: '/slack/events',

@@ -1,4 +1,5 @@
 import { registerAuthController } from '@/controllers/auth.controller';
+import { publicController } from '@/controllers/public.controller';
 import { slackController } from '@/controllers/slack.controller';
 import { authPlugin } from '@/plugins/auth.plugin';
 import { errorHandlerPlugin } from '@/plugins/errorHandler.plugin';
@@ -29,6 +30,11 @@ server.get('/health', () => {
 server.register(requestHandlerPlugin);
 server.register(errorHandlerPlugin);
 registerAuthController(server);
+
+// Public routes
+server.register(tsRestServer.plugin(publicController));
+
+// Auth routes
 server.register(async (fastify) => {
   await fastify.register(authPlugin);
   fastify.register(tsRestServer.plugin(slackController));
