@@ -45,7 +45,7 @@ export const authPlugin = fp(async (fastify: FastifyInstance) => {
 
         request.workspace = workspace;
       } catch (error) {
-        fastify.log.error('Authentication Error:', error);
+        logger.error('Authentication Error:', { error: JSON.stringify(error) });
         return reply.status(500).send({
           error: 'Internal authentication error',
           code: 'AUTH_FAILURE',
