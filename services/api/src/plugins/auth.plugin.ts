@@ -6,11 +6,6 @@ import type { SelectUser, SelectWorkspace } from '@calmpulse-app/db/src/schema';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 
-export interface AuthenticatedRequest extends FastifyRequest {
-  user: SelectUser;
-  workspace: SelectWorkspace | undefined;
-}
-
 export type AuthenticatedUser = {
   user: SelectUser;
   workspace: SelectWorkspace | undefined;

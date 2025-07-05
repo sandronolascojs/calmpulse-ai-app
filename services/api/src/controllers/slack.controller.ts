@@ -8,16 +8,21 @@ const server = initServer();
 
 export const slackController = server.router(contract.slackContract, {
   install: {
-    handler: async () => {
-      const slackService = new SlackService(db, logger);
-      const slackOAuthUrl = await slackService.installApp();
-      return {
-        status: 302,
-        body: undefined,
-        headers: {
-          Location: slackOAuthUrl,
-        },
-      };
+    handler: async ({ request }) => {
+      return await db.transaction(async (tx) => {
+        const slackService = new SlackService(tx, logger);
+        const slackOAuthUrl = await slackService.installApp({
+          user: request.user,
+          workspace: request.workspace,
+        });
+        return {
+          status: 302,
+          body: undefined,
+          headers: {
+            Location: slackOAuthUrl,
+          },
+        };
+      });
     },
   },
   oauthCallback: {

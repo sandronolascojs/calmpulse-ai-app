@@ -7,6 +7,7 @@ import { WorkspaceExternalProviderType } from '@calmpulse-app/types';
 import type { Logger } from '@calmpulse-app/utils';
 import crypto from 'node:crypto';
 import { SlackRepository } from '../repositories/slackRepository';
+import { SlackOauthStoreStateService } from './slackOauthStoreState.service';
 import { SlackWebClientService } from './slackWebClient.service';
 import { WorkspaceService } from './workspace.service';
 
@@ -14,20 +15,41 @@ export class SlackService {
   private slackRepository: SlackRepository;
   private workspaceService: WorkspaceService;
   private slackWebClientService: SlackWebClientService;
+  private slackOauthStoreStateService: SlackOauthStoreStateService;
 
   constructor(db: DB, logger: Logger) {
     this.slackRepository = new SlackRepository(db, logger);
     this.workspaceService = new WorkspaceService(db, logger);
+    this.slackOauthStoreStateService = new SlackOauthStoreStateService(db, logger);
     this.slackWebClientService = new SlackWebClientService();
   }
 
-  async generateCallback(query: { code?: string }, authenticatedUser: AuthenticatedUser) {
+  async generateCallback(
+    query: { code?: string; state?: string },
+    authenticatedUser: AuthenticatedUser,
+  ) {
     const redirect_uri = this.getRedirectUri();
     if (!query.code) {
       throw new ConflictError({
         message: 'invalid_code',
       });
     }
+    if (!query.state) {
+      throw new ConflictError({
+        message: 'invalid_state',
+      });
+    }
+    const oauthStoreState = await this.slackOauthStoreStateService.getByState({
+      state: query.state,
+    });
+    if (!oauthStoreState) {
+      throw new ConflictError({
+        message: 'invalid_state',
+      });
+    }
+    await this.slackOauthStoreStateService.deleteByState({
+      state: query.state,
+    });
     const oauthResponse = await this.slackWebClientService.oauthV2Access({
       code: query.code,
       redirectUri: redirect_uri,
@@ -79,9 +101,13 @@ export class SlackService {
     );
   }
 
-  async installApp() {
+  async installApp(authenticatedUser: AuthenticatedUser) {
     const redirectUri = this.getRedirectUri();
     const stateId = crypto.randomBytes(32).toString('hex');
+    await this.slackOauthStoreStateService.createOauthStoreState({
+      state: stateId,
+      userId: authenticatedUser.user.id,
+    });
     const slackOAuthUrl = `https://slack.com/oauth/v2/authorize?client_id=${encodeURIComponent(
       env.SLACK_CLIENT_ID,
     )}&scope=${encodeURIComponent(env.OAUTH_SCOPES)}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${encodeURIComponent(stateId)}`;
