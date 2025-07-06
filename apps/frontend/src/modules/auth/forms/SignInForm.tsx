@@ -95,7 +95,7 @@ export function SignInForm() {
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <EmailPasswordFields control={form.control} isPending={isPending} />
+          <EmailPasswordFields form={form} isPending={isPending} />
           <div className="flex justify-end">
             <Button
               type="button"
