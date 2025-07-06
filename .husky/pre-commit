@@ -1,7 +1,6 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-pnpx lint-staged
-pnpm run typecheck
 pnpm run lint:fix
-git add -u
+pnpm run typecheck
+pnpx lint-staged

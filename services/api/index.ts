@@ -21,12 +21,6 @@ server.register(cors, {
   maxAge: 86400,
 });
 
-server.get('/health', () => {
-  return {
-    status: 'ok',
-  };
-});
-
 server.register(requestHandlerPlugin);
 server.register(errorHandlerPlugin);
 registerAuthController(server);

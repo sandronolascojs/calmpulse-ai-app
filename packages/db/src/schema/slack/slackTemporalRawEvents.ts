@@ -20,8 +20,8 @@ export const slackTemporalRawEvents = pgTable(
     createdAt: createdAtField,
   },
   (table) => [
-    index('slack_event_id_idx').on(table.slackEventId),
-    index('workspace_member_id_idx').on(table.workspaceMemberId),
+    index('slack_temporal_raw_events_slack_event_id_idx').on(table.slackEventId),
+    index('slack_temporal_raw_events_workspace_member_id_idx').on(table.workspaceMemberId),
   ],
 );
 

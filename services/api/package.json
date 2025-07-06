@@ -15,7 +15,6 @@
   "license": "ISC",
   "dependencies": {
     "@calmpulse-app/ai": "workspace:*",
-    "@calmpulse-app/auth": "workspace:*",
     "@calmpulse-app/config": "workspace:*",
     "@calmpulse-app/db": "workspace:*",
     "@calmpulse-app/shared": "workspace:*",
@@ -27,10 +26,12 @@
     "@slack/web-api": "^7.9.3",
     "@t3-oss/env-core": "catalog:",
     "@ts-rest/fastify": "^3.52.1",
+    "better-auth": "catalog:",
     "dotenv-cli": "catalog:",
     "drizzle-orm": "catalog:",
     "fastify": "catalog:",
     "fastify-plugin": "^5.0.1",
+    "resend": "^4.6.0",
     "tsx": "catalog:",
     "zod": "catalog:"
   },
