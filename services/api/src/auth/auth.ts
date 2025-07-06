@@ -25,7 +25,9 @@ export const auth = betterAuth({
     },
     usePlural: true,
   }),
-  trustedOrigins: env.ALLOWED_ORIGINS.split(',').map((origin) => origin.trim()),
+  trustedOrigins: env.ALLOWED_ORIGINS.split(',')
+    .map((origin) => origin.trim())
+    .filter((origin) => origin.length > 0),
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
