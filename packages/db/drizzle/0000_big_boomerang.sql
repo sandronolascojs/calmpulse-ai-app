@@ -215,4 +215,6 @@ CREATE INDEX "workspace_google_calendar_sync_token_workspace_member_id_idx" ON "
 CREATE INDEX "workspace_google_calendar_watch_channels_workspace_member_id_idx" ON "workspace_google_calendar_watch_channels" USING btree ("workspace_member_id");--> statement-breakpoint
 CREATE INDEX "workspace_member_workspace_id_idx" ON "workspace_members" USING btree ("workspace_id");--> statement-breakpoint
 CREATE INDEX "workspace_tokens_workspace_id_idx" ON "workspace_tokens" USING btree ("workspace_id");--> statement-breakpoint
-CREATE INDEX "workspace_member_id_intervention_id_idx" ON "interventions" USING btree ("workspace_member_id","intervention_id");
+CREATE INDEX "workspace_member_id_intervention_id_idx" ON "interventions" USING btree ("workspace_member_id","intervention_id");--> statement-breakpoint
+CREATE INDEX "user_workspaces_user_id_idx" ON "user_workspaces" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "user_workspaces_workspace_id_idx" ON "user_workspaces" USING btree ("workspace_id");--> statement-breakpoint	
