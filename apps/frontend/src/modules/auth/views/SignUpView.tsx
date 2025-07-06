@@ -1,15 +1,15 @@
 import { Separator } from '@/components/ui/separator';
 import { APP } from '@/constants/app.constants';
-import { SignInForm } from './components/sign-in-form';
+import { SignUpForm } from '../forms/SignUpForm';
 
-export const SignInView = () => {
+export const SignUpView = () => {
   return (
     <>
       <div className="flex min-h-screen">
         {/* Left Section - Sign In Form */}
         <div className="flex-1 flex flex-col justify-center px-4 py-8 sm:px-6 lg:px-12">
           <div className="w-full max-w-md mx-auto">
-            <SignInForm />
+            <SignUpForm />
           </div>
         </div>
 

@@ -9,17 +9,19 @@ export const PASSWORD_REGEX =
 export const PASSWORD_MIN_LENGTH = 6;
 export const PASSWORD_MAX_LENGTH = 62;
 
-export const nameValidation = z
-  .string()
-  .min(1, {
-    message: 'Name is required',
-  })
-  .max(MAX_NAME_LENGTH, {
-    message: `Name must be less than ${MAX_NAME_LENGTH} characters`,
-  })
-  .regex(NAME_REGEX, {
-    message: 'Name must contain only letters, numbers, and spaces',
-  });
+export const nameValidation = (fieldName: string) => {
+  return z
+    .string()
+    .min(1, {
+      message: `${fieldName} is required`,
+    })
+    .max(MAX_NAME_LENGTH, {
+      message: `${fieldName} must be less than ${MAX_NAME_LENGTH} characters`,
+    })
+    .regex(NAME_REGEX, {
+      message: 'Name must contain only letters, numbers, and spaces',
+    });
+};
 
 export const emailValidation = z
   .string()
