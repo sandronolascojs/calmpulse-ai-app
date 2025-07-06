@@ -9,6 +9,7 @@ import { haveIBeenPwned, magicLink } from 'better-auth/plugins';
 
 const TTL = 60 * 60 * 1000; // 1 hour
 export const auth = betterAuth({
+  secret: env.BETTER_AUTH_SECRET,
   rateLimit: {
     enabled: true,
     trustProxy: true,

@@ -10,8 +10,7 @@ export const tsrClient = initTsrReactQuery(contract, {
   baseHeaders: {
     'Content-Type': 'application/json',
     Authorization: () => {
-      const session = auth.useSession();
-      const accessToken = session?.data?.session?.token;
+      const accessToken = auth.getSession().then((session) => session.data?.session.token);
       return accessToken ? `Bearer ${accessToken}` : '';
     },
   },
