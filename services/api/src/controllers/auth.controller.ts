@@ -24,7 +24,9 @@ export async function registerAuthController(fastify: FastifyInstance) {
         reply.status(response.status);
         response.headers.forEach((value, key) => reply.header(key, value));
 
-        reply.send(response.body ? await response.text() : null);
+        if (response.status !== 302) {
+          reply.send(response.body ? await response.text() : null);
+        }
       } catch (error) {
         logger.error('Better Auth Handler Error:', {
           error: error instanceof Error ? error.message : String(error),

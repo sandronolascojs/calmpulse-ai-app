@@ -1,20 +1,24 @@
 import { env } from '@/config/env.config';
 import { EmailService } from '@/services/email.service';
 import { db } from '@calmpulse-app/db';
-import { accounts, sessions, users, verifications } from '@calmpulse-app/db/src/schema';
+import * as schema from '@calmpulse-app/db/src/schema';
 import { APP_CONFIG } from '@calmpulse-app/types';
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { haveIBeenPwned, magicLink } from 'better-auth/plugins';
 
+const TTL = 60 * 60 * 1000; // 1 hour
 export const auth = betterAuth({
+  rateLimit: {
+    enabled: true,
+    trustProxy: true,
+    max: 100,
+    ttl: TTL,
+  },
   database: drizzleAdapter(db, {
     provider: 'pg',
     schema: {
-      user: users,
-      account: accounts,
-      session: sessions,
-      verification: verifications,
+      ...schema,
     },
     usePlural: true,
   }),
@@ -36,6 +40,7 @@ export const auth = betterAuth({
   socialProviders: {
     google: {
       enabled: true,
+      prompt: 'select_account',
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     },

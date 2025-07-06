@@ -1,5 +1,6 @@
 import { QueryClientProviders } from '@/components/QueryClientProviders';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { Toaster } from '@/components/ui/sonner';
 import { APP } from '@/constants/app.constants';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
@@ -33,6 +34,7 @@ export default function RootLayout({
           disableTransitionOnChange
           storageKey={APP.theme.localStorageKey}
         >
+          <Toaster />
           <QueryClientProviders>{children}</QueryClientProviders>
         </ThemeProvider>
       </body>

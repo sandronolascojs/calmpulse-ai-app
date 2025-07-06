@@ -1,5 +1,5 @@
 {
-  "id": "d3811f6f-332a-44dc-b7b7-56afb19841d5",
+  "id": "f29fbf04-adca-46f9-961c-4874a8a44509",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -105,6 +105,107 @@
         }
       },
       "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.fatigue_scores": {
+      "name": "fatigue_scores",
+      "schema": "",
+      "columns": {
+        "fatigue_score_id": {
+          "name": "fatigue_score_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "workspace_member_id": {
+          "name": "workspace_member_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "day": {
+          "name": "day",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fatigue_index": {
+          "name": "fatigue_index",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "label": {
+          "name": "label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "advice": {
+          "name": "advice",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "workspace_member_id_fatigue_score_id_idx": {
+          "name": "workspace_member_id_fatigue_score_id_idx",
+          "columns": [
+            {
+              "expression": "workspace_member_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "fatigue_score_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "fatigue_scores_workspace_member_id_workspace_members_workspace_member_id_fk": {
+          "name": "fatigue_scores_workspace_member_id_workspace_members_workspace_member_id_fk",
+          "tableFrom": "fatigue_scores",
+          "tableTo": "workspace_members",
+          "columnsFrom": ["workspace_member_id"],
+          "columnsTo": ["workspace_member_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "fatigue_scores_fatigue_score_id_unique": {
+          "name": "fatigue_scores_fatigue_score_id_unique",
+          "nullsNotDistinct": false,
+          "columns": ["fatigue_score_id"]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
@@ -612,7 +713,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'User'"
+          "default": "'USER'"
         },
         "created_at": {
           "name": "created_at",
@@ -1059,7 +1160,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'Slack'"
+          "default": "'SLACK'"
         },
         "created_at": {
           "name": "created_at",
@@ -1112,7 +1213,7 @@
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
-          "default": "'Slack'"
+          "default": "'SLACK'"
         },
         "access_token": {
           "name": "access_token",
@@ -1203,6 +1304,108 @@
           "name": "workspace_tokens_token_id_unique",
           "nullsNotDistinct": false,
           "columns": ["token_id"]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.interventions": {
+      "name": "interventions",
+      "schema": "",
+      "columns": {
+        "intervention_id": {
+          "name": "intervention_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "workspace_member_id": {
+          "name": "workspace_member_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "details": {
+          "name": "details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "acknowledged": {
+          "name": "acknowledged",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "workspace_member_id_intervention_id_idx": {
+          "name": "workspace_member_id_intervention_id_idx",
+          "columns": [
+            {
+              "expression": "workspace_member_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "intervention_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "interventions_workspace_member_id_workspace_members_workspace_member_id_fk": {
+          "name": "interventions_workspace_member_id_workspace_members_workspace_member_id_fk",
+          "tableFrom": "interventions",
+          "tableTo": "workspace_members",
+          "columnsFrom": ["workspace_member_id"],
+          "columnsTo": ["workspace_member_id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "interventions_intervention_id_unique": {
+          "name": "interventions_intervention_id_unique",
+          "nullsNotDistinct": false,
+          "columns": ["intervention_id"]
         }
       },
       "policies": {},

@@ -15,6 +15,9 @@ export const env = createEnv({
     API_BASE_URL: z.string({
       required_error: 'API_BASE_URL is required',
     }),
+    FRONTEND_URL: z.string({
+      required_error: 'FRONTEND_URL is required',
+    }),
 
     // slack
     SLACK_CLIENT_ID: z.string({
@@ -67,5 +70,6 @@ export const env = createEnv({
     FROM_EMAIL: process.env.FROM_EMAIL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    FRONTEND_URL: process.env.FRONTEND_URL,
   },
 });

@@ -1,3 +1,8 @@
+--> enums
+CREATE TYPE "user_roles" AS ENUM ('OWNER', 'USER');
+CREATE TYPE "workspace_external_provider_type" AS ENUM ('SLACK', 'MICROSOFT_TEAMS');
+
+--> statement-breakpoint
 CREATE TABLE "daily_features" (
 	"workspace_member_id" text NOT NULL,
 	"day" date NOT NULL,
@@ -9,6 +14,18 @@ CREATE TABLE "daily_features" (
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "daily_features_workspace_member_id_day_pk" PRIMARY KEY("workspace_member_id","day")
+);
+--> statement-breakpoint
+CREATE TABLE "fatigue_scores" (
+	"fatigue_score_id" text PRIMARY KEY NOT NULL,
+	"workspace_member_id" text NOT NULL,
+	"day" date NOT NULL,
+	"fatigue_index" real NOT NULL,
+	"label" text NOT NULL,
+	"advice" text NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "fatigue_scores_fatigue_score_id_unique" UNIQUE("fatigue_score_id")
 );
 --> statement-breakpoint
 CREATE TABLE "slack_oauth_store_state" (
@@ -86,7 +103,7 @@ CREATE TABLE "verifications" (
 CREATE TABLE "user_workspaces" (
 	"user_id" text NOT NULL,
 	"workspace_id" text NOT NULL,
-	"role" "user_roles" DEFAULT 'User' NOT NULL,
+	"role" "user_roles" DEFAULT 'USER' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
@@ -142,7 +159,7 @@ CREATE TABLE "workspaces" (
 	"logo_url" text,
 	"external_id" text NOT NULL,
 	"domain" text,
-	"external_provider_type" "workspace_external_provider_type" DEFAULT 'Slack' NOT NULL,
+	"external_provider_type" "workspace_external_provider_type" DEFAULT 'SLACK' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "workspaces_workspace_id_unique" UNIQUE("workspace_id")
@@ -151,7 +168,7 @@ CREATE TABLE "workspaces" (
 CREATE TABLE "workspace_tokens" (
 	"token_id" text PRIMARY KEY NOT NULL,
 	"workspace_id" text NOT NULL,
-	"provider" "workspace_external_provider_type" DEFAULT 'Slack' NOT NULL,
+	"provider" "workspace_external_provider_type" DEFAULT 'SLACK' NOT NULL,
 	"access_token" text NOT NULL,
 	"refresh_token" text,
 	"expires_at" timestamp,
@@ -162,7 +179,20 @@ CREATE TABLE "workspace_tokens" (
 	CONSTRAINT "workspace_tokens_token_id_unique" UNIQUE("token_id")
 );
 --> statement-breakpoint
+CREATE TABLE "interventions" (
+	"intervention_id" text PRIMARY KEY NOT NULL,
+	"workspace_member_id" text NOT NULL,
+	"date" timestamp NOT NULL,
+	"type" text NOT NULL,
+	"details" text,
+	"acknowledged" boolean DEFAULT false NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "interventions_intervention_id_unique" UNIQUE("intervention_id")
+);
+--> statement-breakpoint
 ALTER TABLE "daily_features" ADD CONSTRAINT "daily_features_workspace_member_id_workspace_members_workspace_member_id_fk" FOREIGN KEY ("workspace_member_id") REFERENCES "public"."workspace_members"("workspace_member_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "fatigue_scores" ADD CONSTRAINT "fatigue_scores_workspace_member_id_workspace_members_workspace_member_id_fk" FOREIGN KEY ("workspace_member_id") REFERENCES "public"."workspace_members"("workspace_member_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "slack_oauth_store_state" ADD CONSTRAINT "slack_oauth_store_state_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "slack_temporal_raw_events" ADD CONSTRAINT "slack_temporal_raw_events_workspace_member_id_workspace_members_workspace_member_id_fk" FOREIGN KEY ("workspace_member_id") REFERENCES "public"."workspace_members"("workspace_member_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -175,11 +205,14 @@ ALTER TABLE "workspace_google_calendar_watch_channels" ADD CONSTRAINT "workspace
 ALTER TABLE "workspace_members" ADD CONSTRAINT "workspace_members_workspace_id_workspaces_workspace_id_fk" FOREIGN KEY ("workspace_id") REFERENCES "public"."workspaces"("workspace_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "workspace_tokens" ADD CONSTRAINT "workspace_tokens_workspace_id_workspaces_workspace_id_fk" FOREIGN KEY ("workspace_id") REFERENCES "public"."workspaces"("workspace_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "workspace_tokens" ADD CONSTRAINT "workspace_tokens_installer_user_id_users_id_fk" FOREIGN KEY ("installer_user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "interventions" ADD CONSTRAINT "interventions_workspace_member_id_workspace_members_workspace_member_id_fk" FOREIGN KEY ("workspace_member_id") REFERENCES "public"."workspace_members"("workspace_member_id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "workspace_member_id_idx" ON "daily_features" USING btree ("workspace_member_id");--> statement-breakpoint
+CREATE INDEX "workspace_member_id_fatigue_score_id_idx" ON "fatigue_scores" USING btree ("workspace_member_id","fatigue_score_id");--> statement-breakpoint
 CREATE INDEX "slack_temporal_raw_events_slack_event_id_idx" ON "slack_temporal_raw_events" USING btree ("slack_event_id");--> statement-breakpoint
 CREATE INDEX "slack_temporal_raw_events_workspace_member_id_idx" ON "slack_temporal_raw_events" USING btree ("workspace_member_id");--> statement-breakpoint
 CREATE INDEX "workspace_google_calendar_integration_workspace_id_idx" ON "workspace_google_calendar_integrations" USING btree ("workspace_id");--> statement-breakpoint
 CREATE INDEX "workspace_google_calendar_sync_token_workspace_member_id_idx" ON "workspace_google_calendar_sync_tokens" USING btree ("workspace_member_id");--> statement-breakpoint
 CREATE INDEX "workspace_google_calendar_watch_channels_workspace_member_id_idx" ON "workspace_google_calendar_watch_channels" USING btree ("workspace_member_id");--> statement-breakpoint
 CREATE INDEX "workspace_member_workspace_id_idx" ON "workspace_members" USING btree ("workspace_id");--> statement-breakpoint
-CREATE INDEX "workspace_tokens_workspace_id_idx" ON "workspace_tokens" USING btree ("workspace_id");
+CREATE INDEX "workspace_tokens_workspace_id_idx" ON "workspace_tokens" USING btree ("workspace_id");--> statement-breakpoint
+CREATE INDEX "workspace_member_id_intervention_id_idx" ON "interventions" USING btree ("workspace_member_id","intervention_id");
