@@ -66,7 +66,7 @@ export function SignInForm() {
         onError: (error) => {
           switch (error.error.code) {
             case auth.$ERROR_CODES.INVALID_PASSWORD:
-              form.setError('password', {
+              form.setError('email', {
                 message: 'Invalid email or password. Please try again.',
               });
               break;
@@ -77,9 +77,6 @@ export function SignInForm() {
               break;
             case auth.$ERROR_CODES.USER_NOT_FOUND:
               form.setError('email', {
-                message: '',
-              });
-              form.setError('password', {
                 message: 'Invalid email or password. Please try again.',
               });
               break;
