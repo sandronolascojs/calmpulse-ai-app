@@ -7,6 +7,8 @@ import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { haveIBeenPwned, magicLink } from 'better-auth/plugins';
 
+const emailService = new EmailService();
+
 const TTL = 60 * 60 * 1000; // 1 hour
 export const auth = betterAuth({
   secret: env.BETTER_AUTH_SECRET,
@@ -30,7 +32,6 @@ export const auth = betterAuth({
     sendResetPassword: async ({ user, url, token }) => {
       const { email } = user;
       const resetPasswordUrl = `${url}?token=${token}`;
-      const emailService = new EmailService();
       await emailService.sendEmail({
         to: email,
         subject: `${APP_CONFIG.basics.name} - Reset your password`,
@@ -50,7 +51,6 @@ export const auth = betterAuth({
     magicLink({
       sendMagicLink: async ({ email, url, token }) => {
         const magicLinkUrl = `${url}?token=${token}`;
-        const emailService = new EmailService();
         await emailService.sendEmail({
           to: email,
           subject: `${APP_CONFIG.basics.name} - Magic link`,
