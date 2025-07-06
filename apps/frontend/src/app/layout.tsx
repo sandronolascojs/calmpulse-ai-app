@@ -23,7 +23,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn(inter.variable, inter.className, 'antialiased')}>
+      <body
+        className={cn(inter.variable, inter.className, 'antialiased bg-background min-h-screen')}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme={APP.theme.defaultTheme}

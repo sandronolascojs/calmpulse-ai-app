@@ -40,7 +40,7 @@ export const env = createEnv({
       required_error: 'RESEND_API_KEY is required',
     }),
     FROM_EMAIL: z.string({
-      required_error: 'RESEND_FROM_EMAIL is required',
+      required_error: 'FROM_EMAIL is required',
     }),
 
     // google
