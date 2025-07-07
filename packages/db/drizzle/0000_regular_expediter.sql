@@ -1,8 +1,8 @@
 --> enums
 CREATE TYPE "user_roles" AS ENUM ('OWNER', 'USER');
-CREATE TYPE "workspace_external_provider_type" AS ENUM ('SLACK', 'MICROSOFT_TEAMS');
+CREATE TYPE "workspace_external_provider_type" AS ENUM ('SLACK', 'MICROSOFT_TEAMS', 'GOOGLE_CALENDAR');
 
---> statement-breakpoint
+--> tables
 CREATE TABLE "daily_features" (
 	"workspace_member_id" text NOT NULL,
 	"day" date NOT NULL,
@@ -176,7 +176,8 @@ CREATE TABLE "workspace_tokens" (
 	"installed_at" timestamp DEFAULT now() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "workspace_tokens_token_id_unique" UNIQUE("token_id")
+	CONSTRAINT "workspace_tokens_token_id_unique" UNIQUE("token_id"),
+	CONSTRAINT "workspace_tokens_workspace_id_unique" UNIQUE("workspace_id")
 );
 --> statement-breakpoint
 CREATE TABLE "interventions" (
@@ -210,11 +211,11 @@ CREATE INDEX "workspace_member_id_idx" ON "daily_features" USING btree ("workspa
 CREATE INDEX "workspace_member_id_fatigue_score_id_idx" ON "fatigue_scores" USING btree ("workspace_member_id","fatigue_score_id");--> statement-breakpoint
 CREATE INDEX "slack_temporal_raw_events_slack_event_id_idx" ON "slack_temporal_raw_events" USING btree ("slack_event_id");--> statement-breakpoint
 CREATE INDEX "slack_temporal_raw_events_workspace_member_id_idx" ON "slack_temporal_raw_events" USING btree ("workspace_member_id");--> statement-breakpoint
+CREATE INDEX "user_workspaces_user_id_idx" ON "user_workspaces" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "user_workspaces_workspace_id_idx" ON "user_workspaces" USING btree ("workspace_id");--> statement-breakpoint
 CREATE INDEX "workspace_google_calendar_integration_workspace_id_idx" ON "workspace_google_calendar_integrations" USING btree ("workspace_id");--> statement-breakpoint
 CREATE INDEX "workspace_google_calendar_sync_token_workspace_member_id_idx" ON "workspace_google_calendar_sync_tokens" USING btree ("workspace_member_id");--> statement-breakpoint
 CREATE INDEX "workspace_google_calendar_watch_channels_workspace_member_id_idx" ON "workspace_google_calendar_watch_channels" USING btree ("workspace_member_id");--> statement-breakpoint
 CREATE INDEX "workspace_member_workspace_id_idx" ON "workspace_members" USING btree ("workspace_id");--> statement-breakpoint
 CREATE INDEX "workspace_tokens_workspace_id_idx" ON "workspace_tokens" USING btree ("workspace_id");--> statement-breakpoint
-CREATE INDEX "workspace_member_id_intervention_id_idx" ON "interventions" USING btree ("workspace_member_id","intervention_id");--> statement-breakpoint
-CREATE INDEX "user_workspaces_user_id_idx" ON "user_workspaces" USING btree ("user_id");--> statement-breakpoint
-CREATE INDEX "user_workspaces_workspace_id_idx" ON "user_workspaces" USING btree ("workspace_id");--> statement-breakpoint	
+CREATE INDEX "workspace_member_id_intervention_id_idx" ON "interventions" USING btree ("workspace_member_id","intervention_id");

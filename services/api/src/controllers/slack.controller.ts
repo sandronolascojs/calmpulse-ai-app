@@ -1,3 +1,4 @@
+import { env } from '@/config/env.config';
 import { SlackService } from '@/services/slack.service';
 import { logger } from '@/utils/logger.instance';
 import { db } from '@calmpulse-app/db';
@@ -16,17 +17,17 @@ export const slackController = server.router(contract.slackContract, {
           workspace: request.workspace,
         });
         return {
-          status: 302,
-          body: undefined,
-          headers: {
-            Location: slackOAuthUrl,
+          status: 200,
+          body: {
+            ok: true,
+            redirectUrl: slackOAuthUrl,
           },
         };
       });
     },
   },
   oauthCallback: {
-    handler: async ({ query, request }) => {
+    handler: async ({ query, request, reply }) => {
       return await db.transaction(async (tx) => {
         const slackService = new SlackService(tx, logger);
         await slackService.generateCallback(query, {
@@ -34,9 +35,10 @@ export const slackController = server.router(contract.slackContract, {
           workspace: request.workspace,
         });
 
+        reply.status(302).header('Location', `${env.FRONTEND_URL}/onboarding?step=finish`);
         return {
-          status: 200,
-          body: undefined,
+          status: 302,
+          body: { location: `${env.FRONTEND_URL}/onboarding?step=finish` },
         };
       });
     },

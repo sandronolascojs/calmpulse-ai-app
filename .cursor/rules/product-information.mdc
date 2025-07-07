@@ -1,0 +1,92 @@
+---
+alwaysApply: false
+---
+
+🚀 CalmPulse Product Overview
+
+CalmPulse is a micro-SaaS platform designed for remote and hybrid teams to proactively detect, quantify, and prevent burnout by analyzing metadata from everyday collaboration tools like Slack and Google Calendar. By focusing on privacy-first data collection—never storing full message content—CalmPulse computes a daily Fatigue Index for each team member and surfaces actionable recommendations.
+
+Key highlights:
+	•	Privacy-First Design: Aggregates only anonymized metrics (message counts, sentiment flags, meeting durations) without retaining raw text or sensitive content.
+	•	Multi-Provider Support: Modular integration architecture supports Slack, Google Calendar, Microsoft Teams, and more via provider-specific tables and workflows.
+	•	Lightweight AI Scoring: Uses compact on-prem or API-powered models to classify sentiment; calls a single LLM scoring per user per day to generate fatigue indices and tailored advice.
+	•	Enterprise-Ready: Row-Level Security (RLS) in Postgres for strict tenant isolation, service-account domain-wide delegation, and Marketplace-based one-click calendar install.
+
+⸻
+
+🌟 Product Vision & Value Proposition
+
+Pain Points Addressed
+	•	Undetected Burnout: Managers lack early signals when overloaded employees risk dropping off mentally or resigning.
+	•	Manual Surveys: Pulse surveys are intrusive and lag real-time stress levels.
+	•	Privacy Concerns: Teams resist tools that read message contents.
+
+CalmPulse Advantages
+	•	Real-Time Signals: Daily indices catch rising fatigue before it spikes, using continuous metadata.
+	•	Non-Intrusive Alerts: Automated micro-interventions (“Take a 15m break”, “Meeting-free afternoon”) delivered via Slack DM or email.
+	•	Transparency & Trust: All calculations and thresholds are user-accessible; raw content never leaves Slack/Calendar.
+
+⸻
+
+🔎 Core Features
+
+1. Daily Fatigue Index
+	•	Composite Score (0–100): Combines normalized signals:
+	•	After-Hours Activity (messages or meetings outside work hours)
+	•	Sentiment Balance (negative vs positive message ratio)
+	•	Meeting Load (total minutes in meetings)
+	•	Break Patterns (number and length of breaks)
+	•	Automated Label: Low / Medium / High fatigue based on adjustable thresholds.
+
+2. Proactive Micro-Interventions
+	•	Suggestions: “Schedule a focus day”, “Take a stretch break”, “Mute notifications for 2 hours”.
+	•	Delivery Channels: Slack bot DM, weekly team digest, optional email summary.
+	•	Acknowledge & Track: Users can mark an intervention as taken; managers see adherence trends.
+
+3. Team Analytics & Benchmarking
+	•	Fatigue Leaderboard: Sort team by current fatigue level; filter by role or department.
+	•	Trend Heatmap: Visualize fatigue patterns over calendar weeks.
+	•	Anonymous Benchmarking: Compare against aggregated anonymized data from similar companies (opt-in).
+
+4. Configurable Work Patterns
+	•	Custom Work Hours: Global or per-member schedules to adjust what counts as ‘after hours’.
+	•	Personal Thresholds: Users or admins set fatigue thresholds for alerts.
+
+5. Seamless Integrations
+	•	Slack: OAuth-based bot, event subscriptions for messages and presences.
+	•	Google Calendar: Marketplace add-on for domain-wide install, watch/sync-token pipeline.
+	•	Future Extensions: Microsoft Teams, Outlook, Zoom, HRIS pipelines.
+
+⸻
+
+📊 Metrics & Monitoring
+
+CalmPulse tracks both health metrics and system metrics:
+
+Metric Category	Examples	Frequency
+User Engagement	Intervention click-through rate, DM opens	Real-time / daily
+Burnout Indicators	Average fatigue index per team	Daily / weekly
+Adoption & Growth	Workspaces connected, active members	Weekly / monthly
+System Health	API latency, webhook delivery success rate	Continuous
+
+	•	Dashboards: Built-in Grafana (or internal Next.js) views for system health and usage.
+	•	Alerts: PagerDuty/Slack alerts for integration failures, token expirations, or batch job errors.
+
+⸻
+
+🔐 Security & Privacy
+	•	Row-Level Security (RLS): Each query scoped to the user’s workspace.
+	•	Token Storage: Encrypted in database; refresh tokens rotated automatically.
+	•	Data Retention: Raw events purged within 24h; only aggregated metrics stored long-term.
+	•	Compliance: GDPR-ready, SOC 2 guidelines adhered for encryption at rest/in transit.
+
+⸻
+
+🛠️ Tech Stack & Architecture
+	•	Backend: Node.js + Fastify, Drizzle ORM, Postgres + RLS, Vercel Edge Functions.
+	•	Frontend: Next.js 14 App Router, shadcn/ui components, TanStack Query v5 + ts-rest, Tailwind CSS.
+	•	AI / ML: OpenAI GPT-3.5/4o-mini for scoring; lightweight on-device sentiment for real-time.
+	•	Integrations: Slack API, Google Calendar API, Outlook API via service account.
+	•	CI/CD: GitHub Actions → Vercel deployments; automated cron for nightly batches.
+
+⸻

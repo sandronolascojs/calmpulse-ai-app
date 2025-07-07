@@ -1,0 +1,28 @@
+# Cursor Rules Index
+
+This document serves as the index for all Cursor rules in this project. Use it to quickly locate and understand the purpose of each rule file.
+
+---
+
+## Rule Files
+
+- **index.mdc** (this file): The main index and table of contents for all Cursor rules. Update this file whenever you add or modify rule files in the `.cursor/rules/` directory.
+
+---
+
+## Purpose
+
+Cursor rules help enforce coding standards, security practices, and project-specific guidelines. They ensure consistency and quality across the codebase.
+
+---
+
+## How to Add or Edit Rules
+
+1. Add new rule files to the `.cursor/rules/` directory, using clear and descriptive filenames.
+2. For each new rule file, add an entry to this index with a brief description.
+3. Keep this index up to date to help all contributors find and understand the rules.
+
+---
+
+---
+

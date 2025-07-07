@@ -1,5 +1,5 @@
 {
-  "id": "f29fbf04-adca-46f9-961c-4874a8a44509",
+  "id": "a21d587b-e74f-4b0c-b768-1c378c422fcb",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -730,7 +730,38 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_workspaces_user_id_idx": {
+          "name": "user_workspaces_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "user_workspaces_workspace_id_idx": {
+          "name": "user_workspaces_workspace_id_idx",
+          "columns": [
+            {
+              "expression": "workspace_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {
         "user_workspaces_user_id_users_id_fk": {
           "name": "user_workspaces_user_id_users_id_fk",
@@ -1304,6 +1335,11 @@
           "name": "workspace_tokens_token_id_unique",
           "nullsNotDistinct": false,
           "columns": ["token_id"]
+        },
+        "workspace_tokens_workspace_id_unique": {
+          "name": "workspace_tokens_workspace_id_unique",
+          "nullsNotDistinct": false,
+          "columns": ["workspace_id"]
         }
       },
       "policies": {},

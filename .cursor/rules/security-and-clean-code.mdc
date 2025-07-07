@@ -1,0 +1,103 @@
+---
+alwaysApply: true
+---
+Summary
+
+This document outlines comprehensive guidelines to ensure security, clean code, and reusable components in a modern web application. It covers key security practices (based on OWASP Top 10 and API Security), coding conventions, clean code principles, and component reuse strategies to avoid bad practices or security leaks. Follow these rules to build maintainable, robust, and secure software.
+
+⸻
+
+🔒 Security Best Practices
+	1.	Adopt the OWASP Top 10: Regularly consult the OWASP Top 10 to prioritize mitigation of critical web application risks such as Broken Access Control, Cryptographic Failures, Injection, and Security Misconfiguration (owasp.org).
+	2.	Implement API Security Top 10: For API-centric services, follow OWASP’s API Security Top 10 to prevent vulnerabilities like Broken Object Level Authorization and Mass Assignment (owasp.org).
+	3.	Use Secure-by-Default Transport: Enforce HTTPS everywhere and employ strong TLS configurations; avoid deprecated ciphers to prevent Insufficient Transport Layer Encryption (owasptopten.org).
+	4.	Validate and Sanitize Inputs: On both client and server, perform strict validation and sanitization of all incoming data to prevent Injection attacks (cloudflare.com).
+	5.	Enforce Principle of Least Privilege: Grant minimal permissions for services and users; use fine-grained roles and permissions to limit impact of compromised accounts (salt.security).
+	6.	Secure Token Storage & Rotation: Store access and refresh tokens encrypted at rest and implement automatic rotation to reduce token theft risk (en.wikipedia.org).
+	7.	Implement RLS and Multitenancy Isolation: Use PostgreSQL Row-Level Security to strictly isolate tenant data, preventing horizontal privilege escalation (en.wikipedia.org).
+	8.	Enable Logging & Monitoring: Log security-relevant events (auth failures, permission changes) and monitor with alerting (e.g., PagerDuty, Grafana) to detect anomalies in real time (cloudflare.com).
+
+⸻
+
+📝 Clean Code Principles
+	1.	Single Responsibility Principle (SRP): Each module or class should have one, and only one, reason to change (en.wikipedia.org).
+	2.	Meaningful Naming: Use intention-revealing names for functions, variables, and classes; avoid misleading or generic identifiers (blog.codacy.com).
+	3.	Small, Focused Functions: Keep functions short (do one thing well), limit arguments (prefer ≤3), and avoid side effects (gist.github.com).
+	4.	Consistent Formatting & Conventions: Follow a shared style guide (e.g., ESLint + Prettier) and coding conventions to reduce cognitive load (en.wikipedia.org).
+	5.	Avoid Duplication (DRY): Refactor repeated logic into functions or modules; however, apply abstraction judiciously to avoid premature complexity (reddit.com).
+	6.	Comprehensive Testing: Write unit tests for critical logic, integration tests for security workflows, and use coverage thresholds to enforce quality (en.wikipedia.org).
+	7.	Code Reviews & Pair Programming: Encourage peer reviews to catch anti-patterns and reinforce team-wide standards, improving overall code health.
+
+⸻
+
+⚛️ Reusable Component Design
+	1.	Composition Over Inheritance: Build flexible UIs by composing small components rather than deep inheritance hierarchies (medium.com).
+	2.	Prop-Driven Configuration: Expose only necessary props with sensible defaults; use PropTypes or TypeScript interfaces for type safety (buttercms.com).
+	3.	Separation of Concerns: Keep UI, business logic, and data fetching separate—use hooks for logic and presentational components for rendering (blog.bitsrc.io).
+	4.	Themed Styling: Leverage CSS-in-JS or design-system theming (e.g., shadcn/ui) for consistent look and feel and to avoid style leaks (buttercms.com).
+	5.	Documentation & Storybook: Publish each component in Storybook with examples, prop tables, and edge-case demos to facilitate reuse by other developers.
+
+⸻
+
+🚫 Avoiding Security Leaks & Anti-Patterns
+	1.	Never Log Sensitive Data: Avoid logging tokens, passwords, or PII; use masked or hashed identifiers in logs only (cloudflare.com).
+	2.	Prevent Client-Side Secrets: Do not embed API keys or secrets in frontend code—use backend proxies or environment variables (owasp.org).
+	3.	Sanitize External Dependencies: Regularly audit and update third-party libraries; monitor for CVEs with tools like Snyk or Dependabot (cloudflare.com).
+	4.	Use Content Security Policy (CSP): Define strict CSP headers to mitigate XSS and data injection attacks (cloudflare.com).
+	5.	Limit Performance Overhead: Avoid excessive abstractions that hinder performance; profile and optimize hot paths to prevent denial-of-service scenarios.
+
+⸻
+
+🔗 Additional Resources
+	•	OWASP Top Ten: https://owasp.org/www-project-top-ten/ (owasp.org)
+	•	OWASP API Security: https://owasp.org/API-Security/editions/2023/ (owasp.org)
+	•	Clean Code Book: https://blog.codacy.com/what-is-clean-code (blog.codacy.com)
+	•	React Reusability Guide: https://medium.com/@rashmipatil24/reusable-react-components-7b025f232ca4 (medium.com)
+	•	Coding Conventions (Wikipedia): https://en.wikipedia.org/wiki/Coding_conventions (en.wikipedia.org)
+	•	Coding Best Practices (Wikipedia): https://en.wikipedia.org/wiki/Coding_best_practices (en.wikipedia.org)
+	•	SRP Principle: https://en.wikipedia.org/wiki/Single-responsibility_principle (en.wikipedia.org)
+	•	Salt Security on OWASP API Top 10: https://salt.security/blog/owasp-api-security-top-10-explained (salt.security)
+	•	Cloudflare Security Learning: https://www.cloudflare.com/learning/security/threats/owasp-top-10/ (cloudflare.com)
+	•	ButterCMS Reusable Components: https://buttercms.com/blog/building-reusable-components-using-react/ (buttercms.com)
+
+⸻
+
+Follow these guidelines as your security and code-quality checklist to maintain a robust, maintainable, and secure codebase. Happy coding! 🚀
+
+⸻
+
+✅ Compliance & Certifications
+
+To ensure CalmPulse meets enterprise and regulatory requirements, adhere to the following certification frameworks and controls:
+
+ISO/IEC 27001:2013
+	•	Information Security Management System (ISMS): Implement and maintain an ISMS covering all operational processes.
+	•	Annex A Controls: Apply relevant controls such as A.9 (Access Control), A.10 (Cryptography), and A.12 (Operations Security).
+	•	Internal Audits: Schedule at least annual internal audits and management reviews.
+
+SOC 2 Type II
+	•	Trust Service Criteria: Ensure controls for Security, Availability, Processing Integrity, Confidentiality, and Privacy.
+	•	Monitoring & Logging: Retain secure logs for a minimum of six months; deploy SIEM for anomaly detection.
+	•	Change Management: Formal change management process with documented approvals and rollback plans.
+
+GDPR (EU General Data Protection Regulation)
+	•	Data Minimization: Only collect aggregated, non-identifying metrics (no message content).
+	•	Legal Basis & Consent: Obtain explicit consent from workspace administrators; provide a clear privacy policy.
+	•	Data Subject Rights: Support data access, rectification, and erasure requests within one month.
+
+HIPAA (if processing ePHI)
+	•	Covered Entities & BAs: Sign Business Associate Agreements when integrating with healthcare organizations.
+	•	PHI Safeguards: Ensure encryption at rest/in transit, strict access logging, and secure authentication.
+	•	Breach Notification: Implement incident response with a 60-day notification window to affected parties.
+
+PCI DSS (if handling Payments)
+	•	Network Security: Isolate payment-processing systems; use firewalls, segmentation, and encrypted networks.
+	•	Secure Development Lifecycle: Conduct regular code reviews, static analysis, and penetration tests on payment flows.
+	•	Access Controls: Multi-factor authentication for all users accessing systems handling cardholder data.
+
+Continuous Compliance Practices
+	•	Policy Documentation: Maintain up-to-date security and privacy policies in a central repository.
+	•	Training & Awareness: Conduct quarterly security training for all employees.
+	•	Third-Party Assessments: Engage external auditors annually for certifications and vulnerability assessments.
+
+By following these frameworks and embedding controls into your development lifecycle, CalmPulse will align with industry best practices and regulatory requirements, minimizing risk and fostering customer trust.

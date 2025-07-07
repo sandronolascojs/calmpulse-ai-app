@@ -29,6 +29,9 @@ export const env = createEnv({
     OAUTH_SCOPES: z.string({
       required_error: 'OAUTH_SCOPES is required',
     }),
+    NGROK_SLACK_ENDPOINT: z.string({
+      required_error: 'NGROK_SLACK_ENDPOINT is required',
+    }),
 
     // auth
     BETTER_AUTH_URL: z.string({
@@ -71,5 +74,6 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     FRONTEND_URL: process.env.FRONTEND_URL,
+    NGROK_SLACK_ENDPOINT: process.env.NGROK_SLACK_ENDPOINT,
   },
 });

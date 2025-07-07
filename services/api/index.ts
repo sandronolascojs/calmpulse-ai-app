@@ -1,6 +1,7 @@
 import { registerAuthController } from '@/controllers/auth.controller';
 import { publicController } from '@/controllers/public.controller';
 import { slackController } from '@/controllers/slack.controller';
+import { workspaceController } from '@/controllers/workspace.controller';
 import { authPlugin } from '@/plugins/auth.plugin';
 import { errorHandlerPlugin } from '@/plugins/errorHandler.plugin';
 import { requestHandlerPlugin } from '@/plugins/requestHandler.plugin';
@@ -31,7 +32,17 @@ server.register(tsRestServer.plugin(publicController));
 // Auth routes
 server.register(async (fastify) => {
   await fastify.register(authPlugin);
-  fastify.register(tsRestServer.plugin(slackController));
+
+  fastify.register(tsRestServer.plugin(slackController), {
+    hooks: {
+      preHandler: fastify.authenticate,
+    },
+  });
+  fastify.register(tsRestServer.plugin(workspaceController), {
+    hooks: {
+      preHandler: fastify.authenticate,
+    },
+  });
 });
 
 server.listen({ port: env.PORT }, (err) => {

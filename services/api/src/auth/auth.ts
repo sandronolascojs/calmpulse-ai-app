@@ -9,8 +9,16 @@ import { haveIBeenPwned, magicLink } from 'better-auth/plugins';
 
 const emailService = new EmailService();
 
+const cacheTTL = 5 * 60 * 1000; // 5 minutes
 const TTL = 60 * 60 * 1000; // 1 hour
+
 export const auth = betterAuth({
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: cacheTTL,
+    },
+  },
   secret: env.BETTER_AUTH_SECRET,
   rateLimit: {
     enabled: true,
