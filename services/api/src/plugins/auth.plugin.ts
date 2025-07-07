@@ -32,10 +32,9 @@ export const authPlugin = fp(async (fastify: FastifyInstance) => {
         }
 
         if (!session.user.id) {
-          logger.error(
-            'Invalid session structure: missing user.id',
-            { userId: session?.user?.id ?? null },
-          );
+          logger.error('Invalid session structure: missing user.id', {
+            userId: session?.user?.id ?? null,
+          });
           return reply.status(401).send({ message: 'Unauthorized' });
         }
 
