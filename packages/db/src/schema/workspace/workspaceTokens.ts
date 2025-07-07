@@ -13,7 +13,8 @@ export const workspaceTokens = pgTable(
     tokenId: generateIdField({ name: 'token_id' }),
     workspaceId: text('workspace_id')
       .notNull()
-      .references(() => workspaces.workspaceId),
+      .references(() => workspaces.workspaceId)
+      .unique(),
     provider: workspaceExternalProviderType('provider')
       .notNull()
       .default(WorkspaceExternalProviderType.Slack),
