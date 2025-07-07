@@ -3,12 +3,17 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
-  const session = await auth.getSession({
-    fetchOptions: {
-      headers: await headers(),
-    },
-  });
-  if (!session) {
+  try {
+    const session = await auth.getSession({
+      fetchOptions: {
+        headers: await headers(),
+      },
+    });
+    if (!session) {
+      redirect('/sign-in');
+    }
+  } catch (error) {
+    console.error('Authentication error:', error);
     redirect('/sign-in');
   }
 
