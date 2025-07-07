@@ -124,8 +124,15 @@ export function SignInForm() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
-            Send magic link
+          <Button type="submit" className="w-full" disabled={isPending}>
+            {isPending ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Sending magic link...
+              </>
+            ) : (
+              'Send magic link'
+            )}
           </Button>
           <Button
             type="button"
