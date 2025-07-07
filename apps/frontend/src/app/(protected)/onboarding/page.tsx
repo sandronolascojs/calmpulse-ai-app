@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 interface OnboardingPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function OnboardingPage({ searchParams }: OnboardingPageProps) {
@@ -19,7 +19,7 @@ export default async function OnboardingPage({ searchParams }: OnboardingPagePro
     queryKey,
   });
 
-  if (result.body.workspace && !searchParams.step) {
+  if (result.body.workspace && !(await searchParams).step) {
     redirect('/');
   }
 
