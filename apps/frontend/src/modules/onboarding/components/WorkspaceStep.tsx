@@ -7,30 +7,30 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Clock4, Loader2, Lock, ShieldCheck } from 'lucide-react';
+import { BadgeCheck, Loader2, Lock, Network, ShieldCheck } from 'lucide-react';
 import { FaSlack } from 'react-icons/fa';
 
 const terms = [
   {
-    icon: <ShieldCheck className="size-5 text-primary" />,
+    icon: <Network className="size-6 text-primary" />,
     title: 'OAuth-Based and Revocable',
     description:
       'Your admin grants permissions once. Tokens can be revoked anytime in Slack App settings.',
   },
   {
-    icon: <Lock className="size-5 text-primary" />,
-    title: 'Enterprise-Grade Encryption',
+    icon: <ShieldCheck className="size-6 text-primary" />,
+    title: 'Enterprise-Grade Security',
     description:
       'All data is encrypted in transit (TLS) and at rest, following ISO 27001 and SOC 2 standards.',
   },
   {
-    icon: <Clock4 className="size-5 text-primary" />,
+    icon: <Lock className="size-6 text-primary" />,
     title: 'Privacy-First Data Handling',
     description:
       'Metadata is stored only for 24 hours to compute daily aggregates. Raw data is purged automatically.',
   },
   {
-    icon: <Lock className="size-5 text-primary" />,
+    icon: <BadgeCheck className="size-6 text-primary" />,
     title: 'Regulatory Compliance',
     description:
       'CalmPulse is GDPR, CCPA, and HIPAA (optionally) compliant, with documented retention and deletion policies.',
@@ -65,8 +65,8 @@ interface WorkspaceStepProps {
  */
 export const WorkspaceStep = ({ onSlackConnect, isLoading }: WorkspaceStepProps) => {
   return (
-    <div className="flex flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-xl">
+    <div className="flex flex-col items-center justify-center">
+      <Card className="w-full max-w-lg md:max-w-xl">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg">
             <FaSlack className="size-6" />
