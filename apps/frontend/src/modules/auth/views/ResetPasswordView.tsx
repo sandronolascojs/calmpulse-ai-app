@@ -1,15 +1,19 @@
 import { Separator } from '@/components/ui/separator';
 import { APP } from '@/constants/app.constants';
-import { SignInForm } from './components/sign-in-form';
+import { ResetPasswordForm } from '../forms/ResetPasswordForm';
 
-export const SignInView = () => {
+interface ResetPasswordViewProps {
+  token: string;
+}
+
+export const ResetPasswordView = ({ token }: ResetPasswordViewProps) => {
   return (
     <>
       <div className="flex min-h-screen">
-        {/* Left Section - Sign In Form */}
+        {/* Left Section - Set New Password Form */}
         <div className="flex-1 flex flex-col justify-center px-4 py-8 sm:px-6 lg:px-12">
           <div className="w-full max-w-md mx-auto">
-            <SignInForm />
+            <ResetPasswordForm token={token} />
           </div>
         </div>
 

@@ -30,7 +30,6 @@ export const auth = betterAuth({
     .filter((origin) => origin.length > 0),
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
     sendResetPassword: async ({ user, url, token }) => {
       const { email } = user;
       const resetPasswordUrl = `${url}?token=${token}`;

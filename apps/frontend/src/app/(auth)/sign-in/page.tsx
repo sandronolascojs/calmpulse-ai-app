@@ -1,4 +1,4 @@
-import { SignInView } from '@/modules/auth/signIn/SignInView';
+import { SignInView } from '@/modules/auth/views/SignInView';
 
 export default function SignInPage() {
   return <SignInView />;
