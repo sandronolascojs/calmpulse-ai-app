@@ -11,11 +11,13 @@ const config: QueryClientConfig = {
       retry: RETRY_COUNT,
     },
   },
-  queryCache: new QueryCache({
-    onError: (error) => {
-      errorHandler(error);
-    },
-  }),
+export const errorHandler = (error: unknown) => {
+  if (isFetchError(error)) {
+    toast.error(error.message);
+    return;
+  }
+  toast.error('Something went wrong. Please try again later.');
+};
 };
 
 export const queryClient = new QueryClient(config);
