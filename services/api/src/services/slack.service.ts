@@ -131,6 +131,10 @@ export class SlackService {
   }
 
   private getRedirectUri(): string {
-    return `${env.API_BASE_URL}/api/slack/oauth/callback`;
+    if (env.APP_ENV === 'development') {
+      return `${env.NGROK_SLACK_ENDPOINT}/slack/oauth/callback`;
+    }
+
+    return `${env.API_BASE_URL}/slack/oauth/callback`;
   }
 }

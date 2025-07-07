@@ -44,17 +44,20 @@ export const slack = c.router({
     method: 'GET',
     path: '/slack/install',
     responses: {
-      302: z.void(),
-      400: z.string(),
-      500: z.string(),
+      200: z.object({
+        ok: z.literal(true),
+        redirectUrl: z.string(),
+      }),
+      ...errorsSchema,
     },
   },
   oauthCallback: {
     method: 'GET',
     path: '/slack/oauth/callback',
-    query: z.object({ code: z.string() }),
+    query: z.object({ code: z.string(), state: z.string() }),
     responses: {
       200: z.undefined(),
+      302: z.object({ location: z.string() }),
       400: oauthFailure,
       ...errorsSchema,
     },

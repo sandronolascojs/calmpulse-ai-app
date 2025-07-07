@@ -182,6 +182,9 @@ importers:
       '@tanstack/react-query':
         specifier: '5'
         version: 5.81.5(react@19.1.0)
+      '@ts-rest/core':
+        specifier: ^3.52.1
+        version: 3.52.1(@types/node@22.16.0)(zod@3.25.67)
       '@ts-rest/react-query':
         specifier: ^3.52.1
         version: 3.52.1(@tanstack/react-query@5.81.5(react@19.1.0))(@ts-rest/core@3.52.1(@types/node@22.16.0)(zod@3.25.67))(react@19.1.0)(zod@3.25.67)
