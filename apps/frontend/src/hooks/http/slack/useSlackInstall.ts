@@ -12,12 +12,8 @@ export const useSlackInstall = () => {
     setError(null);
     try {
       const data = await tsrClient.slackContract.install.query();
-      if (data.status === 302 && data.headers && typeof data.headers.get === 'function') {
-        const location = data.headers.get('Location');
-        if (location) {
-          window.location.href = location;
-          return;
-        }
+      if (data.status === 200) {
+        window.location.href = data.body.redirectUrl;
       }
       setIsError(true);
       setError('Unexpected response from Slack install endpoint.');
