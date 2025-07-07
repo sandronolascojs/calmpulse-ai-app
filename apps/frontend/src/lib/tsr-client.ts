@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 export const errorHandler = (error: unknown) => {
   if (isFetchError(error)) {
     toast.error(error.message);
+    return;
   }
   toast.error('Something went wrong. Please try again later.');
 };
