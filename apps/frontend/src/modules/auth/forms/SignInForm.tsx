@@ -16,7 +16,6 @@ import { emailValidation, passwordValidation } from '@calmpulse-app/types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, Mail } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -43,7 +42,6 @@ export function SignInForm() {
   // State
   const [isPending, startTransition] = useTransition();
   const [magicMode, setMagicMode] = useState(false);
-  const router = useRouter();
 
   // Forms
   const form = useForm<SignInFormData>({
@@ -72,6 +70,38 @@ export function SignInForm() {
         },
       );
     });
+  };
+
+  const handleGoogleSignIn = async () => {
+    await auth.signIn.social(
+      {
+        provider: 'google',
+        callbackURL: env.NEXT_PUBLIC_FRONTEND_URL,
+      },
+      {
+        onError: (error) => {
+          toast.error(error.error.message);
+        },
+      },
+    );
+  };
+
+  const handlePasswordSignIn = async (data: SignInFormData) => {
+    await auth.signIn.email(
+      {
+        email: data.email,
+        password: data.password,
+        callbackURL: env.NEXT_PUBLIC_FRONTEND_URL,
+      },
+      {
+        onSuccess: () => {
+          toast.success('Signed in successfully');
+        },
+        onError: (error) => {
+          toast.error(error.error.message);
+        },
+      },
+    );
   };
 
   // Renderers
