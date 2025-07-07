@@ -56,54 +56,22 @@ export function SignInForm() {
   });
 
   // Handlers
-  const handleGoogleSignIn = async () => {
-    await auth.signIn.social(
-      { provider: 'google', callbackURL: env.NEXT_PUBLIC_FRONTEND_URL },
-      {
-        onError: (error) => {
-          toast.error(error.error.message);
-        },
-      },
-    );
-  };
-
-  const handlePasswordSignIn = async (data: SignInFormData) => {
-    startTransition(async () => {
-      await auth.signIn.email(data, {
-        onSuccess: () => router.push('/'),
-        onError: (error) => {
-          switch (error.error.code) {
-            case auth.$ERROR_CODES.INVALID_PASSWORD:
-            case auth.$ERROR_CODES.INVALID_EMAIL:
-            case auth.$ERROR_CODES.USER_NOT_FOUND:
-              form.setError('email', { message: 'Invalid email or password. Please try again.' });
-              break;
-            case 'PASSWORD_COMPROMISED':
-              form.setError('password', { message: error.error.message });
-              break;
-            default:
-              toast.error(error.error.message);
-              break;
-          }
-        },
-      });
-    });
-  };
-
   const handleMagicLink = async (data: MagicLinkFormData) => {
-    await auth.signIn.magicLink(
-      { email: data.email, callbackURL: env.NEXT_PUBLIC_FRONTEND_URL },
-      {
-        onSuccess: () => {
-          toast.success('Check your email for a magic login link!');
-          setMagicMode(false);
-          magicLinkForm.reset();
+    startTransition(async () => {
+      await auth.signIn.magicLink(
+        { email: data.email, callbackURL: env.NEXT_PUBLIC_FRONTEND_URL },
+        {
+          onSuccess: () => {
+            toast.success('Check your email for a magic login link!');
+            setMagicMode(false);
+            magicLinkForm.reset();
+          },
+          onError: (error) => {
+            toast.error(error.error.message);
+          },
         },
-        onError: (error) => {
-          toast.error(error.error.message);
-        },
-      },
-    );
+      );
+    });
   };
 
   // Renderers
