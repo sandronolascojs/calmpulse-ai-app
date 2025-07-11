@@ -4,8 +4,10 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "infra:deploy": "sst deploy",
-    "infra:dev": "sst dev"
+    "infra:deploy:dev": "sst deploy --stage dev",
+    "infra:deploy:production": "sst deploy --stage production",
+    "infra:dev": "sst dev --stage dev",
+    "infra:remove:dev": "sst remove --stage dev"
   },
   "dependencies": {
     "@calmpulse-app/config": "workspace:*",
