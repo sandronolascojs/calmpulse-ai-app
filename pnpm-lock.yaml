@@ -670,6 +670,9 @@ importers:
       '@calmpulse-app/utils':
         specifier: workspace:*
         version: link:../../packages/utils
+      '@fastify/aws-lambda':
+        specifier: ^5.1.4
+        version: 5.1.4
       '@fastify/cors':
         specifier: ^11.0.1
         version: 11.0.1
@@ -1750,6 +1753,12 @@ packages:
     resolution:
       {
         integrity: sha512-Rkiu/8wIjpsf46Rr+Fitd3HRP+VsxUFDDeag0hs9L0ksfnwx2g7SPQQTFL0E8Qv+rfXzQOxBJnjUB9ITUDjfWQ==,
+      }
+
+  '@fastify/aws-lambda@5.1.4':
+    resolution:
+      {
+        integrity: sha512-ExyaFMcEJXyUnYktzs5ww/5iDI8LcXMiIMnYZW6aavSIu+W0d08bJhvw8ShHL9wsRrRvfH+BOLdUEVB8oQ4Rew==,
       }
 
   '@fastify/cors@11.0.1':
@@ -13027,6 +13036,8 @@ snapshots:
       ajv: 8.17.1
       ajv-formats: 3.0.1(ajv@8.17.1)
       fast-uri: 3.0.6
+
+  '@fastify/aws-lambda@5.1.4': {}
 
   '@fastify/cors@11.0.1':
     dependencies:
