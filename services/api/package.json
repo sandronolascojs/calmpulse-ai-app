@@ -22,6 +22,7 @@
     "@calmpulse-app/utils": "workspace:*",
     "@fastify/aws-lambda": "^5.1.4",
     "@fastify/cors": "^11.0.1",
+    "@fastify/rate-limit": "^10.3.0",
     "@slack/oauth": "^3.0.3",
     "@slack/web-api": "^7.9.3",
     "@t3-oss/env-core": "catalog:",
