@@ -1,31 +1,31 @@
 {
+  "private": true,
   "name": "@calmpulse-app/utils",
-  "author": "Blocks AI",
   "version": "1.0.0",
   "description": "Utils for the project",
-  "main": "index.ts",
   "license": "MIT",
-  "private": true,
+  "author": "Blocks AI",
+  "main": "index.ts",
   "scripts": {
-    "dev": "tsx watch index.ts",
-    "typecheck": "tsc --noEmit",
     "build": "echo 'build'",
+    "dev": "tsx watch index.ts",
+    "format": "prettier --config ../config/.prettierrc --write --ignore-path .gitignore . && prettier-package-json --write ./package.json",
     "lint": "eslint . --ext .ts,.tsx --config ../config/.eslintrc.base.js",
     "lint:fix": "eslint . --ext .ts,.tsx --fix --config ../config/.eslintrc.base.js",
-    "format": "prettier --config ../config/.prettierrc --write --ignore-path .gitignore . && prettier-package-json --write ./package.json"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "zod": "catalog:",
-    "@calmpulse-app/config": "workspace:*"
+    "@calmpulse-app/config": "workspace:*",
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "typescript": "catalog:",
-    "tsx": "catalog:",
-    "prettier": "catalog:",
     "eslint": "catalog:",
-    "prettier-plugin-organize-imports": "^3.2.4",
-    "prettier-package-json": "^2.8.0",
     "pino": "catalog:",
-    "pino-pretty": "catalog:"
+    "pino-pretty": "catalog:",
+    "prettier": "catalog:",
+    "prettier-package-json": "^2.8.0",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
   }
 }

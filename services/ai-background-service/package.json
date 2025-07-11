@@ -2,18 +2,17 @@
   "name": "@calmpulse-app/ai-background-service",
   "version": "1.0.0",
   "description": "",
+  "license": "ISC",
+  "author": "",
   "main": "index.ts",
   "scripts": {
     "dev": "dotenv -e .env.local -- tsx watch index.ts",
-    "start": "tsx index.ts",
-    "typecheck": "tsc --noEmit",
     "format": "prettier --write --ignore-path .gitignore --config ../../packages/config/.prettierrc . && prettier-package-json --write ./package.json",
     "lint": "eslint . --ext .ts --config ../../packages/config/.eslintrc.base.js",
-    "lint:fix": "eslint . --ext .ts --fix --config ../../packages/config/.eslintrc.base.js"
+    "lint:fix": "eslint . --ext .ts --fix --config ../../packages/config/.eslintrc.base.js",
+    "start": "tsx index.ts",
+    "typecheck": "tsc --noEmit"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@calmpulse-app/ai": "workspace:*",
     "@calmpulse-app/config": "workspace:*",
@@ -34,10 +33,11 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "prettier": "catalog:",
-    "typescript": "catalog:",
     "eslint": "catalog:",
+    "prettier": "catalog:",
+    "prettier-package-json": "^2.8.0",
     "prettier-plugin-organize-imports": "^3.2.4",
-    "prettier-package-json": "^2.8.0"
-  }
+    "typescript": "catalog:"
+  },
+  "keywords": []
 }
