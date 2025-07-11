@@ -22,6 +22,8 @@ module.exports = [
       '.husky/**',
       '**/.build/**',
       '**/.next/**',
+      '**/.sst/**',
+      '**/.sst/platform/**',
     ],
   },
   {

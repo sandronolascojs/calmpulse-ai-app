@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "name": "@calmpulse-app/infra",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "infra:deploy": "sst deploy",
+    "infra:dev": "sst dev"
+  },
+  "dependencies": {
+    "@calmpulse-app/config": "workspace:*",
+    "@calmpulse-app/types": "workspace:*",
+    "@t3-oss/env-core": "catalog:",
+    "aws-cdk-lib": "^2.204.0",
+    "dotenv": "^17.2.0",
+    "sst": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.150",
+    "typescript": "catalog:"
+  }
+}

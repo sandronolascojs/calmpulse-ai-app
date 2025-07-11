@@ -1,23 +1,22 @@
 {
-  "dependencies": {
-    "turbo": "^2.5.3"
-  },
   "scripts": {
-    "dev": "turbo run dev",
     "build": "turbo run build",
-    "lint": "eslint . --ext .js,.ts,.tsx",
-    "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
-    "watch": "turbo watch dev",
-    "format": "prettier --write --ignore-path .gitignore --config packages/config/.prettierrc .",
+    "dev": "turbo run dev",
+    "format": "pnpm -r --if-present run format",
+    "lint": "pnpm -r --if-present run lint",
+    "lint:fix": "pnpm -r --if-present run lint:fix",
+    "prepare": "husky install",
     "typecheck": "pnpm -r --if-present run typecheck",
-    "prepare": "husky install"
+    "watch": "turbo watch dev"
   },
   "workspaces": [
     "apps/*",
     "packages/*",
     "services/*"
   ],
-  "packageManager": "pnpm@10.11.0",
+  "dependencies": {
+    "turbo": "^2.5.3"
+  },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
@@ -32,5 +31,6 @@
     "*.{js,ts,tsx,jsx,json,css,md,yaml,yml}": [
       "pnpm format"
     ]
-  }
+  },
+  "packageManager": "pnpm@10.11.0"
 }

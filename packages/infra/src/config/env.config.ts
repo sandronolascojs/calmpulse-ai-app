@@ -1,20 +1,10 @@
 import { createEnv } from '@t3-oss/env-core';
+import 'dotenv/config';
 import { z } from 'zod';
 
 export const env = createEnv({
   server: {
-    PORT: z.coerce.number().default(8000),
-    APP_ENV: z.enum(['development', 'production']).default('development'),
-    DATABASE_URL: z.string({
-      required_error: 'DATABASE_URL is required',
-    }),
-    ALLOWED_ORIGINS: z.string().default('*'),
-    API_BASE_URL: z.string({
-      required_error: 'API_BASE_URL is required',
-    }),
-    FRONTEND_URL: z.string({
-      required_error: 'FRONTEND_URL is required',
-    }),
+    FRONTEND_URL: z.string().url(),
 
     // slack
     SLACK_CLIENT_ID: z.string({
@@ -26,14 +16,13 @@ export const env = createEnv({
     OAUTH_SCOPES: z.string({
       required_error: 'OAUTH_SCOPES is required',
     }),
-    NGROK_SLACK_ENDPOINT: z.string().optional(),
 
     // auth
-    BETTER_AUTH_URL: z.string({
-      required_error: 'BETTER_AUTH_URL is required',
-    }),
     BETTER_AUTH_SECRET: z.string({
       required_error: 'BETTER_AUTH_SECRET is required',
+    }),
+    BETTER_AUTH_URL: z.string({
+      required_error: 'BETTER_AUTH_URL is required',
     }),
 
     // email
@@ -44,7 +33,7 @@ export const env = createEnv({
       required_error: 'FROM_EMAIL is required',
     }),
 
-    // google
+    // google credentials
     GOOGLE_CLIENT_ID: z.string({
       required_error: 'GOOGLE_CLIENT_ID is required',
     }),
@@ -52,22 +41,24 @@ export const env = createEnv({
       required_error: 'GOOGLE_CLIENT_SECRET is required',
     }),
   },
-  runtimeEnvStrict: {
-    PORT: process.env.PORT,
-    APP_ENV: process.env.APP_ENV,
-    API_BASE_URL: process.env.API_BASE_URL,
-    DATABASE_URL: process.env.DATABASE_URL,
-    ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
+  runtimeEnv: {
+    FRONTEND_URL: process.env.FRONTEND_URL,
+
+    // slack
     SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
     SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
     OAUTH_SCOPES: process.env.OAUTH_SCOPES,
-    BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+
+    // auth
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+
+    // email
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     FROM_EMAIL: process.env.FROM_EMAIL,
+
+    // google credentials
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    FRONTEND_URL: process.env.FRONTEND_URL,
-    NGROK_SLACK_ENDPOINT: process.env.NGROK_SLACK_ENDPOINT,
   },
 });
