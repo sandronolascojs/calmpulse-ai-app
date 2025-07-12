@@ -5,16 +5,6 @@ import * as RechartsPrimitive from 'recharts';
 
 import { cn } from '@/lib/utils';
 
-type Payload = {
-  dataKey: string;
-  name: string;
-  value: string;
-  payload: {
-    fill: string;
-  }[];
-  color: string;
-}[];
-
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: '', dark: '.dark' } as const;
 
@@ -31,6 +21,16 @@ export type ChartConfig = {
 type ChartContextProps = {
   config: ChartConfig;
 };
+
+type Payload = {
+  dataKey: string;
+  name: string;
+  value: string;
+  payload: {
+    fill: string;
+  }[];
+  color: string;
+}[];
 
 const ChartContext = React.createContext<ChartContextProps | null>(null);
 
@@ -127,8 +127,8 @@ function ChartTooltipContent({
     indicator?: 'line' | 'dot' | 'dashed';
     nameKey?: string;
     labelKey?: string;
-    payload: Payload;
-    label: string;
+    payload?: Payload;
+    label?: string;
   }) {
   const { config } = useChart();
 
@@ -254,7 +254,7 @@ function ChartLegendContent({
   Pick<RechartsPrimitive.LegendProps, 'verticalAlign'> & {
     hideIcon?: boolean;
     nameKey?: string;
-    payload: Payload;
+    payload?: Payload;
   }) {
   const { config } = useChart();
 
