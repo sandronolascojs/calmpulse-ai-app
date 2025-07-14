@@ -1,10 +1,9 @@
-import { createEnv } from '@t3-oss/env-core';
-import 'dotenv/config';
 import { z } from 'zod';
 
-export const env = createEnv({
-  server: {
-    FRONTEND_URL: z.string().url(),
+const _envSchema = z
+  .object({
+    SST_STAGE: z.enum(['dev', 'production']).default('dev'),
+    FRONTEND_URL: z.string(),
 
     // slack
     SLACK_CLIENT_ID: z.string({
@@ -40,25 +39,19 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string({
       required_error: 'GOOGLE_CLIENT_SECRET is required',
     }),
-  },
-  runtimeEnv: {
-    FRONTEND_URL: process.env.FRONTEND_URL,
 
-    // slack
-    SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
-    SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
-    OAUTH_SCOPES: process.env.OAUTH_SCOPES,
+    // cloudflare
+    CLOUDFLARE_API_TOKEN: z.string({
+      required_error: 'CLOUDFLARE_API_TOKEN is required',
+    }),
+    CLOUDFLARE_DEFAULT_ACCOUNT_ID: z.string({
+      required_error: 'CLOUDFLARE_DEFAULT_ACCOUNT_ID is required',
+    }),
+  })
+  .safeParse(process.env);
 
-    // auth
-    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
-    BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
+if (!_envSchema.success) {
+  throw new Error(`Invalid environment variables: ${_envSchema.error.message}`);
+}
 
-    // email
-    RESEND_API_KEY: process.env.RESEND_API_KEY,
-    FROM_EMAIL: process.env.FROM_EMAIL,
-
-    // google credentials
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-  },
-});
+export const env = _envSchema.data;

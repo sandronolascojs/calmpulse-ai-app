@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const env = createEnv({
   server: {
     PORT: z.coerce.number().default(8000),
-    APP_ENV: z.enum(['development', 'production']).default('development'),
+    APP_ENV: z.enum(['development', 'production', 'dev', 'staging']).default('dev'),
     DATABASE_URL: z.string({
       required_error: 'DATABASE_URL is required',
     }),

@@ -9,7 +9,7 @@ export const env = createEnv({
 
     // Server
     PORT: z.coerce.number().default(8000),
-    APP_ENV: z.enum(['development', 'production']).default('development'),
+    APP_ENV: z.enum(['development', 'production', 'dev', 'staging']).default('dev'),
 
     // Databases
     HEALTH_FOOD_BLOG_DATABASE_URL: z.string({

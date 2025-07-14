@@ -10,6 +10,7 @@
     "format": "prettier --write --ignore-path .gitignore --config ../../packages/config/.prettierrc . && prettier-package-json --write ./package.json",
     "lint": "eslint . --ext .ts,.tsx --config ../../packages/config/.eslintrc.base.js",
     "lint:fix": "eslint . --ext .ts,.tsx --fix --config ../../packages/config/.eslintrc.base.js",
+    "start": "tsx index.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

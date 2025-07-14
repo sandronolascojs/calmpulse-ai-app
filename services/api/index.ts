@@ -1,4 +1,3 @@
-import awsLambdaFastify from '@fastify/aws-lambda';
 import cors from '@fastify/cors';
 import rateLimit from '@fastify/rate-limit';
 import { initServer } from '@ts-rest/fastify';
@@ -44,18 +43,10 @@ export function buildServer() {
   return app;
 }
 
-const proxy = awsLambdaFastify(buildServer());
-
-export const handler = proxy;
-
-if (process.env.AWS_LAMBDA_FUNCTION_NAME === undefined) {
-  const PORT = env.PORT;
-
-  buildServer()
-    .listen({ port: PORT })
-    .then(() => logger.info(`🚀 API ready at http://localhost:${PORT}`))
-    .catch((err) => {
-      logger.error(err);
-      process.exit(1);
-    });
-}
+buildServer()
+  .listen({ port: env.PORT, host: '0.0.0.0' })
+  .then(() => logger.info(`🚀 API ready at http://localhost:${env.PORT}`))
+  .catch((err) => {
+    logger.error(err);
+    process.exit(1);
+  });

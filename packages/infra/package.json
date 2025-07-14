@@ -4,17 +4,18 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "infra:deploy:dev": "sst deploy --stage dev",
-    "infra:deploy:production": "sst deploy --stage production",
-    "infra:dev": "sst dev --stage dev",
-    "infra:remove:dev": "sst remove --stage dev"
+    "infra:deploy:dev": "dotenv -e .env.dev sst deploy --stage dev",
+    "infra:deploy:production": "dotenv -e .env.production sst deploy --stage production",
+    "infra:dev": "dotenv -e .env.dev sst dev --stage dev",
+    "infra:refresh:dev": "dotenv -e .env.dev sst refresh --stage dev",
+    "infra:remove:dev": "dotenv -e .env.dev sst remove --stage dev",
+    "infra:unlock:dev": "dotenv -e .env.dev sst unlock --stage dev"
   },
   "dependencies": {
     "@calmpulse-app/config": "workspace:*",
     "@calmpulse-app/types": "workspace:*",
-    "@t3-oss/env-core": "catalog:",
     "aws-cdk-lib": "^2.204.0",
-    "dotenv": "^17.2.0",
+    "dotenv-cli": "catalog:",
     "sst": "catalog:",
     "zod": "catalog:"
   },

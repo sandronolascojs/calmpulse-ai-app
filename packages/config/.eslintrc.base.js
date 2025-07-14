@@ -6,9 +6,9 @@ const unusedImportsPlugin = require('eslint-plugin-unused-imports');
 module.exports = [
   {
     ignores: [
-      'dist/',
-      'build/',
-      'out/',
+      'dist/**',
+      'build/**',
+      'out/**',
       'node_modules/',
       '**/node_modules/**',
       '**/dist/**',
@@ -23,7 +23,7 @@ module.exports = [
       '**/.build/**',
       '**/.next/**',
       '**/.sst/**',
-      '**/.sst/platform/**',
+      '**/dist/**',
     ],
   },
   {
