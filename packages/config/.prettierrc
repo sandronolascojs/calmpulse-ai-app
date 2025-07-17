@@ -7,5 +7,6 @@
   "arrowParens": "always",
   "endOfLine": "lf",
   "plugins": ["prettier-plugin-organize-imports", "prettier-package-json"],
-  "organizeImportsSkipDestructiveCodeActions": true
+  "organizeImportsSkipDestructiveCodeActions": true,
+  "ignorePath": ".prettierignore"
 }
