@@ -43,7 +43,6 @@ export default tseslint.config(
       '@typescript-eslint/no-misused-promises': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',
       '@typescript-eslint/no-unnecessary-condition': 'warn',
-      '@typescript-eslint/no-unnecessary-condition': 'off',
     },
   },
 );
