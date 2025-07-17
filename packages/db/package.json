@@ -1,29 +1,40 @@
 {
   "name": "@calmpulse-app/db",
   "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "",
-  "main": "index.ts",
+  "description": "Database for the Calm Pulse project",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema/index.ts"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "files": [
+    "src"
+  ],
   "scripts": {
-    "build": "echo 'build'",
-    "db:generate": "dotenv -e ./.env.local -- drizzle-kit generate",
-    "db:migrate:deploy": "drizzle-kit migrate:deploy",
-    "db:migrate:local": "dotenv -e .env.local -- drizzle-kit migrate",
-    "dev": "dotenv -e ./.env.local -- tsx watch ./index.ts",
-    "format": "prettier --write --ignore-path .gitignore --config ../config/.prettierrc .",
-    "lint": "eslint . --ext .ts,.tsx --config ../config/.eslintrc.base.js",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix --config ../config/.eslintrc.base.js",
+    "build": "tsup && tsc --emitDeclarationOnly && tsc-alias --verbose",
+    "clean": "del-cli dist tsconfig.tsbuildinfo",
+    "compile": "tsc --noEmit",
+    "coverage": "vitest run --coverage",
+    "db:generate": "dotenv -e ./.env.local -- drizzle-kit generate --config ./src/drizzle.config.ts",
+    "db:migrate:deploy": "dotenv -e ./.env.local -- drizzle-kit migrate:deploy --config ./src/drizzle.config.ts",
+    "db:migrate:local": "dotenv -e .env.local -- drizzle-kit migrate --config ./src/drizzle.config.ts",
+    "format": "prettier --config ../config/.prettierrc --write --ignore-path .gitignore . && prettier-package-json --write ./package.json",
+    "lint": "eslint src --flag v10_config_lookup_from_file --max-warnings 0",
+    "lint:fix": "eslint src --flag v10_config_lookup_from_file --max-warnings 0 --fix",
+    "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
+  "types": "./src/index.ts",
   "dependencies": {
     "@calmpulse-app/config": "workspace:*",
     "@calmpulse-app/types": "workspace:*",
     "@paralleldrive/cuid2": "catalog:",
-    "@t3-oss/env-core": "catalog:",
     "dotenv-cli": "catalog:",
     "drizzle-orm": "catalog:",
-    "pg": "^8.16.0",
+    "pg": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
@@ -32,7 +43,7 @@
     "eslint": "catalog:",
     "prettier": "catalog:",
     "tsx": "catalog:",
-    "typescript": "catalog:"
-  },
-  "keywords": []
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
+  }
 }

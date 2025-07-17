@@ -1,33 +1,42 @@
 {
   "name": "@calmpulse-app/shared",
   "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "",
-  "main": "index.ts",
+  "description": "Shared for the Calm Pulse project",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "files": [
+    "src"
+  ],
   "scripts": {
-    "build": "echo 'build'",
-    "format": "prettier --write --ignore-path .gitignore --config ../config/.prettierrc . && prettier-package-json --write ./package.json",
-    "lint": "eslint . --ext .ts,.tsx --config ../config/.eslintrc.base.js",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix --config ../config/.eslintrc.base.js",
+    "build": "tsup && tsc --emitDeclarationOnly && tsc-alias --verbose",
+    "clean": "del-cli dist tsconfig.tsbuildinfo",
+    "compile": "tsc --noEmit",
+    "coverage": "vitest run --coverage ",
+    "format": "prettier --config ../config/.prettierrc --write --ignore-path .gitignore . && prettier-package-json --write ./package.json",
+    "lint": "eslint src --flag v10_config_lookup_from_file --max-warnings 0",
+    "lint:fix": "eslint src --flag v10_config_lookup_from_file --max-warnings 0 --fix",
+    "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
+  "types": "./src/index.ts",
   "dependencies": {
     "@calmpulse-app/ai": "workspace:*",
     "@calmpulse-app/config": "workspace:*",
     "@calmpulse-app/db": "workspace:*",
     "@calmpulse-app/types": "workspace:*",
-    "@calmpulse-app/utils": "workspace:*",
-    "@supabase/supabase-js": "^2.50.0",
-    "slugify": "^1.6.6"
+    "limax": "catalog:",
+    "winston": "catalog:"
   },
   "devDependencies": {
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "prettier-package-json": "^2.8.0",
-    "prettier-plugin-organize-imports": "^3.2.4",
     "tsx": "catalog:",
-    "typescript": "catalog:"
-  },
-  "keywords": []
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
+  }
 }

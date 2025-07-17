@@ -55,63 +55,11 @@ export default $config({
       },
     );
 
-    const cluster = new sst.aws.Cluster(CLUSTER_NAME, {
-      vpc,
-    });
-
-    const service = new sst.aws.Service(API_NAME, {
-      cluster,
-      cpu: '0.5 vCPU',
-      memory: '1 GB',
-      scaling: {
-        max: 5,
-        min: 1,
-      },
-      image: {
-        dockerfile: 'services/api/.Dockerfile',
-        context: '../../',
-      },
-      loadBalancer: {
-        domain: {
-          name: API_DOMAIN,
-          dns: sst.cloudflare.dns(),
-        },
-        public: true,
-        rules: [
-          { listen: '80/http', forward: '8000/http' },
-          { listen: '443/https', forward: '8000/http' },
-        ],
-      },
-      environment: {
-        APP_ENV: $app.stage,
-        DATABASE_URL: $interpolate`postgresql://${db.username}:${db.password}@${db.host}:${db.port}/${db.database}`,
-        ALLOWED_ORIGINS: FRONT_ORIGIN,
-        FRONTEND_URL: $interpolate`https://${FRONT_DOMAIN}`,
-        API_BASE_URL: $interpolate`https://${API_DOMAIN}`,
-        // slack
-        SLACK_CLIENT_ID: env.SLACK_CLIENT_ID,
-        SLACK_CLIENT_SECRET: env.SLACK_CLIENT_SECRET,
-        OAUTH_SCOPES: env.OAUTH_SCOPES,
-
-        // auth
-        BETTER_AUTH_SECRET: env.BETTER_AUTH_SECRET,
-        BETTER_AUTH_URL: $interpolate`https://${API_DOMAIN}`,
-
-        // email
-        RESEND_API_KEY: env.RESEND_API_KEY,
-        FROM_EMAIL: env.FROM_EMAIL,
-
-        // google credentials
-        GOOGLE_CLIENT_ID: env.GOOGLE_CLIENT_ID,
-        GOOGLE_CLIENT_SECRET: env.GOOGLE_CLIENT_SECRET,
-      },
-    });
-
-    /* const api = new sst.aws.ApiGatewayV2(API_NAME, {
+    const api = new sst.aws.ApiGatewayV2(API_NAME, {
       vpc,
       domain: {
         name: API_DOMAIN,
-        dns: sst.cloudflare.dns()
+        dns: sst.cloudflare.dns(),
       },
       cors: {
         allowOrigins: [FRONT_ORIGIN],
@@ -122,8 +70,8 @@ export default $config({
       },
     });
 
-    api.route('ANY /', {
-      handler: '../../services/api/index.handler',
+    api.route('ANY /{proxy+}', {
+      handler: '../../services/api/dist/index.handler',
       vpc,
       link: [db],
       runtime: 'nodejs22.x',
@@ -132,6 +80,7 @@ export default $config({
         DATABASE_URL: $interpolate`postgresql://${db.username}:${db.password}@${db.host}:${db.port}/${db.database}`,
         ALLOWED_ORIGINS: FRONT_ORIGIN,
         FRONTEND_URL: $interpolate`https://${FRONT_DOMAIN}`,
+        API_BASE_URL: $interpolate`https://${API_DOMAIN}`,
 
         // slack
         SLACK_CLIENT_ID: env.SLACK_CLIENT_ID,
@@ -151,7 +100,7 @@ export default $config({
         GOOGLE_CLIENT_SECRET: env.GOOGLE_CLIENT_SECRET,
       },
     });
- */
+
     const frontend = new sst.aws.Nextjs(FRONTEND_NAME, {
       path: '../../apps/frontend',
       domain: {
@@ -166,7 +115,7 @@ export default $config({
     });
 
     return {
-      ApiUrl: service.url,
+      ApiUrl: api.url,
       DbHost: db.host,
       DbUser: db.username,
       DbName: db.database,

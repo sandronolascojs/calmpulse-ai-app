@@ -1,16 +1,27 @@
 {
   "name": "@calmpulse-app/ai-background-service",
   "version": "1.0.0",
-  "description": "",
   "license": "ISC",
-  "author": "",
-  "main": "index.ts",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "dev": "dotenv -e .env.local -- tsx watch index.ts",
+    "build": "run-p bundle type:gen",
+    "bundle": "tsup-node",
+    "bundle:watch": "tsup-node --watch",
+    "clean": "del dist tsconfig.tsbuildinfo",
+    "dev": "run-p bundle:watch type:gen:watch dev:local",
+    "dev:local": "dotenv -e .env.local -- node ./dist/index.js",
     "format": "prettier --write --ignore-path .gitignore --config ../../packages/config/.prettierrc . && prettier-package-json --write ./package.json",
-    "lint": "eslint . --ext .ts --config ../../packages/config/.eslintrc.base.js",
-    "lint:fix": "eslint . --ext .ts --fix --config ../../packages/config/.eslintrc.base.js",
-    "start": "tsx index.ts",
+    "lint": "eslint src --max-warnings 0",
+    "lint:fix": "eslint src --max-warnings 0 --fix",
+    "start": "node ./dist/index.js",
+    "type:check": "tsc --noEmit",
+    "type:gen": "tsc --emitDeclarationOnly",
+    "type:gen:watch": "tsc --emitDeclarationOnly --watch",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -19,12 +30,16 @@
     "@calmpulse-app/db": "workspace:*",
     "@calmpulse-app/shared": "workspace:*",
     "@calmpulse-app/types": "workspace:*",
-    "@calmpulse-app/utils": "workspace:*",
     "@fastify/schedule": "^6.0.0",
+    "@mastra/core": "catalog:",
+    "@mastra/libsql": "catalog:",
+    "@mastra/loggers": "catalog:",
+    "@mastra/memory": "catalog:",
     "@t3-oss/env-core": "catalog:",
     "bullmq": "^5.54.3",
     "dotenv-cli": "catalog:",
     "fastify": "catalog:",
+    "mastra": "catalog:",
     "openai": "^5.5.1",
     "sharp": "^0.34.2",
     "toad-scheduler": "^3.1.0",
@@ -35,9 +50,8 @@
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "prettier-package-json": "^2.8.0",
-    "prettier-plugin-organize-imports": "^3.2.4",
-    "typescript": "catalog:"
-  },
-  "keywords": []
+    "tsup": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
+  }
 }

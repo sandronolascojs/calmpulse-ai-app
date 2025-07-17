@@ -15,6 +15,5 @@
     "dist",
     "build",
     "out"
-  ],
-  "extends": "@calmpulse-app/config/tsconfig.base.json"
+  ]
 }

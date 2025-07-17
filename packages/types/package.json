@@ -1,28 +1,50 @@
 {
   "name": "@calmpulse-app/types",
   "version": "1.0.0",
-  "description": "Types for the Mentor Glide AI project (schemas, etc.)",
+  "description": "Types for the Calm Pulse project",
   "license": "MIT",
-  "author": "Mentor Glide AI",
-  "main": "index.ts",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "files": [
+    "src"
+  ],
   "scripts": {
-    "dev": "tsx watch index.ts",
-    "format": "prettier --write --ignore-path .gitignore --config ../config/.prettierrc . && prettier-package-json --write ./package.json",
-    "lint": "eslint . --ext .ts,.tsx --config ../config/.eslintrc.base.js",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix --config ../config/.eslintrc.base.js",
+    "build": "tsup && tsc --emitDeclarationOnly && tsc-alias --verbose",
+    "clean": "del-cli dist tsconfig.tsbuildinfo",
+    "compile": "tsc --noEmit",
+    "coverage": "vitest run --coverage",
+    "format": "prettier --config ../config/.prettierrc --write --ignore-path .gitignore . && prettier-package-json --write ./package.json",
+    "lint": "eslint src --flag v10_config_lookup_from_file --max-warnings 0",
+    "lint:fix": "eslint src --flag v10_config_lookup_from_file --max-warnings 0 --fix",
+    "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
+  "types": "./src/index.ts",
   "dependencies": {
     "@calmpulse-app/config": "workspace:*",
-    "@calmpulse-app/utils": "workspace:*",
     "tsx": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@eslint/js": "catalog:",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "@vercel/style-guide": "catalog:",
     "eslint": "catalog:",
+    "eslint-config-next": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-only-warn": "catalog:",
+    "eslint-plugin-react": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
+    "eslint-plugin-unused-imports": "catalog:",
     "prettier": "catalog:",
-    "prettier-package-json": "^2.8.0",
-    "prettier-plugin-organize-imports": "^3.2.4",
-    "typescript": "catalog:"
+    "prettier-package-json": "catalog:",
+    "prettier-plugin-organize-imports": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
   }
 }

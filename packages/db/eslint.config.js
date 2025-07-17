@@ -1,3 +1,12 @@
-const eslintConfig = require('@calmpulse-app/config/.eslintrc.base.js');
+// @ts-check
+import base from '@calmpulse-app/config/eslint.base.js';
+import tseslint from 'typescript-eslint';
 
-module.exports = [...eslintConfig];
+export default tseslint.config(...base, {
+  languageOptions: {
+    parserOptions: {
+      projectService: true,
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+});

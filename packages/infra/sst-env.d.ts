@@ -6,8 +6,7 @@
 declare module 'sst' {
   export interface Resource {
     'dev-calmpulse-ai-api': {
-      service: string;
-      type: 'sst.aws.Service';
+      type: 'sst.aws.ApiGatewayV2';
       url: string;
     };
     'dev-calmpulse-ai-db': {

@@ -1,13 +1,13 @@
 {
-  "extends": "@calmpulse-app/config/tsconfig.base.json",
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "outDir": "./dist",
-    "rootDir": ".",
+    "target": "esnext",
+    "rootDir": "src",
+    "outDir": "dist",
     "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "composite": true
   },
-  "exclude": ["node_modules", "dist", "build", "out"]
+  "extends": "@calmpulse-app/config/typescript-config/library.json",
+  "include": [
+    "src"
+  ]
 }

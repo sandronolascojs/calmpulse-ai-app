@@ -1,8 +1,8 @@
-import { auth } from '@/auth/auth';
-import { WorkspaceService } from '@/services/workspace.service';
-import { logger } from '@/utils/logger.instance';
+import { auth } from '@/auth/auth.js';
+import { WorkspaceService } from '@/services/workspace.service.js';
+import { logger } from '@/utils/logger.instance.js';
 import { db } from '@calmpulse-app/db';
-import type { SelectUser, SelectWorkspace } from '@calmpulse-app/db/src/schema';
+import type { SelectUser, SelectWorkspace } from '@calmpulse-app/db/schema';
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fp from 'fastify-plugin';
 
@@ -27,7 +27,7 @@ export const authPlugin = fp(async (fastify: FastifyInstance) => {
         });
 
         const session = await auth.api.getSession({ headers });
-        if (!session || !session.user) {
+        if (!session?.user) {
           return reply.status(401).send({ message: 'Unauthorized' });
         }
 

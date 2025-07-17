@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "infra:deploy:dev": "dotenv -e .env.dev sst deploy --stage dev",
-    "infra:deploy:production": "dotenv -e .env.production sst deploy --stage production",
+    "infra:deploy:dev": "turbo build && dotenv -e .env.dev sst deploy --stage dev",
+    "infra:deploy:production": "turbo build && dotenv -e .env.production sst deploy --stage production",
     "infra:dev": "dotenv -e .env.dev sst dev --stage dev",
     "infra:refresh:dev": "dotenv -e .env.dev sst refresh --stage dev",
     "infra:remove:dev": "dotenv -e .env.dev sst remove --stage dev",
