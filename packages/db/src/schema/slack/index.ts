@@ -1,2 +1,2 @@
-export * from './slackOauthStoreState';
-export * from './slackTemporalRawEvents';
+export * from './slackOauthStoreState.js';
+export * from './slackTemporalRawEvents.js';

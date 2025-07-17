@@ -1,8 +1,8 @@
 import { relations } from 'drizzle-orm';
 import { pgTable, text } from 'drizzle-orm/pg-core';
-import { users } from '../user';
-import { generateIdField } from '../utils/id';
-import { createdAtField, updatedAtField } from '../utils/timestamp';
+import { users } from '../user/index.js';
+import { generateIdField } from '../utils/id.js';
+import { createdAtField, updatedAtField } from '../utils/timestamp.js';
 
 export const slackOauthStoreState = pgTable('slack_oauth_store_state', {
   oauthStoreStateId: generateIdField({

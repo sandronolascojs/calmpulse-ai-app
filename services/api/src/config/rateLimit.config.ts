@@ -1,4 +1,4 @@
-import { StatusCode } from '@/utils/errors/statusCode.enum';
+import { StatusCode } from '@/utils/errors/statusCode.enum.js';
 import { RateLimitOptions } from '@fastify/rate-limit';
 
 const MAX_REQUESTS = 100;

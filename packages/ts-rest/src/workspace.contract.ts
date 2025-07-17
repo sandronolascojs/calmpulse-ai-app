@@ -1,5 +1,4 @@
-import { workspaceSchemas } from '@calmpulse-app/types';
-import { errorsSchema } from '@calmpulse-app/utils';
+import { errorsSchema, workspaceSchemas } from '@calmpulse-app/types';
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
@@ -9,7 +8,7 @@ const getWorkspaceSchema = z.object({
   workspace: workspaceSchemas.workspace.nullable(),
 });
 
-export const workspace = contract.router({
+export const workspaceRouter = contract.router({
   getUserWorkspace: {
     method: 'GET',
     path: '/workspace/me',

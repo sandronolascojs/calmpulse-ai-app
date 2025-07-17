@@ -1,5 +1,5 @@
-import { ErrorBase } from '@/utils/errors/error.base';
-import { logger } from '@/utils/logger.instance';
+import { ErrorBase } from '@/utils/errors/error.base.js';
+import { logger } from '@/utils/logger.instance.js';
 import type { FastifyPluginAsync } from 'fastify';
 
 export const errorHandlerPlugin: FastifyPluginAsync = async (fastify) => {
@@ -8,7 +8,7 @@ export const errorHandlerPlugin: FastifyPluginAsync = async (fastify) => {
     if (error instanceof ErrorBase) {
       logger.error(error.message, {
         path: request.url,
-        userId: request.user?.id,
+        userId: request.user.id,
         statusCode: error.statusCode,
         error: error.message,
         requestId: request.id,
@@ -21,7 +21,7 @@ export const errorHandlerPlugin: FastifyPluginAsync = async (fastify) => {
 
     logger.error(error.message, {
       path: request.url,
-      userId: request.user?.id,
+      userId: request.user.id,
       statusCode: 500,
       error: error instanceof Error ? error.message : String(error),
       requestId: request.id,

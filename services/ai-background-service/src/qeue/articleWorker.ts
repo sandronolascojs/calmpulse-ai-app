@@ -1,14 +1,16 @@
-import { env } from '@/config/env.config';
+import { env } from '@/config/env.config.js';
 import { Worker } from 'bullmq';
-import { logger } from '../utils/logger.instance';
-import { ARTICLE_QUEUE_NAME, GenerateArticleJobData } from './articleQueue';
+import { logger } from '../utils/logger.instance.js';
+import { ARTICLE_QUEUE_NAME, GenerateArticleJobData } from './articleQueue.js';
 
 export const startArticleWorker = () => {
   return new Worker<GenerateArticleJobData>(
     ARTICLE_QUEUE_NAME,
     async (job) => {
-      logger.info(`Processing job ${job.id} to generate ${job.data.amount} health articles`);
-      logger.info(`Completed job ${job.id} for health article generation`);
+      logger.info(
+        `Processing job ${job.id ?? 'unknown'} to generate ${job.data.amount} health articles`,
+      );
+      logger.info(`Completed job ${job.id ?? 'unknown'} for health article generation`);
     },
     {
       connection: {

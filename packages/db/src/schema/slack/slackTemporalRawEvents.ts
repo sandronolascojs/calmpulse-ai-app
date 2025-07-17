@@ -1,8 +1,8 @@
 import { relations } from 'drizzle-orm';
 import { index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
-import { generateIdField } from '../utils/id';
-import { createdAtField } from '../utils/timestamp';
-import { workspaceMembers } from '../workspace';
+import { generateIdField } from '../utils/id.js';
+import { createdAtField } from '../utils/timestamp.js';
+import { workspaceMembers } from '../workspace/index.js';
 
 /**
  * Temporary storage for raw Slack events, purged daily

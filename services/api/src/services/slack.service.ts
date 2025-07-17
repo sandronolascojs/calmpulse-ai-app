@@ -1,15 +1,15 @@
-import { env } from '@/config/env.config';
-import type { AuthenticatedUser } from '@/plugins/auth.plugin';
-import { ConflictError } from '@/utils/errors/ConflictError';
+import { env } from '@/config/env.config.js';
+import type { AuthenticatedUser } from '@/plugins/auth.plugin.js';
+import { ConflictError } from '@/utils/errors/ConflictError.js';
 import type { DB } from '@calmpulse-app/db';
+import type { Logger } from '@calmpulse-app/shared';
 import { generateSlug } from '@calmpulse-app/shared';
 import { WorkspaceExternalProviderType } from '@calmpulse-app/types';
-import type { Logger } from '@calmpulse-app/utils';
 import crypto from 'node:crypto';
-import { SlackRepository } from '../repositories/slackRepository';
-import { SlackOauthStoreStateService } from './slackOauthStoreState.service';
-import { SlackWebClientService } from './slackWebClient.service';
-import { WorkspaceService } from './workspace.service';
+import { SlackRepository } from '../repositories/slackRepository.js';
+import { SlackOauthStoreStateService } from './slackOauthStoreState.service.js';
+import { SlackWebClientService } from './slackWebClient.service.js';
+import { WorkspaceService } from './workspace.service.js';
 
 export class SlackService {
   private slackRepository: SlackRepository;
@@ -63,13 +63,13 @@ export class SlackService {
 
     if (!oauthResponse.ok) {
       throw new ConflictError({
-        message: `Slack OAuth failed: ${oauthResponse.error}`,
+        message: `Slack OAuth failed: ${oauthResponse.error ?? 'unknown error'}`,
       });
     }
 
     let workspaceId = authenticatedUser.workspace?.workspaceId;
     const accessToken = oauthResponse.access_token;
-    const refreshToken = oauthResponse.refresh_token || null;
+    const refreshToken = oauthResponse.refresh_token ?? null;
     const expiresAt =
       oauthResponse.expires_in && typeof oauthResponse.expires_in === 'number'
         ? new Date(Date.now() + oauthResponse.expires_in * 1000)
@@ -116,7 +116,7 @@ export class SlackService {
 
   async getWorkspaceInfo(accessToken: string) {
     const teamInfo = await this.slackWebClientService.getTeamInfo(accessToken);
-    if (!teamInfo.ok || !teamInfo || !teamInfo.team || !teamInfo.team.name || !teamInfo.team.id) {
+    if (!teamInfo.ok || !teamInfo.team?.name || !teamInfo.team.id) {
       throw new ConflictError({
         message: 'Failed to fetch workspace info from Slack',
       });
