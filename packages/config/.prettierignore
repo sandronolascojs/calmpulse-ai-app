@@ -1,2 +1,3 @@
 **/.sst/**
-tsconfig.json
+**/tsconfig.json
+**/eslint.config.js
