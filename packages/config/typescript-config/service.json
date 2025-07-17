@@ -4,13 +4,9 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "outDir": "dist",
-    "lib": [
-      "esnext"
-    ],
+    "lib": ["esnext"],
     "sourceMap": true,
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
   "display": "backend service",
   "extends": "./base.json"

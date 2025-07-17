@@ -6,7 +6,5 @@
     "composite": true
   },
   "extends": "@calmpulse-app/config/typescript-config/library.json",
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

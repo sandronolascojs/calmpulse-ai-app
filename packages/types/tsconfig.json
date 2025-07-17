@@ -6,13 +6,9 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "*"
-      ]
+      "@/*": ["*"]
     }
   },
   "extends": "@calmpulse-app/config/typescript-config/library.json",
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }

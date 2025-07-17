@@ -6,11 +6,7 @@
     "declarationMap": false,
     "incremental": true,
     "jsx": "preserve",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "noEmit": true,
     "resolveJsonModule": true,
@@ -19,8 +15,5 @@
   },
   "display": "A Next.js application",
   "extends": "./base.json",
-  "include": [
-    "src",
-    "next-env.d.ts"
-  ]
+  "include": ["src", "next-env.d.ts"]
 }
