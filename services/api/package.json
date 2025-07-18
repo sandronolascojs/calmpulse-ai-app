@@ -1,18 +1,27 @@
 {
   "name": "@calmpulse-app/api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.ts",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "dev": "dotenv -e .env.local -- tsx watch index.ts",
-    "typecheck": "tsc --noEmit",
-    "format": "prettier --write --ignore-path .gitignore --config ../../packages/config/.prettierrc . && prettier-package-json --write ./package.json",
-    "lint": "eslint . --ext .ts,.tsx --config ../../packages/config/.eslintrc.base.js",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix --config ../../packages/config/.eslintrc.base.js"
+    "build": "run-p bundle type:gen",
+    "bundle": "tsup-node",
+    "bundle:watch": "tsup-node --watch",
+    "clean": "del dist tsconfig.tsbuildinfo",
+    "dev": "run-p bundle:watch type:gen:watch dev:local",
+    "dev:local": "dotenv -e .env.local -- node ./dist/index.js",
+    "format": "prettier --write --ignore-path .prettierignore --config ../../packages/config/.prettierrc . && prettier-package-json --write ./package.json",
+    "lint": "eslint src --max-warnings 0 --ext .ts,.tsx",
+    "lint:fix": "eslint src --max-warnings 0 --fix --ext .ts,.tsx",
+    "start": "node ./dist/index.js",
+    "type:check": "tsc --noEmit",
+    "type:gen": "tsc --emitDeclarationOnly",
+    "type:gen:watch": "tsc --emitDeclarationOnly --watch"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@calmpulse-app/ai": "workspace:*",
     "@calmpulse-app/config": "workspace:*",
@@ -20,27 +29,33 @@
     "@calmpulse-app/shared": "workspace:*",
     "@calmpulse-app/ts-rest": "workspace:*",
     "@calmpulse-app/types": "workspace:*",
-    "@calmpulse-app/utils": "workspace:*",
+    "@fastify/aws-lambda": "^5.1.4",
     "@fastify/cors": "^11.0.1",
+    "@fastify/rate-limit": "^10.3.0",
     "@slack/oauth": "^3.0.3",
     "@slack/web-api": "^7.9.3",
     "@t3-oss/env-core": "catalog:",
+    "@ts-rest/core": "catalog:",
     "@ts-rest/fastify": "^3.52.1",
     "better-auth": "catalog:",
     "dotenv-cli": "catalog:",
     "drizzle-orm": "catalog:",
     "fastify": "catalog:",
     "fastify-plugin": "^5.0.1",
+    "limax": "catalog:",
+    "npm-run-all": "^4.1.5",
+    "pg": "catalog:",
     "resend": "^4.6.0",
-    "tsx": "catalog:",
+    "winston": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@paralleldrive/cuid2": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "prettier-package-json": "^2.8.0",
-    "prettier-plugin-organize-imports": "^3.2.4",
-    "typescript": "catalog:"
+    "tsup": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
   }
 }

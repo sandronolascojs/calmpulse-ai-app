@@ -1,16 +1,14 @@
-import { createEnv } from '@t3-oss/env-core';
 import { z } from 'zod';
 
-export const env = createEnv({
-  server: {
+const envSchema = z
+  .object({
     DATABASE_URL: z.string().url(),
-    APP_ENV: z.enum(['development', 'staging', 'production']).default('development'),
-  },
-  client: {},
-  shared: {},
-  runtimeEnv: {
-    DATABASE_URL: process.env.DATABASE_URL,
-    APP_ENV: process.env.APP_ENV,
-  },
-  clientPrefix: '',
-});
+    APP_ENV: z.enum(['development', 'production', 'dev', 'staging']).default('dev'),
+  })
+  .safeParse(process.env);
+
+if (!envSchema.success) {
+  throw new Error(`Invalid environment variables: ${envSchema.error.message}`);
+}
+
+export const env = envSchema.data;

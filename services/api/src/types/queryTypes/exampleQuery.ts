@@ -1,6 +1,6 @@
-import { Pagination } from '@calmpulse-app/utils';
+import { Pagination } from '@calmpulse-app/types';
 
-export interface ExamplesQuery extends Pagination {
+export type ExamplesQuery = {
   search?: string;
   orderBy?: 'newest' | 'oldest';
-}
+} & Pagination;

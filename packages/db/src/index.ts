@@ -2,8 +2,8 @@ import type { ExtractTablesWithRelations } from 'drizzle-orm';
 import { drizzle, NodePgQueryResultHKT } from 'drizzle-orm/node-postgres';
 import { PgTransaction } from 'drizzle-orm/pg-core';
 import { Pool } from 'pg';
-import { env } from './src/config/env.config';
-import * as schema from './src/schema';
+import { env } from './config/env.config.js';
+import * as schema from './schema/index.js';
 
 const MAX_POOL_CONNECTIONS = 30;
 const IDLE_TIMEOUT = 10000;
@@ -26,4 +26,4 @@ export type DrizzleTx = PgTransaction<
 >;
 export type DB = DrizzleDB | DrizzleTx;
 
-export * as schema from './src/schema';
+export * as schema from './schema/index.js';

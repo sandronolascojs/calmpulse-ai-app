@@ -1,5 +1,4 @@
-import { InternalError } from '@/utils/errors/InternalError';
-import { userWorkspaces, workspaces, type InsertWorkspace } from '@calmpulse-app/db/src/schema';
+import { userWorkspaces, workspaces, type InsertWorkspace } from '@calmpulse-app/db/schema';
 import { BaseRepository } from '@calmpulse-app/shared';
 import { UserRole } from '@calmpulse-app/types';
 import { eq } from 'drizzle-orm';
@@ -7,11 +6,6 @@ import { eq } from 'drizzle-orm';
 export class WorkspaceRepository extends BaseRepository {
   async createWorkspace({ workspace, userId }: { workspace: InsertWorkspace; userId: string }) {
     const [createdWorkspace] = await this.db.insert(workspaces).values(workspace).returning();
-    if (!createdWorkspace) {
-      throw new InternalError({
-        message: 'Failed to create workspace',
-      });
-    }
     await this.db.insert(userWorkspaces).values({
       workspaceId: createdWorkspace.workspaceId,
       userId: userId,

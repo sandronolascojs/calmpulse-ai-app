@@ -1,9 +1,9 @@
-import { env } from '@/config/env.config';
+import { env } from '@/config/env.config.js';
 import { JobsOptions, Queue, type ConnectionOptions } from 'bullmq';
 
-export interface GenerateArticleJobData {
+export type GenerateArticleJobData = {
   amount: number;
-}
+};
 
 const connection: ConnectionOptions = {
   url: env.REDIS_URL,

@@ -1,5 +1,5 @@
 import { type DB } from '@calmpulse-app/db';
-import type { Logger } from '@calmpulse-app/utils';
+import type { Logger } from '../telemetry/logger.js';
 
 export abstract class BaseRepository {
   protected readonly db: DB;

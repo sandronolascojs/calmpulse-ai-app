@@ -1,10 +1,10 @@
-import type { AuthenticatedUser } from '@/plugins/auth.plugin';
-import { WorkspaceRepository } from '@/repositories/workspaceRepository';
-import { ConflictError } from '@/utils/errors/ConflictError';
-import { NotFoundError } from '@/utils/errors/NotFoundError';
+import type { AuthenticatedUser } from '@/plugins/auth.plugin.js';
+import { WorkspaceRepository } from '@/repositories/workspaceRepository.js';
+import { ConflictError } from '@/utils/errors/ConflictError.js';
+import { NotFoundError } from '@/utils/errors/NotFoundError.js';
 import type { DB } from '@calmpulse-app/db';
-import type { InsertWorkspace } from '@calmpulse-app/db/src/schema';
-import type { Logger } from '@calmpulse-app/utils';
+import type { InsertWorkspace } from '@calmpulse-app/db/schema';
+import type { Logger } from '@calmpulse-app/shared';
 
 export class WorkspaceService {
   private readonly workspaceRepository: WorkspaceRepository;

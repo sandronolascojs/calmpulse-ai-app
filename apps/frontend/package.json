@@ -1,17 +1,18 @@
 {
+  "private": true,
   "name": "@calmpulse-app/frontend",
   "version": "0.1.0",
-  "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start"
   },
   "dependencies": {
+    "@calmpulse-app/shared": "workspace:*",
     "@calmpulse-app/ts-rest": "workspace:*",
     "@calmpulse-app/types": "workspace:*",
-    "@calmpulse-app/utils": "workspace:*",
     "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
@@ -66,6 +67,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@calmpulse-app/config": "workspace:*",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "catalog:",

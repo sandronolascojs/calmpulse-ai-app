@@ -1,5 +1,5 @@
 import { db } from '@calmpulse-app/db';
-import { users } from '@calmpulse-app/db/src/schema';
+import { users } from '@calmpulse-app/db/schema';
 import { BaseRepository } from '@calmpulse-app/shared';
 import { eq } from 'drizzle-orm';
 

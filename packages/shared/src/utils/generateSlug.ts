@@ -1,5 +1,10 @@
-import slugify from 'slugify';
+import limax from 'limax';
 
-export const generateSlug = (name: string) => {
-  return slugify(name, { lower: true, strict: true, trim: true, locale: 'en' });
+export const generateSlug = (name: string): string => {
+  return limax(name, {
+    lang: 'en',
+    separator: '-',
+    separateNumbers: true,
+    separateApostrophes: true,
+  });
 };
