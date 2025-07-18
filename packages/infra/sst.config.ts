@@ -20,21 +20,20 @@ export default $config({
   async run() {
     const { env } = await import('@/config/env.config');
     const { APP_CONFIG } = await import('@calmpulse-app/types');
+    const isProduction = $app.stage === 'production';
 
     const APP_NAME = APP_CONFIG.basics.name.toLowerCase().replace(/\s+/g, '-');
     const ROOT = env.FRONTEND_URL; // calmpulse.app
     const API_ZONE = `api.${ROOT}`; // api.calmpulse.app   (zone Route 53)
     const APP_ZONE = `app.${ROOT}`; // app.calmpulse.app   (zone Route 53)
 
-    const API_DOMAIN = $app.stage === 'production' ? `${API_ZONE}` : `${$app.stage}.${API_ZONE}`;
-    const FRONT_DOMAIN = $app.stage === 'production' ? `${APP_ZONE}` : `${$app.stage}.${APP_ZONE}`;
-    const FRONT_ORIGIN =
-      $app.stage === 'production' ? `https://${APP_ZONE}` : `https://${$app.stage}.${APP_ZONE}`;
+    const API_DOMAIN = isProduction ? `${API_ZONE}` : `${$app.stage}.${API_ZONE}`;
+    const FRONT_DOMAIN = isProduction ? `${APP_ZONE}` : `${$app.stage}.${APP_ZONE}`;
+    const FRONT_ORIGIN = isProduction ? `https://${APP_ZONE}` : `https://${$app.stage}.${APP_ZONE}`;
 
     const DB_NAME = `${$app.stage}-${APP_NAME}-db`;
     const VPC_NAME = `${$app.stage}-${APP_NAME}-vpc`;
     const API_NAME = `${$app.stage}-${APP_NAME}-api`;
-    const CLUSTER_NAME = `${$app.stage}-${APP_NAME}-cluster`;
     const FRONTEND_NAME = `${$app.stage}-${APP_NAME}-frontend`;
 
     const vpc = new sst.aws.Vpc(VPC_NAME, {
@@ -46,9 +45,9 @@ export default $config({
       DB_NAME,
       {
         vpc,
-        instance: 't4g.micro',
-        storage: '20 GB',
-        proxy: false,
+        instance: isProduction ? 't4g.small' : 't4g.micro',
+        storage: isProduction ? '50 GB' : '20 GB',
+        proxy: isProduction,
       },
       {
         version: '16.x',
