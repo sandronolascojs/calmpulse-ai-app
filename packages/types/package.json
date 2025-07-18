@@ -1,28 +1,50 @@
 {
   "name": "@calmpulse-app/types",
   "version": "1.0.0",
-  "description": "Types for the Mentor Glide AI project (schemas, etc.)",
-  "main": "index.ts",
-  "author": "Mentor Glide AI",
+  "description": "Types for the Calm Pulse project",
   "license": "MIT",
-  "scripts": {
-    "dev": "tsx watch index.ts",
-    "typecheck": "tsc --noEmit",
-    "format": "prettier --write --ignore-path .gitignore --config ../config/.prettierrc . && prettier-package-json --write ./package.json",
-    "lint": "eslint . --ext .ts,.tsx --config ../config/.eslintrc.base.js",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix --config ../config/.eslintrc.base.js"
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly && tsc-alias --verbose",
+    "clean": "del-cli dist tsconfig.tsbuildinfo",
+    "compile": "tsc --noEmit",
+    "coverage": "vitest run --coverage",
+    "format": "prettier --config ../config/.prettierrc --write --ignore-path .gitignore . && prettier-package-json --write ./package.json",
+    "lint": "eslint src --flag v10_config_lookup_from_file --max-warnings 0",
+    "lint:fix": "eslint src --flag v10_config_lookup_from_file --max-warnings 0 --fix",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "types": "./src/index.ts",
   "dependencies": {
-    "zod": "catalog:",
+    "@calmpulse-app/config": "workspace:*",
     "tsx": "catalog:",
-    "@calmpulse-app/utils": "workspace:*",
-    "@calmpulse-app/config": "workspace:*"
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "typescript": "catalog:",
-    "prettier": "catalog:",
+    "@eslint/js": "catalog:",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "@vercel/style-guide": "catalog:",
     "eslint": "catalog:",
-    "prettier-plugin-organize-imports": "^3.2.4",
-    "prettier-package-json": "^2.8.0"
+    "eslint-config-next": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-only-warn": "catalog:",
+    "eslint-plugin-react": "catalog:",
+    "eslint-plugin-react-hooks": "catalog:",
+    "eslint-plugin-unused-imports": "catalog:",
+    "prettier": "catalog:",
+    "prettier-package-json": "catalog:",
+    "prettier-plugin-organize-imports": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
   }
 }

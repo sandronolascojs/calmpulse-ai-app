@@ -147,7 +147,7 @@ export function SignUpForm() {
               )}
             />
           </div>
-          <EmailPasswordFields control={form.control} isPending={isPending} />
+          <EmailPasswordFields form={form} isPending={isPending} />
           <Button type="submit" className="w-full" disabled={isPending}>
             {isPending ? (
               <>

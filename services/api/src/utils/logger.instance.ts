@@ -1,5 +1,5 @@
-import { env } from '@/config/env.config';
-import { Logger } from '@calmpulse-app/utils';
+import { env } from '@/config/env.config.js';
+import { Logger } from '@calmpulse-app/shared';
 
 export const logger = new Logger({
   serviceName: 'api',

@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
-import { generateIdField } from '../utils/id';
-import { createdAtField, updatedAtField } from '../utils/timestamp';
+import { generateIdField } from '../utils/id.js';
+import { createdAtField, updatedAtField } from '../utils/timestamp.js';
 
 export const verifications = pgTable('verifications', {
   id: generateIdField({ name: 'id' }),

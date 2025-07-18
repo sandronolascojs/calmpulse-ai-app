@@ -1,5 +1,5 @@
-import { ErrorBase } from './error.base';
-import { StatusCode } from './statusCode.enum';
+import { ErrorBase } from './error.base.js';
+import { StatusCode } from './statusCode.enum.js';
 
 export class NotFoundError extends ErrorBase {
   constructor({ message }: { message: string }) {

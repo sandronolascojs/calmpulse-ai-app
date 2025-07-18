@@ -1,11 +1,13 @@
 import { fastifySchedule } from '@fastify/schedule';
 import fastify from 'fastify';
-import { env } from './src/config/env.config';
+import { env } from './config/env.config.js';
 
 const server = fastify();
 server.register(fastifySchedule);
 
-server.ready().then(async () => {});
+server.ready().then(async () => {
+  server.log.info('AI Background Service is running');
+});
 
 server.get('/health', () => {
   return {

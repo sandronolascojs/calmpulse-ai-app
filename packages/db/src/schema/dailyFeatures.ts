@@ -1,7 +1,7 @@
 import { relations } from 'drizzle-orm';
 import { date, index, integer, pgTable, primaryKey, text } from 'drizzle-orm/pg-core';
-import { createdAtField, updatedAtField } from './utils/timestamp';
-import { workspaceMembers } from './workspace/workspaceMembers';
+import { createdAtField, updatedAtField } from './utils/timestamp.js';
+import { workspaceMembers } from './workspace/workspaceMembers.js';
 
 export const dailyFeatures = pgTable(
   'daily_features',

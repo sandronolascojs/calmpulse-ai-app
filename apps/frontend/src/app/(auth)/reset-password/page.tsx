@@ -1,10 +1,10 @@
 import { ResetPasswordView } from '@/modules/auth/views/ResetPasswordView';
 
 interface ResetPasswordPageProps {
-  searchParams: { token?: string };
+  searchParams: Promise<{ token?: string }>;
 }
 
-export default function ResetPasswordPage({ searchParams }: ResetPasswordPageProps) {
-  const token = searchParams.token ?? '';
-  return <ResetPasswordView token={token} />;
+export default async function ResetPasswordPage({ searchParams }: ResetPasswordPageProps) {
+  const { token } = await searchParams;
+  return <ResetPasswordView token={token ?? ''} />;
 }

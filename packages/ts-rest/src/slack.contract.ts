@@ -1,4 +1,4 @@
-import { errorsSchema } from '@calmpulse-app/utils';
+import { errorsSchema } from '@calmpulse-app/types';
 import { initContract } from '@ts-rest/core';
 import { z } from 'zod';
 
@@ -39,7 +39,7 @@ const oauthFailure = z.object({
 
 const c = initContract();
 
-export const slack = c.router({
+export const slackRouter = c.router({
   install: {
     method: 'GET',
     path: '/slack/install',

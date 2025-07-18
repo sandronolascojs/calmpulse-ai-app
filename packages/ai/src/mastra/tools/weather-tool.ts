@@ -1,14 +1,14 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 
-interface GeocodingResponse {
+type GeocodingResponse = {
   results: {
     latitude: number;
     longitude: number;
     name: string;
   }[];
-}
-interface WeatherResponse {
+};
+type WeatherResponse = {
   current: {
     time: string;
     temperature_2m: number;
@@ -18,7 +18,7 @@ interface WeatherResponse {
     wind_gusts_10m: number;
     weather_code: number;
   };
-}
+};
 
 export const weatherTool = createTool({
   id: 'get-weather',
@@ -45,13 +45,13 @@ const getWeather = async (location: string) => {
   const geocodingResponse = await fetch(geocodingUrl);
   const geocodingData = (await geocodingResponse.json()) as GeocodingResponse;
 
-  if (!geocodingData.results?.[0]) {
+  if (geocodingData.results.length === 0) {
     throw new Error(`Location '${location}' not found`);
   }
 
   const { latitude, longitude, name } = geocodingData.results[0];
 
-  const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_gusts_10m,weather_code`;
+  const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude.toString()}&longitude=${longitude.toString()}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_gusts_10m,weather_code`;
 
   const response = await fetch(weatherUrl);
   const data = (await response.json()) as WeatherResponse;

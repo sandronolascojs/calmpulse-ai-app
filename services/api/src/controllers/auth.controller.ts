@@ -1,5 +1,5 @@
-import { auth } from '@/auth/auth';
-import { logger } from '@/utils/logger.instance';
+import { auth } from '@/auth/auth.js';
+import { logger } from '@/utils/logger.instance.js';
 import { FastifyInstance } from 'fastify';
 
 export async function registerAuthController(fastify: FastifyInstance) {
@@ -8,7 +8,7 @@ export async function registerAuthController(fastify: FastifyInstance) {
     url: '/api/auth/*',
     async handler(request, reply) {
       try {
-        const url = new URL(request.url, `http://${request.headers.host}`);
+        const url = new URL(request.url, `http://${request.headers.host ?? 'localhost'}`);
         const headers = new Headers();
         Object.entries(request.headers).forEach(([key, value]) => {
           if (value) headers.append(key, value.toString());

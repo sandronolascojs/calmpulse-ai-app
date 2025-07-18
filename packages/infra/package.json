@@ -1,0 +1,26 @@
+{
+  "private": true,
+  "name": "@calmpulse-app/infra",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "infra:deploy:dev": "turbo build && dotenv -e .env.dev sst deploy --stage dev",
+    "infra:deploy:production": "turbo build && dotenv -e .env.production sst deploy --stage production",
+    "infra:dev": "dotenv -e .env.dev sst dev --stage dev",
+    "infra:refresh:dev": "dotenv -e .env.dev sst refresh --stage dev",
+    "infra:remove:dev": "dotenv -e .env.dev sst remove --stage dev",
+    "infra:unlock:dev": "dotenv -e .env.dev sst unlock --stage dev"
+  },
+  "dependencies": {
+    "@calmpulse-app/config": "workspace:*",
+    "@calmpulse-app/types": "workspace:*",
+    "aws-cdk-lib": "^2.204.0",
+    "dotenv-cli": "catalog:",
+    "sst": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.150",
+    "typescript": "catalog:"
+  }
+}

@@ -1,37 +1,49 @@
 {
   "name": "@calmpulse-app/db",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.ts",
-  "scripts": {
-    "build": "echo 'build'",
-    "typecheck": "tsc --noEmit",
-    "format": "prettier --write --ignore-path .gitignore --config ../config/.prettierrc .",
-    "lint": "eslint . --ext .js,.ts,.tsx",
-    "dev": "dotenv -e ./.env.local -- tsx watch ./index.ts",
-    "db:generate": "dotenv -e ./.env.local -- drizzle-kit generate",
-    "db:migrate:deploy": "drizzle-kit migrate:deploy",
-    "db:migrate:local": "dotenv -e .env.local -- drizzle-kit migrate"
+  "description": "Database for the Calm Pulse project",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema/index.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": "tsup && tsc --emitDeclarationOnly && tsc-alias --verbose",
+    "clean": "del-cli dist tsconfig.tsbuildinfo",
+    "compile": "tsc --noEmit",
+    "coverage": "vitest run --coverage",
+    "db:generate": "dotenv -e ./.env.local -- drizzle-kit generate --config ./src/drizzle.config.ts",
+    "db:migrate:deploy": "dotenv -e ./.env.local -- drizzle-kit migrate:deploy --config ./src/drizzle.config.ts",
+    "db:migrate:local": "dotenv -e .env.local -- drizzle-kit migrate --config ./src/drizzle.config.ts",
+    "format": "prettier --config ../config/.prettierrc --write --ignore-path .gitignore . && prettier-package-json --write ./package.json",
+    "lint": "eslint src --flag v10_config_lookup_from_file --max-warnings 0",
+    "lint:fix": "eslint src --flag v10_config_lookup_from_file --max-warnings 0 --fix",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "types": "./src/index.ts",
   "dependencies": {
-    "@calmpulse-app/types": "workspace:*",
     "@calmpulse-app/config": "workspace:*",
-    "drizzle-orm": "catalog:",
-    "pg": "^8.16.0",
-    "dotenv-cli": "catalog:",
-    "@t3-oss/env-core": "catalog:",
+    "@calmpulse-app/types": "workspace:*",
     "@paralleldrive/cuid2": "catalog:",
+    "dotenv-cli": "catalog:",
+    "drizzle-orm": "catalog:",
+    "pg": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@types/pg": "^8.15.2",
     "drizzle-kit": "^0.31.1",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:",
-    "prettier": "catalog:",
-    "eslint": "catalog:"
+    "typescript-eslint": "catalog:"
   }
 }

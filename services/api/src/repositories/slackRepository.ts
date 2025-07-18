@@ -28,10 +28,9 @@ export class SlackRepository extends BaseRepository {
   }
 
   async getWorkspaceToken(workspaceId: string) {
-    const [workspaceToken] = await this.db
-      .select()
-      .from(schema.workspaceTokens)
-      .where(eq(schema.workspaceTokens.workspaceId, workspaceId));
+    const workspaceToken = await this.db.query.workspaceTokens.findFirst({
+      where: eq(schema.workspaceTokens.workspaceId, workspaceId),
+    });
 
     if (workspaceToken?.expiresAt && workspaceToken.expiresAt < new Date()) {
       await this.db
