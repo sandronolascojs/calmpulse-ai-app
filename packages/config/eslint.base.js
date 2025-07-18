@@ -17,16 +17,7 @@ export default tseslint.config(
     plugins: {
       'unused-imports': unusedImports,
     },
-    ignores: [
-      'dist',
-      'node_modules',
-      'build',
-      'dist-types',
-      'dist-test',
-      'eslint.config.js',
-      'tsconfig.json',
-      '**/tsconfig.json',
-    ],
+    ignores: ['dist', 'node_modules', 'build', 'dist-types', 'dist-test', 'eslint.config.js'],
     rules: {
       '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
