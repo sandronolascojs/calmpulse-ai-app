@@ -19,8 +19,8 @@
     "coverage": "vitest run --coverage ",
     "dev": "mastra dev",
     "format": "prettier --config ../config/.prettierrc --write --ignore-path .gitignore . && prettier-package-json --write ./package.json",
-    "lint": "eslint src --flag v10_config_lookup_from_file --max-warnings 0",
-    "lint:fix": "eslint src --flag v10_config_lookup_from_file --max-warnings 0 --fix",
+    "lint": "eslint src --flag v10_config_lookup_from_file --max-warnings 0 --ext .ts,.tsx",
+    "lint:fix": "eslint src --flag v10_config_lookup_from_file --max-warnings 0 --fix --ext .ts,.tsx",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
