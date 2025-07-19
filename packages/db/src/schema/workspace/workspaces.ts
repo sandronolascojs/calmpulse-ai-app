@@ -1,19 +1,23 @@
 import { WorkspaceExternalProviderType } from '@calmpulse-app/types';
 import { relations } from 'drizzle-orm';
-import { pgTable, text } from 'drizzle-orm/pg-core';
+import { pgTable, text, varchar } from 'drizzle-orm/pg-core';
 import { generateIdField } from '../utils/id.js';
+import { MAX_NAME_LENGTH } from '../utils/maxLengths.js';
 import { createdAtField, updatedAtField } from '../utils/timestamp.js';
 import { workspaceExternalProviderType } from './workspaceExternalProviderEnum.js';
 import { workspaceMembers } from './workspaceMembers.js';
 import { workspaceTokens } from './workspaceTokens.js';
 
+const MAX_SLUG_LENGTH = 100;
+const MAX_DOMAIN_LENGTH = 255;
+
 export const workspaces = pgTable('workspaces', {
   workspaceId: generateIdField({ name: 'workspace_id' }),
-  name: text('name').notNull(),
-  slug: text('slug').notNull(),
+  name: varchar('name', { length: MAX_NAME_LENGTH }).notNull(),
+  slug: varchar('slug', { length: MAX_SLUG_LENGTH }).notNull(),
   logoUrl: text('logo_url'),
   externalId: text('external_id').notNull(),
-  domain: text('domain'),
+  domain: varchar('domain', { length: MAX_DOMAIN_LENGTH }),
   externalProviderType: workspaceExternalProviderType('external_provider_type')
     .notNull()
     .default(WorkspaceExternalProviderType.Slack),

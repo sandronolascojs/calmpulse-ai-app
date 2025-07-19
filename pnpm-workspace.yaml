@@ -43,3 +43,4 @@ catalog:
   'eslint-plugin-unused-imports': ^4.1.4
   'prettier-package-json': ^2.8.0
   'prettier-plugin-organize-imports': ^3.2.4
+  'npm-run-all': ^4.1.5

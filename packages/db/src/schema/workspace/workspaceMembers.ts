@@ -1,6 +1,7 @@
 import { relations } from 'drizzle-orm';
-import { index, pgTable, text } from 'drizzle-orm/pg-core';
+import { index, pgTable, text, varchar } from 'drizzle-orm/pg-core';
 import { generateIdField } from '../utils/id.js';
+import { MAX_NAME_LENGTH } from '../utils/maxLengths.js';
 import { createdAtField, updatedAtField } from '../utils/timestamp.js';
 import { workspaces } from './workspaces.js';
 
@@ -11,7 +12,7 @@ export const workspaceMembers = pgTable(
     workspaceId: text('workspace_id')
       .notNull()
       .references(() => workspaces.workspaceId),
-    name: text('name').notNull(),
+    name: varchar('name', { length: MAX_NAME_LENGTH }).notNull(),
     email: text('email').notNull(),
     title: text('title'),
     avatarUrl: text('avatar_url'),

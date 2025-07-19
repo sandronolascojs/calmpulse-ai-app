@@ -81,6 +81,9 @@ catalogs:
     mastra:
       specifier: ^0.10.10
       version: 0.10.10
+    npm-run-all:
+      specifier: ^4.1.5
+      version: 4.1.5
     pg:
       specifier: ^8.16.0
       version: 8.16.3
@@ -724,6 +727,9 @@ importers:
       mastra:
         specifier: 'catalog:'
         version: 0.10.10(@mastra/core@0.10.10(openapi-types@12.1.3)(react@19.1.0)(zod@3.25.67))(@opentelemetry/api@1.9.0)(react@19.1.0)(typescript@5.8.3)
+      npm-run-all:
+        specifier: 'catalog:'
+        version: 4.1.5
       openai:
         specifier: ^5.5.1
         version: 5.8.2(ws@8.18.3)(zod@3.25.67)
@@ -822,7 +828,7 @@ importers:
         specifier: 'catalog:'
         version: 4.1.0
       npm-run-all:
-        specifier: ^4.1.5
+        specifier: 'catalog:'
         version: 4.1.5
       pg:
         specifier: 'catalog:'
