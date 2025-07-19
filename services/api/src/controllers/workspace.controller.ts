@@ -15,14 +15,16 @@ export const workspaceController = server.router(contract.workspaceContract, {
         userId: user.id,
       });
 
-      const workspace = {
-        workspaceId: workspaceFromDb.workspaceId,
-        name: workspaceFromDb.name,
-        slug: workspaceFromDb.slug,
-        logoUrl: workspaceFromDb.logoUrl,
-        domain: workspaceFromDb.domain,
-        createdAt: workspaceFromDb.createdAt.toISOString(),
-      };
+      const workspace = workspaceFromDb
+        ? {
+            workspaceId: workspaceFromDb.workspaceId,
+            name: workspaceFromDb.name,
+            slug: workspaceFromDb.slug,
+            logoUrl: workspaceFromDb.logoUrl,
+            domain: workspaceFromDb.domain,
+            createdAt: workspaceFromDb.createdAt.toISOString(),
+          }
+        : null;
 
       return {
         status: 200,

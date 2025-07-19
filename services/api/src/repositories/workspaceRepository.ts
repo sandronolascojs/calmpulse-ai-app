@@ -6,6 +6,11 @@ import { eq } from 'drizzle-orm';
 export class WorkspaceRepository extends BaseRepository {
   async createWorkspace({ workspace, userId }: { workspace: InsertWorkspace; userId: string }) {
     const [createdWorkspace] = await this.db.insert(workspaces).values(workspace).returning();
+
+    if (!createdWorkspace) {
+      throw new Error('Failed to create workspace');
+    }
+
     await this.db.insert(userWorkspaces).values({
       workspaceId: createdWorkspace.workspaceId,
       userId: userId,

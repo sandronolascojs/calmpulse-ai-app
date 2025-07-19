@@ -28,8 +28,7 @@ export const authPlugin = fp(async (fastify: FastifyInstance) => {
 
         const session = await auth.api.getSession({ headers });
         if (!session?.user) {
-          reply.status(401).send({ message: 'Unauthorized' });
-          return;
+          return await reply.status(401).send({ message: 'Unauthorized' });
         }
 
         const workspace = await workspaceService.getWorkspaceByUserId({
