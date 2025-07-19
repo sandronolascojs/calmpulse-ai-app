@@ -4,28 +4,7 @@
 /* deno-fmt-ignore-file */
 
 declare module 'sst' {
-  export interface Resource {
-    'dev-calmpulse-ai-api': {
-      type: 'sst.aws.ApiGatewayV2';
-      url: string;
-    };
-    'dev-calmpulse-ai-db': {
-      database: string;
-      host: string;
-      password: string;
-      port: number;
-      type: 'sst.aws.Postgres';
-      username: string;
-    };
-    'dev-calmpulse-ai-frontend': {
-      type: 'sst.aws.Nextjs';
-      url: string;
-    };
-    'dev-calmpulse-ai-vpc': {
-      bastion: string;
-      type: 'sst.aws.Vpc';
-    };
-  }
+  export interface Resource {}
 }
 /// <reference path="sst-env.d.ts" />
 
