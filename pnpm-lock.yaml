@@ -94,8 +94,8 @@ catalogs:
       specifier: ^2.8.0
       version: 2.8.0
     prettier-plugin-organize-imports:
-      specifier: ^3.2.4
-      version: 3.2.4
+      specifier: ^4.1.0
+      version: 4.1.0
     sst:
       specifier: ^3.17.10
       version: 3.17.10
@@ -457,7 +457,7 @@ importers:
         version: 2.8.0
       prettier-plugin-organize-imports:
         specifier: 'catalog:'
-        version: 3.2.4(prettier@3.6.2)(typescript@5.8.3)
+        version: 4.1.0(prettier@3.6.2)(typescript@5.8.3)
       tailwind-merge:
         specifier: ^3.3.0
         version: 3.3.1
@@ -676,7 +676,7 @@ importers:
         version: 2.8.0
       prettier-plugin-organize-imports:
         specifier: 'catalog:'
-        version: 3.2.4(prettier@3.6.2)(typescript@5.8.3)
+        version: 4.1.0(prettier@3.6.2)(typescript@5.8.3)
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
@@ -7523,6 +7523,16 @@ packages:
       '@volar/vue-language-plugin-pug':
         optional: true
       '@volar/vue-typescript':
+        optional: true
+
+  prettier-plugin-organize-imports@4.1.0:
+    resolution: {integrity: sha512-5aWRdCgv645xaa58X8lOxzZoiHAldAPChljr/MT0crXVOWTZ+Svl4hIWlz+niYSlO6ikE5UXkN1JrRvIP2ut0A==}
+    peerDependencies:
+      prettier: '>=2.0'
+      typescript: '>=2.9'
+      vue-tsc: ^2.1.0
+    peerDependenciesMeta:
+      vue-tsc:
         optional: true
 
   prettier-plugin-packagejson@2.5.18:
@@ -16695,6 +16705,11 @@ snapshots:
       sort-order: 1.1.2
 
   prettier-plugin-organize-imports@3.2.4(prettier@3.6.2)(typescript@5.8.3):
+    dependencies:
+      prettier: 3.6.2
+      typescript: 5.8.3
+
+  prettier-plugin-organize-imports@4.1.0(prettier@3.6.2)(typescript@5.8.3):
     dependencies:
       prettier: 3.6.2
       typescript: 5.8.3
