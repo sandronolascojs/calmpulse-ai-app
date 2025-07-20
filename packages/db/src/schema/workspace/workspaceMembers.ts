@@ -12,7 +12,7 @@ export const workspaceMembers = pgTable(
     workspaceId: text('workspace_id')
       .notNull()
       .references(() => workspaces.workspaceId),
-    name: varchar('name', { length: MAX_NAME_LENGTH }).notNull(),
+    name: varchar('name', { length: MAX_NAME_LENGTH }).notNull().unique(),
     email: text('email').notNull(),
     title: text('title'),
     avatarUrl: text('avatar_url'),
