@@ -1,12 +1,18 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "outDir": "dist",
-    "lib": ["esnext"],
+    "lib": [
+      "esnext"
+    ],
     "sourceMap": true,
-    "types": ["node"]
+    "types": [
+      "node"
+    ]
   },
   "display": "backend service",
   "extends": "./base.json"

@@ -1,9 +1,9 @@
 import { relations } from 'drizzle-orm';
 import { index, pgTable, text, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
-import { generateIdField } from '../utils/id.js';
-import { MAX_NAME_LENGTH } from '../utils/maxLengths.js';
-import { createdAtField, updatedAtField } from '../utils/timestamp.js';
-import { workspaces } from './workspaces.js';
+import { generateIdField } from '../utils/id';
+import { MAX_NAME_LENGTH } from '../utils/maxLengths';
+import { createdAtField, updatedAtField } from '../utils/timestamp';
+import { workspaces } from './workspaces';
 
 export const workspaceMembers = pgTable(
   'workspace_members',

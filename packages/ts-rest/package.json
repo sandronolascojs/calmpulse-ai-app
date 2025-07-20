@@ -13,11 +13,11 @@
     "src"
   ],
   "scripts": {
-    "build": "tsup && tsc --emitDeclarationOnly && tsc-alias --verbose",
+    "build": "echo 'No build step'",
     "clean": "del-cli dist tsconfig.tsbuildinfo",
     "compile": "tsc --noEmit",
     "coverage": "vitest run --coverage",
-    "format": "prettier --config ../config/.prettierrc --write --ignore-path .gitignore . && prettier-package-json --write ./package.json",
+    "format": "prettier --config ../config/.prettierrc --write . && prettier-package-json --write ./package.json",
     "lint": "eslint src --flag v10_config_lookup_from_file --max-warnings 0 --ext .ts,.tsx",
     "lint:fix": "eslint src --flag v10_config_lookup_from_file --max-warnings 0 --fix --ext .ts,.tsx",
     "test": "vitest",

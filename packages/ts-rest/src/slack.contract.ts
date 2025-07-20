@@ -37,9 +37,9 @@ const oauthFailure = z.object({
   error: oauthErrorCodes,
 });
 
-const c = initContract();
+const contract = initContract();
 
-export const slackRouter = c.router({
+export const slackRouter = contract.router({
   install: {
     method: 'GET',
     path: '/slack/install',

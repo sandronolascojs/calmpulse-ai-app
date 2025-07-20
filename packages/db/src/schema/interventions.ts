@@ -1,8 +1,8 @@
 import { relations } from 'drizzle-orm';
 import { boolean, index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
-import { generateIdField } from './utils/id.js';
-import { createdAtField, updatedAtField } from './utils/timestamp.js';
-import { workspaceMembers } from './workspace/workspaceMembers.js';
+import { generateIdField } from './utils/id';
+import { createdAtField, updatedAtField } from './utils/timestamp';
+import { workspaceMembers } from './workspace/workspaceMembers';
 
 export const interventions = pgTable(
   'interventions',

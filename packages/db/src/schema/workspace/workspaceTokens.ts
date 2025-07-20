@@ -1,11 +1,11 @@
 import { WorkspaceExternalProviderType } from '@calmpulse-app/types';
 import { relations } from 'drizzle-orm';
 import { index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
-import { users } from '../user/index.js';
-import { generateIdField } from '../utils/id.js';
-import { createdAtField, updatedAtField } from '../utils/timestamp.js';
-import { workspaceExternalProviderType } from './workspaceExternalProviderEnum.js';
-import { workspaces } from './workspaces.js';
+import { users } from '../user/index';
+import { generateIdField } from '../utils/id';
+import { createdAtField, updatedAtField } from '../utils/timestamp';
+import { workspaceExternalProviderType } from './workspaceExternalProviderEnum';
+import { workspaces } from './workspaces';
 
 export const workspaceTokens = pgTable(
   'workspace_tokens',

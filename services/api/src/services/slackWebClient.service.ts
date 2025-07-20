@@ -1,4 +1,4 @@
-import { env } from '@/config/env.config.js';
+import { env } from '@/config/env.config';
 import { LogLevel, WebClient } from '@slack/web-api';
 
 export class SlackWebClientService {

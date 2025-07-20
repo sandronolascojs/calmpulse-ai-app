@@ -1,5 +1,5 @@
-import { WorkspaceService } from '@/services/workspace.service.js';
-import { logger } from '@/utils/logger.instance.js';
+import { WorkspaceService } from '@/services/workspace.service';
+import { logger } from '@/utils/logger.instance';
 import { db } from '@calmpulse-app/db';
 import { contract } from '@calmpulse-app/ts-rest';
 import { initServer } from '@ts-rest/fastify';

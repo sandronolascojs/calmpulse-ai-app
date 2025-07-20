@@ -1,4 +1,4 @@
-import { env } from '@/config/env.config.js';
+import { env } from '@/config/env.config';
 import { Logger } from '@calmpulse-app/shared';
 
 export const logger = new Logger({

@@ -1,2 +1,2 @@
-export * from './app.constants.js';
-export * from './workspaceSubscription.constants.js';
+export * from './app.constants';
+export * from './workspaceSubscription.constants';

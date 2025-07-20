@@ -1,4 +1,4 @@
-import { env } from '@/config/env.config.js';
+import { env } from '@/config/env.config';
 import { FastifyCorsOptions } from '@fastify/cors';
 
 export const MAX_AGE = 86400; // 24 hours

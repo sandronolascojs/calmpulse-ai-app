@@ -1,2 +1,2 @@
-export * from './workspaceSubscriptionStatus.enum.js';
-export * from './workspaceSubscriptionTier.enum.js';
+export * from './workspaceSubscriptionStatus.enum';
+export * from './workspaceSubscriptionTier.enum';

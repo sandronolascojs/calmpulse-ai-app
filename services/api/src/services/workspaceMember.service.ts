@@ -1,4 +1,4 @@
-import { WorkspaceMemberRepository } from '@/repositories/workspaceMemberRepository.js';
+import { WorkspaceMemberRepository } from '@/repositories/workspaceMemberRepository';
 import type { DB } from '@calmpulse-app/db';
 import type { InsertWorkspaceMember } from '@calmpulse-app/db/schema';
 import type { Logger } from '@calmpulse-app/shared';

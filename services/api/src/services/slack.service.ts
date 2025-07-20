@@ -1,17 +1,17 @@
-import { env } from '@/config/env.config.js';
-import type { AuthenticatedUser } from '@/plugins/auth.plugin.js';
-import { ConflictError } from '@/utils/errors/ConflictError.js';
+import { env } from '@/config/env.config';
+import type { AuthenticatedUser } from '@/plugins/auth.plugin';
+import { ConflictError } from '@/utils/errors/ConflictError';
 import type { DB } from '@calmpulse-app/db';
 import type { InsertWorkspaceMember } from '@calmpulse-app/db/schema';
 import type { Logger } from '@calmpulse-app/shared';
 import { generateSlug } from '@calmpulse-app/shared';
 import { WorkspaceExternalProviderType } from '@calmpulse-app/types';
 import crypto from 'node:crypto';
-import { SlackRepository } from '../repositories/slackRepository.js';
-import { SlackOauthStoreStateService } from './slackOauthStoreState.service.js';
-import { SlackWebClientService } from './slackWebClient.service.js';
-import { WorkspaceService } from './workspace.service.js';
-import { WorkspaceMemberService } from './workspaceMember.service.js';
+import { SlackRepository } from '../repositories/slackRepository';
+import { SlackOauthStoreStateService } from './slackOauthStoreState.service';
+import { SlackWebClientService } from './slackWebClient.service';
+import { WorkspaceService } from './workspace.service';
+import { WorkspaceMemberService } from './workspaceMember.service';
 
 const BOT_NAMES = ['slackbot', 'slack-actions-bot', 'slack-actions-bot-dev'];
 

@@ -1,12 +1,12 @@
 import { WorkspaceExternalProviderType } from '@calmpulse-app/types';
 import { relations } from 'drizzle-orm';
 import { pgTable, text, varchar } from 'drizzle-orm/pg-core';
-import { generateIdField } from '../utils/id.js';
-import { MAX_NAME_LENGTH } from '../utils/maxLengths.js';
-import { createdAtField, updatedAtField } from '../utils/timestamp.js';
-import { workspaceExternalProviderType } from './workspaceExternalProviderEnum.js';
-import { workspaceMembers } from './workspaceMembers.js';
-import { workspaceTokens } from './workspaceTokens.js';
+import { generateIdField } from '../utils/id';
+import { MAX_NAME_LENGTH } from '../utils/maxLengths';
+import { createdAtField, updatedAtField } from '../utils/timestamp';
+import { workspaceExternalProviderType } from './workspaceExternalProviderEnum';
+import { workspaceMembers } from './workspaceMembers';
+import { workspaceTokens } from './workspaceTokens';
 
 const MAX_SLUG_LENGTH = 100;
 const MAX_DOMAIN_LENGTH = 255;

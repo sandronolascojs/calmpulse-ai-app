@@ -1,5 +1,5 @@
-import { ErrorBase } from '@/utils/errors/error.base.js';
-import { logger } from '@/utils/logger.instance.js';
+import { ErrorBase } from '@/utils/errors/error.base';
+import { logger } from '@/utils/logger.instance';
 import type { FastifyPluginAsync } from 'fastify';
 
 export const errorHandlerPlugin: FastifyPluginAsync = async (fastify) => {

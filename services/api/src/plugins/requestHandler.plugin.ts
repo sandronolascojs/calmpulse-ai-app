@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import { logger } from '@/utils/logger.instance.js';
+import { logger } from '@/utils/logger.instance';
 import type { FastifyPluginAsync } from 'fastify';
 
 export const requestHandlerPlugin: FastifyPluginAsync = async (fastify) => {

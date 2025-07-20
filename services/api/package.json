@@ -14,7 +14,7 @@
     "clean": "del dist tsconfig.tsbuildinfo",
     "dev": "run-p bundle:watch type:gen:watch dev:local",
     "dev:local": "dotenv -e .env.local -- node ./dist/index.js",
-    "format": "prettier --write --ignore-path .prettierignore --config ../../packages/config/.prettierrc . && prettier-package-json --write ./package.json",
+    "format": "prettier --config ../../packages/config/.prettierrc --write . && prettier-package-json --write ./package.json",
     "lint": "eslint src --max-warnings 0 --ext .ts,.tsx",
     "lint:fix": "eslint src --max-warnings 0 --fix --ext .ts,.tsx",
     "start": "node ./dist/index.js",
