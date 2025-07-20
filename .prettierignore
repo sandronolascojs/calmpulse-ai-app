@@ -1,2 +1,5 @@
-tsconfig.json
-**/tsconfig.json 
+# Ignore all JSON files
+**/*.json
+
+# But include package.json files
+!**/package.json 
