@@ -8,5 +8,6 @@
   "endOfLine": "lf",
   "plugins": ["prettier-plugin-organize-imports", "prettier-package-json"],
   "organizeImportsSkipDestructiveCodeActions": true,
-  "ignorePath": ".prettierignore"
+  "ignorePath": ".prettierignore",
+  "ignorePatterns": ["**/*.json", "!**/package.json"]
 }
