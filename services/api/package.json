@@ -18,9 +18,9 @@
     "lint": "eslint src --max-warnings 0 --ext .ts,.tsx",
     "lint:fix": "eslint src --max-warnings 0 --fix --ext .ts,.tsx",
     "start": "node ./dist/index.js",
-    "type:check": "tsc --noEmit",
     "type:gen": "tsc --emitDeclarationOnly",
-    "type:gen:watch": "tsc --emitDeclarationOnly --watch"
+    "type:gen:watch": "tsc --emitDeclarationOnly --watch",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@calmpulse-app/ai": "workspace:*",

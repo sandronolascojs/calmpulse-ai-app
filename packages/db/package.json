@@ -14,9 +14,7 @@
     "src"
   ],
   "scripts": {
-    "build": "tsup && tsc --emitDeclarationOnly && tsc-alias --verbose",
-    "clean": "del-cli dist tsconfig.tsbuildinfo",
-    "compile": "tsc --noEmit",
+    "clean": "del dist tsconfig.tsbuildinfo",
     "coverage": "vitest run --coverage",
     "db:generate": "dotenv -e ./.env.local -- drizzle-kit generate --config ./src/drizzle.config.ts",
     "db:migrate:deploy": "dotenv -e ./.env.local -- drizzle-kit migrate:deploy --config ./src/drizzle.config.ts",
@@ -41,8 +39,9 @@
     "@types/pg": "^8.15.2",
     "drizzle-kit": "^0.31.1",
     "eslint": "catalog:",
+    "npm-run-all": "catalog:",
     "prettier": "catalog:",
-    "tsx": "catalog:",
+    "tsup": "catalog:",
     "typescript": "catalog:",
     "typescript-eslint": "catalog:"
   }
