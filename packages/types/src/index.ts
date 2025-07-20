@@ -1,10 +1,10 @@
-export { APP_CONFIG, WORKSPACE_SUBSCRIPTION_TIER_SEATS } from './constants/index.js';
+export { APP_CONFIG, WORKSPACE_SUBSCRIPTION_TIER_SEATS } from './constants/index';
 export {
   UserRole,
   WorkspaceExternalProviderType,
   WorkspaceSubscriptionStatus,
   WorkspaceSubscriptionTier,
-} from './enums/index.js';
+} from './enums/index';
 export {
   EMAIL_REGEX,
   MAX_NAME_LENGTH,
@@ -23,4 +23,4 @@ export {
   type OrderBy,
   type Pagination,
   type PaginationMeta,
-} from './schemas/index.js';
+} from './schemas/index';

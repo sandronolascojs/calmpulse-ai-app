@@ -1,8 +1,12 @@
-import { publicRouter } from './public.contract.js';
-import { slackRouter } from './slack.contract.js';
-import { workspaceRouter } from './workspace.contract.js';
+import { publicRouter } from './public.contract';
+import { slackRouter } from './slack.contract';
+import { workspaceRouter } from './workspace.contract';
 
-export const contract = {
+export const contract: {
+  publicContract: typeof publicRouter;
+  slackContract: typeof slackRouter;
+  workspaceContract: typeof workspaceRouter;
+} = {
   publicContract: publicRouter,
   slackContract: slackRouter,
   workspaceContract: workspaceRouter,

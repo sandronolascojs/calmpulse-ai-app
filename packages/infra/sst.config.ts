@@ -1,5 +1,13 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
+export const securityHeaders = {
+  'Content-Security-Policy': "default-src 'self'",
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'X-XSS-Protection': '1; mode=block',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+};
+
 export default $config({
   app(input) {
     return {
@@ -66,6 +74,7 @@ export default $config({
         allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
         allowCredentials: true,
         maxAge: '1 day',
+        exposeHeaders: Object.keys(securityHeaders),
       },
     });
 

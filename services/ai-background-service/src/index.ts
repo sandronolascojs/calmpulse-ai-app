@@ -1,6 +1,6 @@
+import { env } from '@/config/env.config';
 import { fastifySchedule } from '@fastify/schedule';
 import fastify from 'fastify';
-import { env } from './config/env.config.js';
 
 const server = fastify();
 server.register(fastifySchedule);

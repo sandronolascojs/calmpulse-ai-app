@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 
-import { env } from '@/config/env.config.js';
+import { env } from '@/config/env.config';
 import { APP_CONFIG } from '@calmpulse-app/types';
 
 export class EmailService {

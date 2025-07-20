@@ -1,5 +1,5 @@
-import { WorkspaceService } from '@/services/workspace.service.js';
-import { logger } from '@/utils/logger.instance.js';
+import { WorkspaceService } from '@/services/workspace.service';
+import { logger } from '@/utils/logger.instance';
 import { db } from '@calmpulse-app/db';
 import { contract } from '@calmpulse-app/ts-rest';
 import { initServer } from '@ts-rest/fastify';
@@ -15,14 +15,16 @@ export const workspaceController = server.router(contract.workspaceContract, {
         userId: user.id,
       });
 
-      const workspace = {
-        workspaceId: workspaceFromDb.workspaceId,
-        name: workspaceFromDb.name,
-        slug: workspaceFromDb.slug,
-        logoUrl: workspaceFromDb.logoUrl,
-        domain: workspaceFromDb.domain,
-        createdAt: workspaceFromDb.createdAt.toISOString(),
-      };
+      const workspace = workspaceFromDb
+        ? {
+            workspaceId: workspaceFromDb.workspaceId,
+            name: workspaceFromDb.name,
+            slug: workspaceFromDb.slug,
+            logoUrl: workspaceFromDb.logoUrl,
+            domain: workspaceFromDb.domain,
+            createdAt: workspaceFromDb.createdAt.toISOString(),
+          }
+        : null;
 
       return {
         status: 200,

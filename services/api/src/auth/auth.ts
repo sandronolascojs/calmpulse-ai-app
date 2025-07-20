@@ -1,5 +1,5 @@
-import { env } from '@/config/env.config.js';
-import { EmailService } from '@/services/email.service.js';
+import { env } from '@/config/env.config';
+import { EmailService } from '@/services/email.service';
 import { db } from '@calmpulse-app/db';
 import * as schema from '@calmpulse-app/db/schema';
 import { APP_CONFIG } from '@calmpulse-app/types';

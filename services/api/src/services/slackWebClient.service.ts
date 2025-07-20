@@ -1,4 +1,4 @@
-import { env } from '@/config/env.config.js';
+import { env } from '@/config/env.config';
 import { LogLevel, WebClient } from '@slack/web-api';
 
 export class SlackWebClientService {
@@ -21,6 +21,14 @@ export class SlackWebClientService {
   async getTeamInfo(accessToken: string) {
     const webClient = this.createWebClient(accessToken);
     const response = await webClient.team.info();
+    return response;
+  }
+
+  async getUsers(accessToken: string) {
+    const webClient = this.createWebClient(accessToken);
+    const response = await webClient.users.list({
+      limit: 1000,
+    });
     return response;
   }
 }

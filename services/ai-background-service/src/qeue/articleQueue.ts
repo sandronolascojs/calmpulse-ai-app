@@ -1,4 +1,4 @@
-import { env } from '@/config/env.config.js';
+import { env } from '@/config/env.config';
 import { JobsOptions, Queue, type ConnectionOptions } from 'bullmq';
 
 export type GenerateArticleJobData = {
