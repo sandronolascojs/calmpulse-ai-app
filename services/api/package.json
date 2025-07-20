@@ -45,7 +45,7 @@
     "limax": "catalog:",
     "npm-run-all": "catalog:",
     "pg": "catalog:",
-    "resend": "^4.6.0",
+    "resend": "^4.7.0",
     "winston": "catalog:",
     "zod": "catalog:"
   },
