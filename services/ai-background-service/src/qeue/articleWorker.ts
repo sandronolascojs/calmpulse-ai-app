@@ -1,7 +1,7 @@
-import { env } from '@/config/env.config.js';
+import { env } from '@/config/env.config';
 import { Worker } from 'bullmq';
-import { logger } from '../utils/logger.instance.js';
-import { ARTICLE_QUEUE_NAME, GenerateArticleJobData } from './articleQueue.js';
+import { logger } from '../utils/logger.instance';
+import { ARTICLE_QUEUE_NAME, GenerateArticleJobData } from './articleQueue';
 
 export const startArticleWorker = () => {
   return new Worker<GenerateArticleJobData>(

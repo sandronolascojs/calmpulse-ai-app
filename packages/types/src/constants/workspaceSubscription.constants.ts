@@ -1,4 +1,4 @@
-import { WorkspaceSubscriptionTier } from '../enums/workspaceSubscription/workspaceSubscriptionTier.enum.js';
+import { WorkspaceSubscriptionTier } from '../enums/workspaceSubscription/workspaceSubscriptionTier.enum';
 
 export const WORKSPACE_SUBSCRIPTION_TIER_SEATS = {
   [WorkspaceSubscriptionTier.FREE]: 3,

@@ -1,11 +1,11 @@
 import { relations } from 'drizzle-orm';
 import { boolean, pgTable, text } from 'drizzle-orm/pg-core';
-import { generateIdField } from '../utils/id.js';
-import { createdAtField, updatedAtField } from '../utils/timestamp.js';
-import { userWorkspaces } from '../workspace/index.js';
-import { accounts } from './accounts.js';
-import { sessions } from './sessions.js';
-import { verifications } from './verifications.js';
+import { generateIdField } from '../utils/id';
+import { createdAtField, updatedAtField } from '../utils/timestamp';
+import { userWorkspaces } from '../workspace/index';
+import { accounts } from './accounts';
+import { sessions } from './sessions';
+import { verifications } from './verifications';
 
 export const users = pgTable('users', {
   id: generateIdField({ name: 'id' }),

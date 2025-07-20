@@ -1,4 +1,4 @@
-import { UserRepository } from '@/repositories/userRepository.js';
+import { UserRepository } from '@/repositories/userRepository';
 import type { DB } from '@calmpulse-app/db';
 import type { Logger } from '@calmpulse-app/shared';
 

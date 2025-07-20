@@ -1,9 +1,9 @@
 import { UserRole } from '@calmpulse-app/types';
 import { relations } from 'drizzle-orm';
 import { index, pgEnum, pgTable, text } from 'drizzle-orm/pg-core';
-import { users } from '../user/users.js';
-import { createdAtField, updatedAtField } from '../utils/timestamp.js';
-import { workspaces } from './workspaces.js';
+import { users } from '../user/users';
+import { createdAtField, updatedAtField } from '../utils/timestamp';
+import { workspaces } from './workspaces';
 
 const userRolesEnum = pgEnum('user_roles', [UserRole.OWNER, UserRole.USER]);
 

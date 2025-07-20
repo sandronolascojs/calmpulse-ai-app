@@ -1,5 +1,5 @@
-import { auth } from '@/auth/auth.js';
-import { logger } from '@/utils/logger.instance.js';
+import { auth } from '@/auth/auth';
+import { logger } from '@/utils/logger.instance';
 import { FastifyInstance } from 'fastify';
 
 export async function registerAuthController(fastify: FastifyInstance) {

@@ -14,14 +14,13 @@
     "src"
   ],
   "scripts": {
-    "build": "tsup && tsc --emitDeclarationOnly && tsc-alias --verbose",
-    "clean": "del-cli dist tsconfig.tsbuildinfo",
-    "compile": "tsc --noEmit",
+    "build": "echo 'No build step'",
+    "clean": "del dist tsconfig.tsbuildinfo",
     "coverage": "vitest run --coverage",
     "db:generate": "dotenv -e ./.env.local -- drizzle-kit generate --config ./src/drizzle.config.ts",
     "db:migrate:deploy": "dotenv -e ./.env.local -- drizzle-kit migrate:deploy --config ./src/drizzle.config.ts",
     "db:migrate:local": "dotenv -e .env.local -- drizzle-kit migrate --config ./src/drizzle.config.ts",
-    "format": "prettier --config ../config/.prettierrc --write --ignore-path .gitignore . && prettier-package-json --write ./package.json",
+    "format": "prettier --config ../config/.prettierrc --write . && prettier-package-json --write ./package.json",
     "lint": "eslint src --flag v10_config_lookup_from_file --max-warnings 0 --ext .ts,.tsx",
     "lint:fix": "eslint src --flag v10_config_lookup_from_file --max-warnings 0 --fix --ext .ts,.tsx",
     "test": "vitest",
@@ -41,8 +40,9 @@
     "@types/pg": "^8.15.2",
     "drizzle-kit": "^0.31.1",
     "eslint": "catalog:",
+    "npm-run-all": "catalog:",
     "prettier": "catalog:",
-    "tsx": "catalog:",
+    "tsup": "catalog:",
     "typescript": "catalog:",
     "typescript-eslint": "catalog:"
   }

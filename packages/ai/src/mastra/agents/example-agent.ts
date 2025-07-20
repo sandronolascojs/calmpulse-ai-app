@@ -2,7 +2,7 @@ import { openai } from '@ai-sdk/openai';
 import type { Mastra } from '@mastra/core';
 import { Agent, type AgentConfig } from '@mastra/core/agent';
 import { RuntimeContext } from '@mastra/core/runtime-context';
-import { BaseAgent } from './baseAgent.js';
+import { BaseAgent } from './baseAgent';
 
 export type ExampleContext = {
   example: string;

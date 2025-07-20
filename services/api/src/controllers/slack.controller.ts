@@ -1,6 +1,6 @@
-import { env } from '@/config/env.config.js';
-import { SlackService } from '@/services/slack.service.js';
-import { logger } from '@/utils/logger.instance.js';
+import { env } from '@/config/env.config';
+import { SlackService } from '@/services/slack.service';
+import { logger } from '@/utils/logger.instance';
 import { db } from '@calmpulse-app/db';
 import { contract } from '@calmpulse-app/ts-rest';
 import { initServer } from '@ts-rest/fastify';

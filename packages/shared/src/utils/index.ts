@@ -1,1 +1,1 @@
-export * from './generateSlug.js';
+export * from './generateSlug';

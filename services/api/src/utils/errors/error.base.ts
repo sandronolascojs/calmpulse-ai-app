@@ -1,4 +1,4 @@
-import type { StatusCode } from './statusCode.enum.js';
+import type { StatusCode } from './statusCode.enum';
 
 export class ErrorBase extends Error {
   statusCode: StatusCode;

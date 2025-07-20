@@ -1,5 +1,5 @@
-import { SlackOauthStoreStateRepository } from '@/repositories/slackOauthStoreStateRepository.js';
-import { NotFoundError } from '@/utils/errors/NotFoundError.js';
+import { SlackOauthStoreStateRepository } from '@/repositories/slackOauthStoreStateRepository';
+import { NotFoundError } from '@/utils/errors/NotFoundError';
 import type { DB } from '@calmpulse-app/db';
 import type { InsertSlackOauthStoreState } from '@calmpulse-app/db/schema';
 import type { Logger } from '@calmpulse-app/shared';

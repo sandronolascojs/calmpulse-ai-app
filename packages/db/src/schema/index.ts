@@ -1,19 +1,19 @@
-export { dailyFeatures, dailyFeaturesRelations } from './dailyFeatures.js';
-export type { InsertDailyFeature, SelectDailyFeature } from './dailyFeatures.js';
+export { dailyFeatures, dailyFeaturesRelations } from './dailyFeatures';
+export type { InsertDailyFeature, SelectDailyFeature } from './dailyFeatures';
 export {
   slackOauthStoreState,
   slackOauthStoreStateRelations,
   slackTemporalRawEvents,
   slackTemporalRawEventsRelations,
-} from './slack/index.js';
+} from './slack/index';
 export type {
   InsertSlackOauthStoreState,
   InsertSlackTemporalRawEvent,
   SelectSlackOauthStoreState,
   SelectSlackTemporalRawEvent,
-} from './slack/index.js';
-export { accounts, sessions, userRelations, users, verifications } from './user/index.js';
-export type { InsertUser, SelectUser } from './user/index.js';
+} from './slack/index';
+export { accounts, sessions, userRelations, users, verifications } from './user/index';
+export type { InsertUser, SelectUser } from './user/index';
 export {
   userWorkspaceRelations,
   userWorkspaces,
@@ -29,7 +29,7 @@ export {
   workspaceTokenRelations,
   workspaceTokens,
   workspaces,
-} from './workspace/index.js';
+} from './workspace/index';
 export type {
   InsertUserWorkspace,
   InsertWorkspace,
@@ -45,4 +45,4 @@ export type {
   SelectWorkspaceGoogleCalendarWatchChannels,
   SelectWorkspaceMember,
   SelectWorkspaceToken,
-} from './workspace/index.js';
+} from './workspace/index';

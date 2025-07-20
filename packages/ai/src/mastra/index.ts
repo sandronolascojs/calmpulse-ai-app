@@ -1,7 +1,7 @@
 import { Mastra } from '@mastra/core';
 import { PinoLogger } from '@mastra/loggers';
-import { ExampleAgent } from './agents/example-agent.js';
-export * from './agents/index.js';
+import { ExampleAgent } from './agents/example-agent';
+export * from './agents/index';
 
 export const agents = {
   exampleAgent: new ExampleAgent().getAgent(),
