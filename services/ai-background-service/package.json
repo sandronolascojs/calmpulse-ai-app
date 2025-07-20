@@ -36,7 +36,7 @@
     "@mastra/loggers": "catalog:",
     "@mastra/memory": "catalog:",
     "@t3-oss/env-core": "catalog:",
-    "bullmq": "^5.54.3",
+    "bullmq": "^5.56.4",
     "dotenv-cli": "catalog:",
     "fastify": "catalog:",
     "mastra": "catalog:",
