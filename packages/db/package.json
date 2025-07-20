@@ -8,8 +8,8 @@
     ".": "./src/index.ts",
     "./schema": "./src/schema/index.ts"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
   "files": [
     "src"
   ],
