@@ -2,6 +2,7 @@ import { env } from '@/config/env.config.js';
 import type { AuthenticatedUser } from '@/plugins/auth.plugin.js';
 import { ConflictError } from '@/utils/errors/ConflictError.js';
 import type { DB } from '@calmpulse-app/db';
+import type { InsertWorkspaceMember } from '@calmpulse-app/db/schema';
 import type { Logger } from '@calmpulse-app/shared';
 import { generateSlug } from '@calmpulse-app/shared';
 import { WorkspaceExternalProviderType } from '@calmpulse-app/types';
@@ -10,17 +11,22 @@ import { SlackRepository } from '../repositories/slackRepository.js';
 import { SlackOauthStoreStateService } from './slackOauthStoreState.service.js';
 import { SlackWebClientService } from './slackWebClient.service.js';
 import { WorkspaceService } from './workspace.service.js';
+import { WorkspaceMemberService } from './workspaceMember.service.js';
+
+const BOT_NAMES = ['slackbot', 'slack-actions-bot', 'slack-actions-bot-dev'];
 
 export class SlackService {
   private slackRepository: SlackRepository;
   private workspaceService: WorkspaceService;
   private slackWebClientService: SlackWebClientService;
   private slackOauthStoreStateService: SlackOauthStoreStateService;
+  private workspaceMemberService: WorkspaceMemberService;
 
   constructor(db: DB, logger: Logger) {
     this.slackRepository = new SlackRepository(db, logger);
     this.workspaceService = new WorkspaceService(db, logger);
     this.slackOauthStoreStateService = new SlackOauthStoreStateService(db, logger);
+    this.workspaceMemberService = new WorkspaceMemberService(db, logger);
     this.slackWebClientService = new SlackWebClientService();
   }
 
@@ -99,6 +105,27 @@ export class SlackService {
       refreshToken,
       expiresAt,
     );
+
+    const slackUsers = await this.slackWebClientService.getUsers(accessToken);
+
+    const satinizedWorkspaceMembers: InsertWorkspaceMember[] =
+      slackUsers.members
+        ?.map((member) => {
+          if (member.is_bot || BOT_NAMES.includes(member.name ?? '')) {
+            return null;
+          }
+
+          return {
+            workspaceId,
+            name: member.real_name ?? 'N/A',
+            title: member.profile?.title ?? null,
+            email: (member.profile?.email ?? 'N/A').trim(),
+            avatarUrl: member.profile?.image_192 ?? null,
+          };
+        })
+        .filter((member) => member !== null) ?? [];
+
+    await this.workspaceMemberService.createWorkspaceMembers(satinizedWorkspaceMembers);
   }
 
   async installApp(authenticatedUser: AuthenticatedUser) {

@@ -23,4 +23,12 @@ export class SlackWebClientService {
     const response = await webClient.team.info();
     return response;
   }
+
+  async getUsers(accessToken: string) {
+    const webClient = this.createWebClient(accessToken);
+    const response = await webClient.users.list({
+      limit: 1000,
+    });
+    return response;
+  }
 }
