@@ -21,7 +21,7 @@ export class WorkspaceMemberService {
     workspaceId: string;
     workspaceMemberId: string;
   }) {
-    return this.workspaceMemberRepository.getSlackMember({ workspaceId, workspaceMemberId });
+    return this.workspaceMemberRepository.getMember({ workspaceId, workspaceMemberId });
   }
 
   async createWorkspaceMembers(values: InsertWorkspaceMember[]) {

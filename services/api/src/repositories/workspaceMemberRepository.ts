@@ -10,20 +10,20 @@ export class WorkspaceMemberRepository extends BaseRepository {
     return members;
   }
 
-  async getSlackMember({
+  async getMember({
     workspaceId,
     workspaceMemberId,
   }: {
     workspaceId: string;
     workspaceMemberId: string;
   }) {
-    const slackMember = await this.db.query.workspaceMembers.findFirst({
+    const member = await this.db.query.workspaceMembers.findFirst({
       where: and(
         eq(workspaceMembers.workspaceId, workspaceId),
         eq(workspaceMembers.workspaceMemberId, workspaceMemberId),
       ),
     });
-    return slackMember;
+    return member;
   }
 
   async createWorkspaceMember(values: InsertWorkspaceMember) {

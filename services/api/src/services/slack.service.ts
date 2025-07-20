@@ -21,6 +21,7 @@ export class SlackService {
   private slackWebClientService: SlackWebClientService;
   private slackOauthStoreStateService: SlackOauthStoreStateService;
   private workspaceMemberService: WorkspaceMemberService;
+  private logger: Logger;
 
   constructor(db: DB, logger: Logger) {
     this.slackRepository = new SlackRepository(db, logger);
@@ -28,6 +29,7 @@ export class SlackService {
     this.slackOauthStoreStateService = new SlackOauthStoreStateService(db, logger);
     this.workspaceMemberService = new WorkspaceMemberService(db, logger);
     this.slackWebClientService = new SlackWebClientService();
+    this.logger = logger;
   }
 
   async generateCallback(
@@ -108,7 +110,7 @@ export class SlackService {
 
     const slackUsers = await this.slackWebClientService.getUsers(accessToken);
 
-    const satinizedWorkspaceMembers: InsertWorkspaceMember[] =
+    const sanitizedWorkspaceMembers: InsertWorkspaceMember[] =
       slackUsers.members
         ?.map((member) => {
           if (member.is_bot || BOT_NAMES.includes(member.name ?? '')) {
@@ -119,13 +121,17 @@ export class SlackService {
             workspaceId,
             name: member.real_name ?? 'N/A',
             title: member.profile?.title ?? null,
-            email: (member.profile?.email ?? 'N/A').trim(),
+            email: member.profile?.email ?? 'N/A',
             avatarUrl: member.profile?.image_192 ?? null,
           };
         })
         .filter((member) => member !== null) ?? [];
 
-    await this.workspaceMemberService.createWorkspaceMembers(satinizedWorkspaceMembers);
+    this.logger.info('Syncing workspace members', {
+      workspaceId,
+      memberCount: sanitizedWorkspaceMembers.length,
+    });
+    await this.workspaceMemberService.createWorkspaceMembers(sanitizedWorkspaceMembers);
   }
 
   async installApp(authenticatedUser: AuthenticatedUser) {
