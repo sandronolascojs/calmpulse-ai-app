@@ -1,8 +1,83 @@
 {
-  "id": "a21d587b-e74f-4b0c-b768-1c378c422fcb",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  },
   "dialect": "postgresql",
+  "enums": {
+    "public.slack_event_types": {
+      "name": "slack_event_types",
+      "schema": "public",
+      "values": [
+        "TEAM_JOIN",
+        "MESSAGE",
+        "APP_MENTION",
+        "MEMBER_JOINED_CHANNEL",
+        "DND_UPDATED_USER"
+      ]
+    },
+    "public.user_roles": {
+      "name": "user_roles",
+      "schema": "public",
+      "values": [
+        "OWNER",
+        "USER"
+      ]
+    },
+    "public.workspace_external_provider_type": {
+      "name": "workspace_external_provider_type",
+      "schema": "public",
+      "values": [
+        "SLACK",
+        "MICROSOFT_TEAMS"
+      ]
+    },
+    "public.locale": {
+      "name": "locale",
+      "schema": "public",
+      "values": [
+        "en_US",
+        "es_ES",
+        "fr_FR",
+        "de_DE",
+        "it_IT",
+        "pt_PT",
+        "ru_RU",
+        "zh_CN",
+        "ja_JP",
+        "ko_KR",
+        "pt_BR",
+        "ar_SA",
+        "zh_TW",
+        "nl_NL",
+        "pl_PL",
+        "sv_SE",
+        "tr_TR",
+        "uk_UA",
+        "vi_VN",
+        "id_ID",
+        "ms_MY",
+        "th_TH",
+        "ms_SG"
+      ]
+    },
+    "public.workspace_deactivation_reason": {
+      "name": "workspace_deactivation_reason",
+      "schema": "public",
+      "values": [
+        "TOKEN_REVOKED",
+        "APP_UNINSTALLED"
+      ]
+    }
+  },
+  "id": "6ba1d3f6-6373-4d20-98ce-49f52256cee9",
+  "policies": {},
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "roles": {},
+  "schemas": {},
+  "sequences": {},
   "tables": {
     "public.daily_features": {
       "name": "daily_features",
@@ -92,8 +167,12 @@
           "name": "daily_features_workspace_member_id_workspace_members_workspace_member_id_fk",
           "tableFrom": "daily_features",
           "tableTo": "workspace_members",
-          "columnsFrom": ["workspace_member_id"],
-          "columnsTo": ["workspace_member_id"],
+          "columnsFrom": [
+            "workspace_member_id"
+          ],
+          "columnsTo": [
+            "workspace_member_id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -101,7 +180,10 @@
       "compositePrimaryKeys": {
         "daily_features_workspace_member_id_day_pk": {
           "name": "daily_features_workspace_member_id_day_pk",
-          "columns": ["workspace_member_id", "day"]
+          "columns": [
+            "workspace_member_id",
+            "day"
+          ]
         }
       },
       "uniqueConstraints": {},
@@ -192,8 +274,12 @@
           "name": "fatigue_scores_workspace_member_id_workspace_members_workspace_member_id_fk",
           "tableFrom": "fatigue_scores",
           "tableTo": "workspace_members",
-          "columnsFrom": ["workspace_member_id"],
-          "columnsTo": ["workspace_member_id"],
+          "columnsFrom": [
+            "workspace_member_id"
+          ],
+          "columnsTo": [
+            "workspace_member_id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -203,7 +289,117 @@
         "fatigue_scores_fatigue_score_id_unique": {
           "name": "fatigue_scores_fatigue_score_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["fatigue_score_id"]
+          "columns": [
+            "fatigue_score_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.interventions": {
+      "name": "interventions",
+      "schema": "",
+      "columns": {
+        "intervention_id": {
+          "name": "intervention_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "workspace_member_id": {
+          "name": "workspace_member_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "details": {
+          "name": "details",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "acknowledged": {
+          "name": "acknowledged",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "workspace_member_id_intervention_id_idx": {
+          "name": "workspace_member_id_intervention_id_idx",
+          "columns": [
+            {
+              "expression": "workspace_member_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "intervention_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "interventions_workspace_member_id_workspace_members_workspace_member_id_fk": {
+          "name": "interventions_workspace_member_id_workspace_members_workspace_member_id_fk",
+          "tableFrom": "interventions",
+          "tableTo": "workspace_members",
+          "columnsFrom": [
+            "workspace_member_id"
+          ],
+          "columnsTo": [
+            "workspace_member_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "interventions_intervention_id_unique": {
+          "name": "interventions_intervention_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "intervention_id"
+          ]
         }
       },
       "policies": {},
@@ -253,8 +449,12 @@
           "name": "slack_oauth_store_state_user_id_users_id_fk",
           "tableFrom": "slack_oauth_store_state",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -264,12 +464,16 @@
         "slack_oauth_store_state_oauth_store_state_id_unique": {
           "name": "slack_oauth_store_state_oauth_store_state_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["oauth_store_state_id"]
+          "columns": [
+            "oauth_store_state_id"
+          ]
         },
         "slack_oauth_store_state_state_unique": {
           "name": "slack_oauth_store_state_state_unique",
           "nullsNotDistinct": false,
-          "columns": ["state"]
+          "columns": [
+            "state"
+          ]
         }
       },
       "policies": {},
@@ -298,9 +502,16 @@
           "primaryKey": false,
           "notNull": true
         },
-        "text": {
-          "name": "text",
-          "type": "text",
+        "type": {
+          "name": "type",
+          "type": "slack_event_types",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "payload": {
+          "name": "payload",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": true
         },
@@ -348,6 +559,21 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "slack_temporal_raw_events_type_idx": {
+          "name": "slack_temporal_raw_events_type_idx",
+          "columns": [
+            {
+              "expression": "type",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -355,8 +581,12 @@
           "name": "slack_temporal_raw_events_workspace_member_id_workspace_members_workspace_member_id_fk",
           "tableFrom": "slack_temporal_raw_events",
           "tableTo": "workspace_members",
-          "columnsFrom": ["workspace_member_id"],
-          "columnsTo": ["workspace_member_id"],
+          "columnsFrom": [
+            "workspace_member_id"
+          ],
+          "columnsTo": [
+            "workspace_member_id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -366,7 +596,9 @@
         "slack_temporal_raw_events_slack_temporal_raw_event_id_unique": {
           "name": "slack_temporal_raw_events_slack_temporal_raw_event_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["slack_temporal_raw_event_id"]
+          "columns": [
+            "slack_temporal_raw_event_id"
+          ]
         }
       },
       "policies": {},
@@ -464,8 +696,12 @@
           "name": "accounts_user_id_users_id_fk",
           "tableFrom": "accounts",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -475,7 +711,9 @@
         "accounts_id_unique": {
           "name": "accounts_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         }
       },
       "policies": {},
@@ -543,8 +781,12 @@
           "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -554,12 +796,16 @@
         "sessions_id_unique": {
           "name": "sessions_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         },
         "sessions_token_unique": {
           "name": "sessions_token_unique",
           "nullsNotDistinct": false,
-          "columns": ["token"]
+          "columns": [
+            "token"
+          ]
         }
       },
       "policies": {},
@@ -622,12 +868,16 @@
         "users_id_unique": {
           "name": "users_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         },
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
         }
       },
       "policies": {},
@@ -684,7 +934,9 @@
         "verifications_id_unique": {
           "name": "verifications_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         }
       },
       "policies": {},
@@ -767,8 +1019,12 @@
           "name": "user_workspaces_user_id_users_id_fk",
           "tableFrom": "user_workspaces",
           "tableTo": "users",
-          "columnsFrom": ["user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -776,8 +1032,12 @@
           "name": "user_workspaces_workspace_id_workspaces_workspace_id_fk",
           "tableFrom": "user_workspaces",
           "tableTo": "workspaces",
-          "columnsFrom": ["workspace_id"],
-          "columnsTo": ["workspace_id"],
+          "columnsFrom": [
+            "workspace_id"
+          ],
+          "columnsTo": [
+            "workspace_id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -860,8 +1120,12 @@
           "name": "workspace_google_calendar_integrations_workspace_id_workspaces_workspace_id_fk",
           "tableFrom": "workspace_google_calendar_integrations",
           "tableTo": "workspaces",
-          "columnsFrom": ["workspace_id"],
-          "columnsTo": ["workspace_id"],
+          "columnsFrom": [
+            "workspace_id"
+          ],
+          "columnsTo": [
+            "workspace_id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -871,7 +1135,9 @@
         "workspace_google_calendar_integrations_workspace_google_calendar_integration_id_unique": {
           "name": "workspace_google_calendar_integrations_workspace_google_calendar_integration_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["workspace_google_calendar_integration_id"]
+          "columns": [
+            "workspace_google_calendar_integration_id"
+          ]
         }
       },
       "policies": {},
@@ -943,8 +1209,12 @@
           "name": "workspace_google_calendar_sync_tokens_workspace_member_id_workspace_members_workspace_member_id_fk",
           "tableFrom": "workspace_google_calendar_sync_tokens",
           "tableTo": "workspace_members",
-          "columnsFrom": ["workspace_member_id"],
-          "columnsTo": ["workspace_member_id"],
+          "columnsFrom": [
+            "workspace_member_id"
+          ],
+          "columnsTo": [
+            "workspace_member_id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -954,7 +1224,9 @@
         "workspace_google_calendar_sync_tokens_workspace_google_calendar_sync_token_id_unique": {
           "name": "workspace_google_calendar_sync_tokens_workspace_google_calendar_sync_token_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["workspace_google_calendar_sync_token_id"]
+          "columns": [
+            "workspace_google_calendar_sync_token_id"
+          ]
         }
       },
       "policies": {},
@@ -1032,8 +1304,12 @@
           "name": "workspace_google_calendar_watch_channels_workspace_member_id_workspace_members_workspace_member_id_fk",
           "tableFrom": "workspace_google_calendar_watch_channels",
           "tableTo": "workspace_members",
-          "columnsFrom": ["workspace_member_id"],
-          "columnsTo": ["workspace_member_id"],
+          "columnsFrom": [
+            "workspace_member_id"
+          ],
+          "columnsTo": [
+            "workspace_member_id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1043,7 +1319,107 @@
         "workspace_google_calendar_watch_channels_watch_id_unique": {
           "name": "workspace_google_calendar_watch_channels_watch_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["watch_id"]
+          "columns": [
+            "watch_id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.workspace_member_preferences": {
+      "name": "workspace_member_preferences",
+      "schema": "",
+      "columns": {
+        "workspace_member_preferences_id": {
+          "name": "workspace_member_preferences_id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "workspace_member_id": {
+          "name": "workspace_member_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "timezone": {
+          "name": "timezone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "locale": {
+          "name": "locale",
+          "type": "locale",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'en_US'"
+        },
+        "is_dnd_enabled": {
+          "name": "is_dnd_enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "workspace_member_preferences_workspace_member_id_unique_idx": {
+          "name": "workspace_member_preferences_workspace_member_id_unique_idx",
+          "columns": [
+            {
+              "expression": "workspace_member_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "workspace_member_preferences_workspace_member_id_workspace_members_workspace_member_id_fk": {
+          "name": "workspace_member_preferences_workspace_member_id_workspace_members_workspace_member_id_fk",
+          "tableFrom": "workspace_member_preferences",
+          "tableTo": "workspace_members",
+          "columnsFrom": [
+            "workspace_member_id"
+          ],
+          "columnsTo": [
+            "workspace_member_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "workspace_member_preferences_workspace_member_preferences_id_unique": {
+          "name": "workspace_member_preferences_workspace_member_preferences_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "workspace_member_preferences_id"
+          ]
         }
       },
       "policies": {},
@@ -1068,7 +1444,7 @@
         },
         "name": {
           "name": "name",
-          "type": "text",
+          "type": "varchar(400)",
           "primaryKey": false,
           "notNull": true
         },
@@ -1083,6 +1459,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "external_id": {
+          "name": "external_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         },
         "avatar_url": {
           "name": "avatar_url",
@@ -1106,17 +1488,44 @@
         }
       },
       "indexes": {
-        "workspace_member_workspace_id_idx": {
-          "name": "workspace_member_workspace_id_idx",
+        "workspace_member_workspace_email_unique_idx": {
+          "name": "workspace_member_workspace_email_unique_idx",
           "columns": [
             {
               "expression": "workspace_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
+            },
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
             }
           ],
-          "isUnique": false,
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "workspace_member_workspace_external_id_unique_idx": {
+          "name": "workspace_member_workspace_external_id_unique_idx",
+          "columns": [
+            {
+              "expression": "workspace_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "external_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -1127,8 +1536,12 @@
           "name": "workspace_members_workspace_id_workspaces_workspace_id_fk",
           "tableFrom": "workspace_members",
           "tableTo": "workspaces",
-          "columnsFrom": ["workspace_id"],
-          "columnsTo": ["workspace_id"],
+          "columnsFrom": [
+            "workspace_id"
+          ],
+          "columnsTo": [
+            "workspace_id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1138,7 +1551,16 @@
         "workspace_members_workspace_member_id_unique": {
           "name": "workspace_members_workspace_member_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["workspace_member_id"]
+          "columns": [
+            "workspace_member_id"
+          ]
+        },
+        "workspace_members_external_id_unique": {
+          "name": "workspace_members_external_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "external_id"
+          ]
         }
       },
       "policies": {},
@@ -1157,13 +1579,13 @@
         },
         "name": {
           "name": "name",
-          "type": "text",
+          "type": "varchar(400)",
           "primaryKey": false,
           "notNull": true
         },
         "slug": {
           "name": "slug",
-          "type": "text",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
         },
@@ -1181,7 +1603,7 @@
         },
         "domain": {
           "name": "domain",
-          "type": "text",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false
         },
@@ -1192,6 +1614,26 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'SLACK'"
+        },
+        "is_disabled": {
+          "name": "is_disabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "deactivation_reason": {
+          "name": "deactivation_reason",
+          "type": "workspace_deactivation_reason",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "deactivated_at": {
+          "name": "deactivated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -1215,7 +1657,9 @@
         "workspaces_workspace_id_unique": {
           "name": "workspaces_workspace_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["workspace_id"]
+          "columns": [
+            "workspace_id"
+          ]
         }
       },
       "policies": {},
@@ -1314,8 +1758,12 @@
           "name": "workspace_tokens_workspace_id_workspaces_workspace_id_fk",
           "tableFrom": "workspace_tokens",
           "tableTo": "workspaces",
-          "columnsFrom": ["workspace_id"],
-          "columnsTo": ["workspace_id"],
+          "columnsFrom": [
+            "workspace_id"
+          ],
+          "columnsTo": [
+            "workspace_id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -1323,8 +1771,12 @@
           "name": "workspace_tokens_installer_user_id_users_id_fk",
           "tableFrom": "workspace_tokens",
           "tableTo": "users",
-          "columnsFrom": ["installer_user_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "installer_user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -1334,114 +1786,16 @@
         "workspace_tokens_token_id_unique": {
           "name": "workspace_tokens_token_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["token_id"]
+          "columns": [
+            "token_id"
+          ]
         },
         "workspace_tokens_workspace_id_unique": {
           "name": "workspace_tokens_workspace_id_unique",
           "nullsNotDistinct": false,
-          "columns": ["workspace_id"]
-        }
-      },
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.interventions": {
-      "name": "interventions",
-      "schema": "",
-      "columns": {
-        "intervention_id": {
-          "name": "intervention_id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "workspace_member_id": {
-          "name": "workspace_member_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "date": {
-          "name": "date",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "details": {
-          "name": "details",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "acknowledged": {
-          "name": "acknowledged",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        }
-      },
-      "indexes": {
-        "workspace_member_id_intervention_id_idx": {
-          "name": "workspace_member_id_intervention_id_idx",
           "columns": [
-            {
-              "expression": "workspace_member_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "intervention_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "interventions_workspace_member_id_workspace_members_workspace_member_id_fk": {
-          "name": "interventions_workspace_member_id_workspace_members_workspace_member_id_fk",
-          "tableFrom": "interventions",
-          "tableTo": "workspace_members",
-          "columnsFrom": ["workspace_member_id"],
-          "columnsTo": ["workspace_member_id"],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "interventions_intervention_id_unique": {
-          "name": "interventions_intervention_id_unique",
-          "nullsNotDistinct": false,
-          "columns": ["intervention_id"]
+            "workspace_id"
+          ]
         }
       },
       "policies": {},
@@ -1449,15 +1803,5 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
-  "schemas": {},
-  "sequences": {},
-  "roles": {},
-  "policies": {},
-  "views": {},
-  "_meta": {
-    "columns": {},
-    "schemas": {},
-    "tables": {}
-  }
+  "views": {}
 }

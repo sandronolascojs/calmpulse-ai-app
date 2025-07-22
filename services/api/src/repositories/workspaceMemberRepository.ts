@@ -1,4 +1,8 @@
-import { workspaceMembers, type InsertWorkspaceMember } from '@calmpulse-app/db/schema';
+import {
+  workspaceMembers,
+  type InsertWorkspaceMember,
+  type UpdateWorkspaceMember,
+} from '@calmpulse-app/db/schema';
 import { BaseRepository } from '@calmpulse-app/shared';
 import { and, eq } from 'drizzle-orm';
 
@@ -32,6 +36,45 @@ export class WorkspaceMemberRepository extends BaseRepository {
   }
 
   async createWorkspaceMembersBulk(values: InsertWorkspaceMember[]) {
-    await this.db.insert(workspaceMembers).values(values).onConflictDoNothing();
+    const createdMembers = await this.db
+      .insert(workspaceMembers)
+      .values(values)
+      .onConflictDoNothing()
+      .returning();
+    return createdMembers;
+  }
+
+  async getWorkspaceMemberByExternalUserId({
+    externalUserId,
+    workspaceId,
+  }: {
+    externalUserId: string;
+    workspaceId: string;
+  }) {
+    const member = await this.db.query.workspaceMembers.findFirst({
+      where: and(
+        eq(workspaceMembers.workspaceId, workspaceId),
+        eq(workspaceMembers.externalId, externalUserId),
+      ),
+    });
+    return member;
+  }
+
+  async updateWorkspaceMember({
+    workspaceMemberId,
+    workspaceMember,
+  }: {
+    workspaceMemberId: string;
+    workspaceMember: UpdateWorkspaceMember;
+  }) {
+    const [updatedWorkspaceMember] = await this.db
+      .update(workspaceMembers)
+      .set({
+        ...workspaceMember,
+        updatedAt: new Date(),
+      })
+      .where(eq(workspaceMembers.workspaceMemberId, workspaceMemberId))
+      .returning();
+    return updatedWorkspaceMember;
   }
 }

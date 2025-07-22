@@ -1,6 +1,6 @@
 import { WorkspaceMemberRepository } from '@/repositories/workspaceMemberRepository';
 import type { DB } from '@calmpulse-app/db';
-import type { InsertWorkspaceMember } from '@calmpulse-app/db/schema';
+import type { InsertWorkspaceMember, UpdateWorkspaceMember } from '@calmpulse-app/db/schema';
 import type { Logger } from '@calmpulse-app/shared';
 
 export class WorkspaceMemberService {
@@ -25,6 +25,33 @@ export class WorkspaceMemberService {
   }
 
   async createWorkspaceMembers(values: InsertWorkspaceMember[]) {
-    return this.workspaceMemberRepository.createWorkspaceMembersBulk(values);
+    return await this.workspaceMemberRepository.createWorkspaceMembersBulk(values);
+  }
+
+  async getWorkspaceMemberByExternalUserId({
+    externalUserId,
+    workspaceId,
+  }: {
+    externalUserId: string;
+    workspaceId: string;
+  }) {
+    return this.workspaceMemberRepository.getWorkspaceMemberByExternalUserId({
+      externalUserId,
+      workspaceId,
+    });
+  }
+
+  async updateWorkspaceMember({
+    workspaceMemberId,
+    workspaceMember,
+  }: {
+    workspaceMemberId: string;
+    workspaceMember: UpdateWorkspaceMember;
+  }) {
+    const updatedWorkspaceMember = await this.workspaceMemberRepository.updateWorkspaceMember({
+      workspaceMemberId,
+      workspaceMember,
+    });
+    return updatedWorkspaceMember;
   }
 }

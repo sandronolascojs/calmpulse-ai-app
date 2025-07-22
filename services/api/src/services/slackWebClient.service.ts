@@ -31,4 +31,16 @@ export class SlackWebClientService {
     });
     return response;
   }
+
+  async getUser(accessToken: string, userId: string) {
+    const webClient = this.createWebClient(accessToken);
+    const response = await webClient.users.info({ user: userId });
+    return response;
+  }
+
+  async getConversationInfo(accessToken: string, channelId: string) {
+    const webClient = this.createWebClient(accessToken);
+    const response = await webClient.conversations.info({ channel: channelId });
+    return response;
+  }
 }

@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { index, pgTable, text, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, text, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { generateIdField } from '../utils/id';
 import { MAX_NAME_LENGTH } from '../utils/maxLengths';
 import { createdAtField, updatedAtField } from '../utils/timestamp';
@@ -15,13 +15,17 @@ export const workspaceMembers = pgTable(
     name: varchar('name', { length: MAX_NAME_LENGTH }).notNull(),
     email: text('email').notNull(),
     title: text('title'),
+    externalId: text('external_id').notNull().unique(),
     avatarUrl: text('avatar_url'),
     createdAt: createdAtField,
     updatedAt: updatedAtField,
   },
   (table) => [
-    index('workspace_member_workspace_id_idx').on(table.workspaceId),
     uniqueIndex('workspace_member_workspace_email_unique_idx').on(table.workspaceId, table.email),
+    uniqueIndex('workspace_member_workspace_external_id_unique_idx').on(
+      table.workspaceId,
+      table.externalId,
+    ),
   ],
 );
 
@@ -34,3 +38,4 @@ export const workspaceMemberRelations = relations(workspaceMembers, ({ one }) =>
 
 export type InsertWorkspaceMember = typeof workspaceMembers.$inferInsert;
 export type SelectWorkspaceMember = typeof workspaceMembers.$inferSelect;
+export type UpdateWorkspaceMember = Partial<SelectWorkspaceMember>;

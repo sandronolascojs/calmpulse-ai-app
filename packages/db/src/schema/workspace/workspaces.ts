@@ -1,15 +1,20 @@
-import { WorkspaceExternalProviderType } from '@calmpulse-app/types';
+import { WorkspaceDeactivationReason, WorkspaceExternalProviderType } from '@calmpulse-app/types';
 import { relations } from 'drizzle-orm';
-import { pgTable, text, varchar } from 'drizzle-orm/pg-core';
+import { boolean, pgEnum, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { generateIdField } from '../utils/id';
 import { MAX_NAME_LENGTH } from '../utils/maxLengths';
 import { createdAtField, updatedAtField } from '../utils/timestamp';
-import { workspaceExternalProviderType } from './workspaceExternalProviderEnum';
+import { workspaceExternalProviderType } from './workspaceExternalProviderTypeEnum';
 import { workspaceMembers } from './workspaceMembers';
 import { workspaceTokens } from './workspaceTokens';
 
 const MAX_SLUG_LENGTH = 100;
 const MAX_DOMAIN_LENGTH = 255;
+
+export const workspaceDeactivationReasonEnum = pgEnum('workspace_deactivation_reason', [
+  WorkspaceDeactivationReason.TOKEN_REVOKED,
+  WorkspaceDeactivationReason.APP_UNINSTALLED,
+]);
 
 export const workspaces = pgTable('workspaces', {
   workspaceId: generateIdField({ name: 'workspace_id' }),
@@ -20,7 +25,10 @@ export const workspaces = pgTable('workspaces', {
   domain: varchar('domain', { length: MAX_DOMAIN_LENGTH }),
   externalProviderType: workspaceExternalProviderType('external_provider_type')
     .notNull()
-    .default(WorkspaceExternalProviderType.Slack),
+    .default(WorkspaceExternalProviderType.SLACK),
+  isDisabled: boolean('is_disabled').notNull().default(false),
+  deactivationReason: workspaceDeactivationReasonEnum('deactivation_reason'),
+  deactivatedAt: timestamp('deactivated_at'),
   createdAt: createdAtField,
   updatedAt: updatedAtField,
 });
@@ -32,3 +40,4 @@ export const workspaceRelations = relations(workspaces, ({ many }) => ({
 
 export type InsertWorkspace = typeof workspaces.$inferInsert;
 export type SelectWorkspace = typeof workspaces.$inferSelect;
+export type UpdateWorkspace = Partial<InsertWorkspace>;

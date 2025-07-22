@@ -498,6 +498,9 @@ importers:
         specifier: 'catalog:'
         version: 3.25.67
     devDependencies:
+      '@faker-js/faker':
+        specifier: ^9.9.0
+        version: 9.9.0
       '@types/pg':
         specifier: ^8.15.2
         version: 8.15.4
@@ -1949,6 +1952,13 @@ packages:
         integrity: sha512-1+WqvgNMhmlAambTvT3KPtCl/Ibr68VldY2XY40SL1CE0ZXiakFR/cbTspaF5HsnpDMvcYYoJHfl4980NBjGag==,
       }
     engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
+
+  '@faker-js/faker@9.9.0':
+    resolution:
+      {
+        integrity: sha512-OEl393iCOoo/z8bMezRlJu+GlRGlsKbUAN7jKB6LhnKoqKve5DXRpalbItIIcwnCjs1k/FOPjFzcA6Qn+H+YbA==,
+      }
+    engines: { node: '>=18.0.0', npm: '>=9.0.0' }
 
   '@fastify/ajv-compiler@4.0.2':
     resolution:
@@ -14959,6 +14969,8 @@ snapshots:
     dependencies:
       '@eslint/core': 0.15.1
       levn: 0.4.1
+
+  '@faker-js/faker@9.9.0': {}
 
   '@fastify/ajv-compiler@4.0.2':
     dependencies:

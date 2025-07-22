@@ -4,16 +4,21 @@ import { WorkspaceExternalProviderType } from '@calmpulse-app/types';
 import { eq } from 'drizzle-orm';
 
 export class SlackRepository extends BaseRepository {
-  async upsertWorkspaceToken(
-    workspaceId: string,
-    accessToken: string,
-    refreshToken: string | null,
-    expiresAt: Date | null,
-  ) {
+  async upsertWorkspaceToken({
+    workspaceId,
+    accessToken,
+    refreshToken,
+    expiresAt,
+  }: {
+    workspaceId: string;
+    accessToken: string;
+    refreshToken: string | null;
+    expiresAt: Date | null;
+  }) {
     const workspaceToken = await this.db
       .insert(schema.workspaceTokens)
       .values({
-        provider: WorkspaceExternalProviderType.Slack,
+        provider: WorkspaceExternalProviderType.SLACK,
         workspaceId,
         accessToken,
         refreshToken,
@@ -27,7 +32,7 @@ export class SlackRepository extends BaseRepository {
     return workspaceToken;
   }
 
-  async getWorkspaceToken(workspaceId: string) {
+  async getWorkspaceTokenByWorkspaceId({ workspaceId }: { workspaceId: string }) {
     const workspaceToken = await this.db.query.workspaceTokens.findFirst({
       where: eq(schema.workspaceTokens.workspaceId, workspaceId),
     });
@@ -40,5 +45,11 @@ export class SlackRepository extends BaseRepository {
     }
 
     return workspaceToken;
+  }
+
+  async deleteWorkspaceTokenByWorkspaceId({ workspaceId }: { workspaceId: string }) {
+    await this.db
+      .delete(schema.workspaceTokens)
+      .where(eq(schema.workspaceTokens.workspaceId, workspaceId));
   }
 }

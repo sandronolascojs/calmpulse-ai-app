@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1751871974810,
-      "tag": "0000_regular_expediter",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1752962918766,
-      "tag": "0001_curly_patriot",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1752980149354,
-      "tag": "0002_bitter_pride",
+      "when": 1753165730036,
+      "tag": "0000_brief_rage",
       "breakpoints": true
     }
   ]
