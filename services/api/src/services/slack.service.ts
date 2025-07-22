@@ -12,7 +12,7 @@ import { generateSlug } from '@calmpulse-app/shared';
 import {
   Locale,
   SlackEventTypes,
-  WorkspaceDisableReason,
+  WorkspaceDeactivationReason,
   WorkspaceExternalProviderType,
   type AppMentionEvent,
   type AppUninstalledEvent,
@@ -563,7 +563,7 @@ export class SlackService {
         workspaceId: workspace.workspaceId,
         workspace: {
           isDisabled: true,
-          deactivationReason: WorkspaceDisableReason.APP_UNINSTALLED,
+          deactivationReason: WorkspaceDeactivationReason.APP_UNINSTALLED,
           deactivatedAt: new Date(),
         },
       });
@@ -576,7 +576,7 @@ export class SlackService {
         workspaceId: workspace.workspaceId,
         workspace: {
           isDisabled: true,
-          deactivationReason: WorkspaceDisableReason.TOKEN_REVOKED,
+          deactivationReason: WorkspaceDeactivationReason.TOKEN_REVOKED,
           deactivatedAt: new Date(),
         },
       });

@@ -1,4 +1,4 @@
-import { WorkspaceDisableReason, WorkspaceExternalProviderType } from '@calmpulse-app/types';
+import { WorkspaceDeactivationReason, WorkspaceExternalProviderType } from '@calmpulse-app/types';
 import { relations } from 'drizzle-orm';
 import { boolean, pgEnum, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { generateIdField } from '../utils/id';
@@ -12,8 +12,8 @@ const MAX_SLUG_LENGTH = 100;
 const MAX_DOMAIN_LENGTH = 255;
 
 export const workspaceDeactivationReasonEnum = pgEnum('workspace_deactivation_reason', [
-  WorkspaceDisableReason.TOKEN_REVOKED,
-  WorkspaceDisableReason.APP_UNINSTALLED,
+  WorkspaceDeactivationReason.TOKEN_REVOKED,
+  WorkspaceDeactivationReason.APP_UNINSTALLED,
 ]);
 
 export const workspaces = pgTable('workspaces', {
