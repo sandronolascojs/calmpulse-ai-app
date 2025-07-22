@@ -536,6 +536,7 @@ export class SlackService {
         workspaceId: workspace.workspaceId,
         workspace: {
           name: event.eventPayload.name.trim(),
+          slug: generateSlug(event.eventPayload.name.trim()),
         },
       });
     }
