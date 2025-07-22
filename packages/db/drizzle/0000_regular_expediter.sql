@@ -1,3 +1,8 @@
+CREATE TYPE "public"."user_roles" AS ENUM('OWNER', 'USER');--> statement-breakpoint
+CREATE TYPE "public"."workspace_external_provider_type" AS ENUM('SLACK', 'MICROSOFT_TEAMS');
+CREATE TYPE "public"."workspace_deactivation_reason" AS ENUM('TOKEN_REVOKED', 'APP_UNINSTALLED');
+CREATE TYPE "public"."slack_event_types" AS ENUM('TEAM_JOIN', 'MESSAGE', 'APP_MENTION', 'MEMBER_JOINED_CHANNEL', 'DND_UPDATED_USER');--> statement-breakpoint
+
 --> tables
 CREATE TABLE "daily_features" (
 	"workspace_member_id" text NOT NULL,
