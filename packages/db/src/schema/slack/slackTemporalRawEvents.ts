@@ -10,6 +10,7 @@ const slackEventTypes = pgEnum('slack_event_types', [
   SlackEventTypes.MESSAGE,
   SlackEventTypes.APP_MENTION,
   SlackEventTypes.MEMBER_JOINED_CHANNEL,
+  SlackEventTypes.DND_UPDATED_USER,
 ]);
 
 /**

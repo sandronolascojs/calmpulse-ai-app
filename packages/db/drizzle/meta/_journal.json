@@ -43,6 +43,13 @@
       "when": 1753152564107,
       "tag": "0005_silent_leper_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1753157777800,
+      "tag": "0006_black_marvex",
+      "breakpoints": true
     }
   ]
 }

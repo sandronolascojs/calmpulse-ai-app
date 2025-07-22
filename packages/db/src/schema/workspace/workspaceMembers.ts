@@ -39,3 +39,4 @@ export const workspaceMemberRelations = relations(workspaceMembers, ({ one }) =>
 
 export type InsertWorkspaceMember = typeof workspaceMembers.$inferInsert;
 export type SelectWorkspaceMember = typeof workspaceMembers.$inferSelect;
+export type UpdateWorkspaceMember = Partial<SelectWorkspaceMember>;

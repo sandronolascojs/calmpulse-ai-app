@@ -41,6 +41,7 @@ export const SlackUserProfileSchema = z.object({
   status_emoji: z.string().optional(),
   status_emoji_display_info: z.array(z.any()).optional(),
   status_expiration: z.number().optional(),
+  status_text_canonical: z.string().optional(),
   avatar_hash: z.string().optional(),
   first_name: z.string().optional(),
   last_name: z.string().optional(),
@@ -75,7 +76,7 @@ export const SlackUserSchema = z.object({
   updated: z.number().optional(),
   is_email_confirmed: z.boolean().optional(),
   who_can_share_contact_card: z.string().optional(),
-  presence: z.string().optional(),
+  locale: z.string().optional(),
 });
 
 // — Base event
@@ -160,6 +161,29 @@ export const AppUninstalledEventSchema = BaseEvent.extend({
   type: z.literal('app_uninstalled'),
 });
 
+// — Event tokens revoked
+export const TokensRevokedEventSchema = BaseEvent.extend({
+  type: z.literal('tokens_revoked'),
+  tokens: z.object({
+    oauth: z.array(z.string()).optional(),
+    bot: z.array(z.string()).optional(),
+  }),
+});
+
+// — DND status object
+const DndStatusSchema = z.object({
+  dnd_enabled: z.boolean(),
+  next_dnd_start_ts: z.number(),
+  next_dnd_end_ts: z.number(),
+});
+
+// — Event DND updated user
+export const DndUpdatedUserEventSchema = BaseEvent.extend({
+  type: z.literal('dnd_updated_user'),
+  user: z.string(),
+  dnd_status: DndStatusSchema,
+});
+
 // — Full event callback
 export const EventCallbackSchema = SlackBaseSchema.extend({
   type: z.literal('event_callback'),
@@ -170,6 +194,8 @@ export const EventCallbackSchema = SlackBaseSchema.extend({
     TeamJoinEventSchema,
     UserChangeEventSchema,
     AppUninstalledEventSchema,
+    TokensRevokedEventSchema,
+    DndUpdatedUserEventSchema,
   ]),
 });
 
@@ -192,4 +218,6 @@ export type MemberJoinedChannelEvent = z.infer<typeof MemberJoinedChannelEventSc
 export type AppRateLimitedEvent = z.infer<typeof AppRateLimitedEventSchema>;
 export type UserChangeEvent = z.infer<typeof UserChangeEventSchema>;
 export type AppUninstalledEvent = z.infer<typeof AppUninstalledEventSchema>;
+export type TokensRevokedEvent = z.infer<typeof TokensRevokedEventSchema>;
+export type DndUpdatedUserEvent = z.infer<typeof DndUpdatedUserEventSchema>;
 export type EventCallback = z.infer<typeof EventCallbackSchema>;
