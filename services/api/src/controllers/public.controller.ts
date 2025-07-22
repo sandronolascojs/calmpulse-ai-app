@@ -12,6 +12,7 @@ import {
   SlackEventTypes,
   SlackEventsBodySchema,
   TeamJoinEventSchema,
+  UserChangeEventSchema,
 } from '@calmpulse-app/types';
 import { initServer } from '@ts-rest/fastify';
 import crypto from 'node:crypto';
@@ -129,6 +130,16 @@ export const publicController = server.router(contract.publicContract, {
               eventId: event.event_id,
               eventType: SlackEventTypes.TEAM_JOIN,
               eventPayload: teamJoinEvent,
+            });
+          }
+
+          if (event.event.type === SlackEventTypes.USER_CHANGE.toLowerCase()) {
+            const userChangeEvent = UserChangeEventSchema.parse(event.event);
+            await slackService.handleEvent({
+              externalWorkspaceId: bodyParsed.team_id,
+              eventId: event.event_id,
+              eventType: SlackEventTypes.USER_CHANGE,
+              eventPayload: userChangeEvent,
             });
           }
         });

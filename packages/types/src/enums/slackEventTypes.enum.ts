@@ -3,4 +3,5 @@ export enum SlackEventTypes {
   TEAM_JOIN = 'TEAM_JOIN',
   APP_MENTION = 'APP_MENTION',
   MESSAGE = 'MESSAGE',
+  USER_CHANGE = 'USER_CHANGE',
 }

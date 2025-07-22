@@ -53,6 +53,31 @@ export const SlackUserProfileSchema = z.object({
   team: z.string().optional(),
 });
 
+// — Slack user
+export const SlackUserSchema = z.object({
+  id: z.string(),
+  team_id: z.string(),
+  name: z.string(),
+  deleted: z.boolean(),
+  color: z.string().optional(),
+  real_name: z.string().optional(),
+  tz: z.string().optional(),
+  tz_label: z.string().optional(),
+  tz_offset: z.number().optional(),
+  profile: SlackUserProfileSchema,
+  is_admin: z.boolean().optional(),
+  is_owner: z.boolean().optional(),
+  is_primary_owner: z.boolean().optional(),
+  is_restricted: z.boolean().optional(),
+  is_ultra_restricted: z.boolean().optional(),
+  is_bot: z.boolean().optional(),
+  is_app_user: z.boolean().optional(),
+  updated: z.number().optional(),
+  is_email_confirmed: z.boolean().optional(),
+  who_can_share_contact_card: z.string().optional(),
+  presence: z.string().optional(),
+});
+
 // — Base event
 const BaseEvent = z.object({
   type: z.string(),
@@ -63,29 +88,7 @@ const BaseEvent = z.object({
 // — Event team join
 export const TeamJoinEventSchema = z.object({
   type: z.literal('team_join'),
-  user: z.object({
-    id: z.string(),
-    team_id: z.string(),
-    name: z.string(),
-    deleted: z.boolean(),
-    color: z.string().optional(),
-    real_name: z.string().optional(),
-    tz: z.string().optional(),
-    tz_label: z.string().optional(),
-    tz_offset: z.number().optional(),
-    profile: SlackUserProfileSchema,
-    is_admin: z.boolean().optional(),
-    is_owner: z.boolean().optional(),
-    is_primary_owner: z.boolean().optional(),
-    is_restricted: z.boolean().optional(),
-    is_ultra_restricted: z.boolean().optional(),
-    is_bot: z.boolean().optional(),
-    is_app_user: z.boolean().optional(),
-    updated: z.number().optional(),
-    is_email_confirmed: z.boolean().optional(),
-    who_can_share_contact_card: z.string().optional(),
-    presence: z.string().optional(),
-  }),
+  user: SlackUserSchema,
   cache_ts: z.number().optional(),
   event_ts: z.string().optional(),
 });
@@ -144,6 +147,14 @@ export const AppRateLimitedEventSchema = z.object({
   minute_rate_limited: z.number(),
 });
 
+// — Event user change
+export const UserChangeEventSchema = z.object({
+  type: z.literal('user_change'),
+  user: SlackUserSchema,
+  cache_ts: z.number().optional(),
+  event_ts: z.string(),
+});
+
 // — Full event callback
 export const EventCallbackSchema = SlackBaseSchema.extend({
   type: z.literal('event_callback'),
@@ -152,6 +163,7 @@ export const EventCallbackSchema = SlackBaseSchema.extend({
     AppMentionEventSchema,
     MemberJoinedChannelEventSchema,
     TeamJoinEventSchema,
+    UserChangeEventSchema,
   ]),
 });
 
@@ -172,4 +184,5 @@ export type MessageEvent = z.infer<typeof MessageEventSchema>;
 export type AppMentionEvent = z.infer<typeof AppMentionEventSchema>;
 export type MemberJoinedChannelEvent = z.infer<typeof MemberJoinedChannelEventSchema>;
 export type AppRateLimitedEvent = z.infer<typeof AppRateLimitedEventSchema>;
+export type UserChangeEvent = z.infer<typeof UserChangeEventSchema>;
 export type EventCallback = z.infer<typeof EventCallbackSchema>;

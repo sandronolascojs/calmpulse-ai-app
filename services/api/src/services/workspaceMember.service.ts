@@ -40,4 +40,26 @@ export class WorkspaceMemberService {
       workspaceId,
     });
   }
+
+  async updateWorkspaceMember({
+    workspaceMemberId,
+    name,
+    email,
+    avatarUrl,
+    title,
+  }: {
+    workspaceMemberId: string;
+    name: string;
+    email: string;
+    avatarUrl: string | null;
+    title: string | null;
+  }) {
+    return this.workspaceMemberRepository.updateWorkspaceMember({
+      workspaceMemberId,
+      name,
+      email,
+      avatarUrl,
+      title,
+    });
+  }
 }

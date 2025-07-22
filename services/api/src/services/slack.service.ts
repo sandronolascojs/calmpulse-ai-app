@@ -13,6 +13,7 @@ import {
   type MemberJoinedChannelEvent,
   type MessageEvent,
   type TeamJoinEvent,
+  type UserChangeEvent,
 } from '@calmpulse-app/types';
 import crypto from 'node:crypto';
 import { SlackRepository } from '../repositories/slackRepository';
@@ -207,6 +208,12 @@ export class SlackService {
         eventId: string;
         eventType: SlackEventTypes.TEAM_JOIN;
         eventPayload: TeamJoinEvent;
+      }
+    | {
+        externalWorkspaceId: string;
+        eventId: string;
+        eventType: SlackEventTypes.USER_CHANGE;
+        eventPayload: UserChangeEvent;
       }) {
     if (eventType === SlackEventTypes.MESSAGE) {
       const workspace = await this.workspaceService.getWorkspaceByExternalId({
@@ -359,6 +366,50 @@ export class SlackService {
           title: userFromSlack.user?.profile?.title ?? null,
         },
       ]);
+    }
+
+    if (eventType === SlackEventTypes.USER_CHANGE) {
+      const workspace = await this.workspaceService.getWorkspaceByExternalId({
+        externalId: externalWorkspaceId,
+      });
+      if (!workspace) {
+        throw new ConflictError({
+          message: 'Workspace not found. Workspace not installed.',
+        });
+      }
+
+      const workspaceMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
+        externalUserId: eventPayload.user.id,
+        workspaceId: workspace.workspaceId,
+      });
+
+      if (!workspaceMember) {
+        throw new ConflictError({
+          message: 'Workspace member not found',
+        });
+      }
+
+      const workspaceToken = await this.slackRepository.getWorkspaceTokenByWorkspaceId({
+        workspaceId: workspace.workspaceId,
+      });
+      if (!workspaceToken) {
+        throw new ConflictError({
+          message: 'Workspace token not found. Workspace not installed.',
+        });
+      }
+
+      const userFromSlack = await this.slackWebClientService.getUser(
+        workspaceToken.accessToken,
+        eventPayload.user.id,
+      );
+
+      await this.workspaceMemberService.updateWorkspaceMember({
+        workspaceMemberId: workspaceMember.workspaceMemberId,
+        name: userFromSlack.user?.real_name ?? 'N/A',
+        email: userFromSlack.user?.profile?.email ?? 'N/A',
+        avatarUrl: userFromSlack.user?.profile?.image_192 ?? null,
+        title: userFromSlack.user?.profile?.title ?? null,
+      });
     }
   }
 

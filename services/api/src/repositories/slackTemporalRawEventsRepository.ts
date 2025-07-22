@@ -18,7 +18,11 @@ export class SlackTemporalRawEventsRepository extends BaseRepository {
     eventId: string;
     eventPayload: MessageEvent | MemberJoinedChannelEvent | AppMentionEvent | TeamJoinEvent;
     workspaceMemberId: string;
-    eventType: SlackEventTypes;
+    eventType:
+      | SlackEventTypes.MEMBER_JOINED_CHANNEL
+      | SlackEventTypes.TEAM_JOIN
+      | SlackEventTypes.APP_MENTION
+      | SlackEventTypes.MESSAGE;
   }) {
     await this.db.insert(slackTemporalRawEvents).values({
       slackEventId: eventId,

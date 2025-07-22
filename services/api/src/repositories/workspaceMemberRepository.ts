@@ -50,4 +50,28 @@ export class WorkspaceMemberRepository extends BaseRepository {
     });
     return member;
   }
+
+  async updateWorkspaceMember({
+    workspaceMemberId,
+    name,
+    email,
+    avatarUrl,
+    title,
+  }: {
+    workspaceMemberId: string;
+    name: string;
+    email: string;
+    avatarUrl: string | null;
+    title: string | null;
+  }) {
+    await this.db
+      .update(workspaceMembers)
+      .set({
+        name,
+        email,
+        avatarUrl,
+        title,
+      })
+      .where(eq(workspaceMembers.workspaceMemberId, workspaceMemberId));
+  }
 }
