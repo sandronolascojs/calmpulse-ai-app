@@ -7,12 +7,14 @@ import { contract } from '@calmpulse-app/ts-rest';
 import {
   AppMentionEventSchema,
   AppUninstalledEventSchema,
+  DndUpdatedUserEventSchema,
   EventCallbackSchema,
   MemberJoinedChannelEventSchema,
   MessageEventSchema,
   SlackEventTypes,
   SlackEventsBodySchema,
   TeamJoinEventSchema,
+  TokensRevokedEventSchema,
   UserChangeEventSchema,
 } from '@calmpulse-app/types';
 import { initServer } from '@ts-rest/fastify';
@@ -151,6 +153,26 @@ export const publicController = server.router(contract.publicContract, {
               eventId: event.event_id,
               eventType: SlackEventTypes.APP_UNINSTALLED,
               eventPayload: appUninstalledEvent,
+            });
+          }
+
+          if (event.event.type === SlackEventTypes.TOKENS_REVOKED.toLowerCase()) {
+            const tokensRevokedEvent = TokensRevokedEventSchema.parse(event.event);
+            await slackService.handleEvent({
+              externalWorkspaceId: bodyParsed.team_id,
+              eventId: event.event_id,
+              eventType: SlackEventTypes.TOKENS_REVOKED,
+              eventPayload: tokensRevokedEvent,
+            });
+          }
+
+          if (event.event.type === SlackEventTypes.DND_UPDATED_USER.toLowerCase()) {
+            const dndUpdatedUserEvent = DndUpdatedUserEventSchema.parse(event.event);
+            await slackService.handleEvent({
+              externalWorkspaceId: bodyParsed.team_id,
+              eventId: event.event_id,
+              eventType: SlackEventTypes.DND_UPDATED_USER,
+              eventPayload: dndUpdatedUserEvent,
             });
           }
         });

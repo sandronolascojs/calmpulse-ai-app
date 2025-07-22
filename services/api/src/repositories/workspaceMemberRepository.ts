@@ -1,4 +1,8 @@
-import { workspaceMembers, type InsertWorkspaceMember } from '@calmpulse-app/db/schema';
+import {
+  workspaceMembers,
+  type InsertWorkspaceMember,
+  type UpdateWorkspaceMember,
+} from '@calmpulse-app/db/schema';
 import { BaseRepository } from '@calmpulse-app/shared';
 import { and, eq } from 'drizzle-orm';
 
@@ -53,24 +57,16 @@ export class WorkspaceMemberRepository extends BaseRepository {
 
   async updateWorkspaceMember({
     workspaceMemberId,
-    name,
-    email,
-    avatarUrl,
-    title,
+    workspaceMember,
   }: {
     workspaceMemberId: string;
-    name: string;
-    email: string;
-    avatarUrl: string | null;
-    title: string | null;
+    workspaceMember: UpdateWorkspaceMember;
   }) {
     await this.db
       .update(workspaceMembers)
       .set({
-        name,
-        email,
-        avatarUrl,
-        title,
+        ...workspaceMember,
+        updatedAt: new Date(),
       })
       .where(eq(workspaceMembers.workspaceMemberId, workspaceMemberId));
   }

@@ -7,14 +7,17 @@ import type { InsertWorkspaceMember } from '@calmpulse-app/db/schema';
 import type { Logger } from '@calmpulse-app/shared';
 import { generateSlug } from '@calmpulse-app/shared';
 import {
+  Locale,
   SlackEventTypes,
   WorkspaceDisableReason,
   WorkspaceExternalProviderType,
   type AppMentionEvent,
   type AppUninstalledEvent,
+  type DndUpdatedUserEvent,
   type MemberJoinedChannelEvent,
   type MessageEvent,
   type TeamJoinEvent,
+  type TokensRevokedEvent,
   type UserChangeEvent,
 } from '@calmpulse-app/types';
 import crypto from 'node:crypto';
@@ -23,6 +26,7 @@ import { SlackOauthStoreStateService } from './slackOauthStoreState.service';
 import { SlackWebClientService } from './slackWebClient.service';
 import { WorkspaceService } from './workspace.service';
 import { WorkspaceMemberService } from './workspaceMember.service';
+import { WorkspaceMemberPreferencesService } from './workspaceMemberPreferences.service';
 
 const BOT_NAMES = ['slackbot', 'slack-actions-bot', 'slack-actions-bot-dev'];
 
@@ -33,6 +37,7 @@ export class SlackService {
   private slackOauthStoreStateService: SlackOauthStoreStateService;
   private slackTemporalRawEventsRepository: SlackTemporalRawEventsRepository;
   private workspaceMemberService: WorkspaceMemberService;
+  private workspaceMemberPreferencesService: WorkspaceMemberPreferencesService;
   private logger: Logger;
 
   constructor(db: DB, logger: Logger) {
@@ -42,6 +47,7 @@ export class SlackService {
     this.workspaceMemberService = new WorkspaceMemberService(db, logger);
     this.slackWebClientService = new SlackWebClientService();
     this.slackTemporalRawEventsRepository = new SlackTemporalRawEventsRepository(db, logger);
+    this.workspaceMemberPreferencesService = new WorkspaceMemberPreferencesService(db, logger);
     this.logger = logger;
   }
 
@@ -222,6 +228,18 @@ export class SlackService {
         eventId: string;
         eventType: SlackEventTypes.APP_UNINSTALLED;
         eventPayload: AppUninstalledEvent;
+      }
+    | {
+        externalWorkspaceId: string;
+        eventId: string;
+        eventType: SlackEventTypes.TOKENS_REVOKED;
+        eventPayload: TokensRevokedEvent;
+      }
+    | {
+        externalWorkspaceId: string;
+        eventId: string;
+        eventType: SlackEventTypes.DND_UPDATED_USER;
+        eventPayload: DndUpdatedUserEvent;
       }) {
     if (eventType === SlackEventTypes.MESSAGE) {
       const workspace = await this.workspaceService.getWorkspaceByExternalId({
@@ -413,10 +431,77 @@ export class SlackService {
 
       await this.workspaceMemberService.updateWorkspaceMember({
         workspaceMemberId: workspaceMember.workspaceMemberId,
-        name: userFromSlack.user?.real_name ?? 'N/A',
-        email: userFromSlack.user?.profile?.email ?? 'N/A',
-        avatarUrl: userFromSlack.user?.profile?.image_192 ?? null,
-        title: userFromSlack.user?.profile?.title ?? null,
+        workspaceMember: {
+          name: userFromSlack.user?.real_name ?? 'N/A',
+          email: userFromSlack.user?.profile?.email ?? 'N/A',
+          avatarUrl: userFromSlack.user?.profile?.image_192 ?? null,
+          title: userFromSlack.user?.profile?.title ?? null,
+        },
+      });
+
+      const preferences =
+        await this.workspaceMemberPreferencesService.getWorkspaceMemberPreferencesByWorkspaceMemberId(
+          {
+            workspaceMemberId: workspaceMember.workspaceMemberId,
+          },
+        );
+
+      if (!preferences) {
+        await this.workspaceMemberPreferencesService.createWorkspaceMemberPreferences({
+          workspaceMemberId: workspaceMember.workspaceMemberId,
+          timezone: eventPayload.user.tz_label ?? 'UTC',
+          locale: (eventPayload.user.locale as Locale | null) ?? Locale.EN_US,
+        });
+      }
+    }
+
+    if (eventType === SlackEventTypes.DND_UPDATED_USER) {
+      const workspace = await this.workspaceService.getWorkspaceByExternalId({
+        externalId: externalWorkspaceId,
+      });
+
+      if (!workspace) {
+        throw new ConflictError({
+          message: 'Workspace not found. Workspace not installed.',
+        });
+      }
+
+      const workspaceMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
+        externalUserId: eventPayload.user,
+        workspaceId: workspace.workspaceId,
+      });
+
+      if (!workspaceMember) {
+        throw new ConflictError({
+          message: 'Workspace member not found',
+        });
+      }
+
+      const preferences =
+        await this.workspaceMemberPreferencesService.getWorkspaceMemberPreferencesByWorkspaceMemberId(
+          {
+            workspaceMemberId: workspaceMember.workspaceMemberId,
+          },
+        );
+
+      if (!preferences) {
+        throw new ConflictError({
+          message: 'Workspace member preferences not found',
+        });
+      }
+
+      await this.workspaceMemberPreferencesService.updateWorkspaceMemberPreferences({
+        workspaceMemberPreferencesId: preferences.workspaceMemberPreferencesId,
+        memberPreferences: {
+          isDndEnabled: eventPayload.dnd_status.dnd_enabled,
+        },
+      });
+
+      await this.slackTemporalRawEventsRepository.saveSlackTemporalRawEvent({
+        eventId,
+        eventPayload,
+        eventType,
+        workspaceMemberId: workspaceMember.workspaceMemberId,
       });
     }
 
@@ -440,6 +525,27 @@ export class SlackService {
         workspace: {
           isDisabled: true,
           deactivationReason: WorkspaceDisableReason.APP_UNINSTALLED,
+          deactivatedAt: new Date(),
+        },
+      });
+    }
+
+    if (eventType === SlackEventTypes.TOKENS_REVOKED) {
+      const workspace = await this.workspaceService.getWorkspaceByExternalId({
+        externalId: externalWorkspaceId,
+      });
+
+      if (!workspace) {
+        throw new ConflictError({
+          message: 'Workspace not found. Workspace not installed.',
+        });
+      }
+
+      await this.workspaceService.updateWorkspace({
+        workspaceId: workspace.workspaceId,
+        workspace: {
+          isDisabled: true,
+          deactivationReason: WorkspaceDisableReason.TOKEN_REVOKED,
           deactivatedAt: new Date(),
         },
       });

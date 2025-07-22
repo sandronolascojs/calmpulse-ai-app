@@ -1,6 +1,6 @@
 import { WorkspaceMemberRepository } from '@/repositories/workspaceMemberRepository';
 import type { DB } from '@calmpulse-app/db';
-import type { InsertWorkspaceMember } from '@calmpulse-app/db/schema';
+import type { InsertWorkspaceMember, UpdateWorkspaceMember } from '@calmpulse-app/db/schema';
 import type { Logger } from '@calmpulse-app/shared';
 
 export class WorkspaceMemberService {
@@ -43,23 +43,14 @@ export class WorkspaceMemberService {
 
   async updateWorkspaceMember({
     workspaceMemberId,
-    name,
-    email,
-    avatarUrl,
-    title,
+    workspaceMember,
   }: {
     workspaceMemberId: string;
-    name: string;
-    email: string;
-    avatarUrl: string | null;
-    title: string | null;
+    workspaceMember: UpdateWorkspaceMember;
   }) {
     return this.workspaceMemberRepository.updateWorkspaceMember({
       workspaceMemberId,
-      name,
-      email,
-      avatarUrl,
-      title,
+      workspaceMember,
     });
   }
 }
