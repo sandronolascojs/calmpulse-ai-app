@@ -3,6 +3,7 @@ import {
   workspaces,
   workspaceTokens,
   type InsertWorkspace,
+  type UpdateWorkspace,
 } from '@calmpulse-app/db/schema';
 import { BaseRepository } from '@calmpulse-app/shared';
 import { UserRole } from '@calmpulse-app/types';
@@ -42,6 +43,9 @@ export class WorkspaceRepository extends BaseRepository {
         externalId: workspaces.externalId,
         domain: workspaces.domain,
         externalProviderType: workspaces.externalProviderType,
+        isDisabled: workspaces.isDisabled,
+        deactivationReason: workspaces.deactivationReason,
+        deactivatedAt: workspaces.deactivatedAt,
         createdAt: workspaces.createdAt,
         updatedAt: workspaces.updatedAt,
       })
@@ -64,5 +68,20 @@ export class WorkspaceRepository extends BaseRepository {
       where: eq(workspaceTokens.workspaceId, workspaceId),
     });
     return workspaceToken;
+  }
+
+  async updateWorkspace({
+    workspaceId,
+    workspace,
+  }: {
+    workspaceId: string;
+    workspace: UpdateWorkspace;
+  }) {
+    await this.db
+      .update(workspaces)
+      .set({
+        ...workspace,
+      })
+      .where(eq(workspaces.workspaceId, workspaceId));
   }
 }
