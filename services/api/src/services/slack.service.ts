@@ -16,7 +16,9 @@ import {
   type DndUpdatedUserEvent,
   type MemberJoinedChannelEvent,
   type MessageEvent,
+  type TeamDomainChangeEvent,
   type TeamJoinEvent,
+  type TeamRenameEvent,
   type TokensRevokedEvent,
   type UserChangeEvent,
 } from '@calmpulse-app/types';
@@ -29,6 +31,73 @@ import { WorkspaceMemberService } from './workspaceMember.service';
 import { WorkspaceMemberPreferencesService } from './workspaceMemberPreferences.service';
 
 const BOT_NAMES = ['slackbot', 'slack-actions-bot', 'slack-actions-bot-dev'];
+
+interface BaseSlackEvent {
+  externalWorkspaceId: string;
+  eventId: string;
+}
+
+interface SlackMessageEvent extends BaseSlackEvent {
+  eventType: SlackEventTypes.MESSAGE;
+  eventPayload: MessageEvent;
+}
+
+interface SlackMemberJoinedChannelEvent extends BaseSlackEvent {
+  eventType: SlackEventTypes.MEMBER_JOINED_CHANNEL;
+  eventPayload: MemberJoinedChannelEvent;
+}
+
+interface SlackAppMentionEvent extends BaseSlackEvent {
+  eventType: SlackEventTypes.APP_MENTION;
+  eventPayload: AppMentionEvent;
+}
+
+interface SlackTeamJoinEvent extends BaseSlackEvent {
+  eventType: SlackEventTypes.TEAM_JOIN;
+  eventPayload: TeamJoinEvent;
+}
+
+interface SlackUserChangeEvent extends BaseSlackEvent {
+  eventType: SlackEventTypes.USER_CHANGE;
+  eventPayload: UserChangeEvent;
+}
+
+interface SlackAppUninstalledEvent extends BaseSlackEvent {
+  eventType: SlackEventTypes.APP_UNINSTALLED;
+  eventPayload: AppUninstalledEvent;
+}
+
+interface SlackTokensRevokedEvent extends BaseSlackEvent {
+  eventType: SlackEventTypes.TOKENS_REVOKED;
+  eventPayload: TokensRevokedEvent;
+}
+
+interface SlackDndUpdatedUserEvent extends BaseSlackEvent {
+  eventType: SlackEventTypes.DND_UPDATED_USER;
+  eventPayload: DndUpdatedUserEvent;
+}
+
+interface SlackTeamRenameEvent extends BaseSlackEvent {
+  eventType: SlackEventTypes.TEAM_RENAME;
+  eventPayload: TeamRenameEvent;
+}
+
+interface SlackTeamDomainChangeEvent extends BaseSlackEvent {
+  eventType: SlackEventTypes.TEAM_DOMAIN_CHANGE;
+  eventPayload: TeamDomainChangeEvent;
+}
+
+type SlackEvent =
+  | SlackMessageEvent
+  | SlackMemberJoinedChannelEvent
+  | SlackAppMentionEvent
+  | SlackTeamJoinEvent
+  | SlackUserChangeEvent
+  | SlackAppUninstalledEvent
+  | SlackTokensRevokedEvent
+  | SlackDndUpdatedUserEvent
+  | SlackTeamRenameEvent
+  | SlackTeamDomainChangeEvent;
 
 export class SlackService {
   private slackRepository: SlackRepository;
@@ -187,63 +256,10 @@ export class SlackService {
     };
   }
 
-  async handleEvent({
-    externalWorkspaceId,
-    eventId,
-    eventPayload,
-    eventType,
-  }:
-    | {
-        externalWorkspaceId: string;
-        eventId: string;
-        eventType: SlackEventTypes.MESSAGE;
-        eventPayload: MessageEvent;
-      }
-    | {
-        externalWorkspaceId: string;
-        eventId: string;
-        eventType: SlackEventTypes.MEMBER_JOINED_CHANNEL;
-        eventPayload: MemberJoinedChannelEvent;
-      }
-    | {
-        externalWorkspaceId: string;
-        eventId: string;
-        eventType: SlackEventTypes.APP_MENTION;
-        eventPayload: AppMentionEvent;
-      }
-    | {
-        externalWorkspaceId: string;
-        eventId: string;
-        eventType: SlackEventTypes.TEAM_JOIN;
-        eventPayload: TeamJoinEvent;
-      }
-    | {
-        externalWorkspaceId: string;
-        eventId: string;
-        eventType: SlackEventTypes.USER_CHANGE;
-        eventPayload: UserChangeEvent;
-      }
-    | {
-        externalWorkspaceId: string;
-        eventId: string;
-        eventType: SlackEventTypes.APP_UNINSTALLED;
-        eventPayload: AppUninstalledEvent;
-      }
-    | {
-        externalWorkspaceId: string;
-        eventId: string;
-        eventType: SlackEventTypes.TOKENS_REVOKED;
-        eventPayload: TokensRevokedEvent;
-      }
-    | {
-        externalWorkspaceId: string;
-        eventId: string;
-        eventType: SlackEventTypes.DND_UPDATED_USER;
-        eventPayload: DndUpdatedUserEvent;
-      }) {
-    if (eventType === SlackEventTypes.MESSAGE) {
+  async handleEvent(event: SlackEvent) {
+    if (event.eventType === SlackEventTypes.MESSAGE) {
       const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: externalWorkspaceId,
+        externalId: event.externalWorkspaceId,
       });
       if (!workspace) {
         throw new ConflictError({
@@ -251,14 +267,14 @@ export class SlackService {
         });
       }
 
-      if (!eventPayload.user) {
+      if (!event.eventPayload.user) {
         throw new ConflictError({
           message: 'User id not found in message event',
         });
       }
 
       const workspaceMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
-        externalUserId: eventPayload.user,
+        externalUserId: event.eventPayload.user,
         workspaceId: workspace.workspaceId,
       });
 
@@ -269,16 +285,16 @@ export class SlackService {
       }
 
       await this.slackTemporalRawEventsRepository.saveSlackTemporalRawEvent({
-        eventId,
-        eventPayload,
-        eventType,
+        eventId: event.eventId,
+        eventPayload: event.eventPayload,
+        eventType: event.eventType,
         workspaceMemberId: workspaceMember.workspaceMemberId,
       });
     }
 
-    if (eventType === SlackEventTypes.MEMBER_JOINED_CHANNEL) {
+    if (event.eventType === SlackEventTypes.MEMBER_JOINED_CHANNEL) {
       const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: externalWorkspaceId,
+        externalId: event.externalWorkspaceId,
       });
       if (!workspace) {
         throw new ConflictError({
@@ -286,20 +302,20 @@ export class SlackService {
         });
       }
 
-      if (!eventPayload.user) {
+      if (!event.eventPayload.user) {
         throw new ConflictError({
           message: 'User id not found in member joined channel event',
         });
       }
 
-      if (!eventPayload.team) {
+      if (!event.eventPayload.team) {
         throw new ConflictError({
           message: 'Team id not found in member joined channel event',
         });
       }
 
       const workspaceMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
-        externalUserId: eventPayload.user,
+        externalUserId: event.eventPayload.user,
         workspaceId: workspace.workspaceId,
       });
 
@@ -310,16 +326,16 @@ export class SlackService {
       }
 
       await this.slackTemporalRawEventsRepository.saveSlackTemporalRawEvent({
-        eventId,
-        eventPayload,
-        eventType,
+        eventId: event.eventId,
+        eventPayload: event.eventPayload,
+        eventType: event.eventType,
         workspaceMemberId: workspaceMember.workspaceMemberId,
       });
     }
 
-    if (eventType === SlackEventTypes.APP_MENTION) {
+    if (event.eventType === SlackEventTypes.APP_MENTION) {
       const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: externalWorkspaceId,
+        externalId: event.externalWorkspaceId,
       });
       if (!workspace) {
         throw new ConflictError({
@@ -327,14 +343,14 @@ export class SlackService {
         });
       }
 
-      if (!eventPayload.user) {
+      if (!event.eventPayload.user) {
         throw new ConflictError({
           message: 'User id not found in app mention event',
         });
       }
 
       const workspaceMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
-        externalUserId: eventPayload.user,
+        externalUserId: event.eventPayload.user,
         workspaceId: workspace.workspaceId,
       });
 
@@ -345,16 +361,16 @@ export class SlackService {
       }
 
       await this.slackTemporalRawEventsRepository.saveSlackTemporalRawEvent({
-        eventId,
-        eventPayload,
-        eventType,
+        eventId: event.eventId,
+        eventPayload: event.eventPayload,
+        eventType: event.eventType,
         workspaceMemberId: workspaceMember.workspaceMemberId,
       });
     }
 
-    if (eventType === SlackEventTypes.TEAM_JOIN) {
+    if (event.eventType === SlackEventTypes.TEAM_JOIN) {
       const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: externalWorkspaceId,
+        externalId: event.externalWorkspaceId,
       });
       if (!workspace) {
         throw new ConflictError({
@@ -373,7 +389,7 @@ export class SlackService {
 
       const userFromSlack = await this.slackWebClientService.getUser(
         workspaceToken.accessToken,
-        eventPayload.user.id,
+        event.eventPayload.user.id,
       );
 
       if (!userFromSlack.ok) {
@@ -387,16 +403,16 @@ export class SlackService {
           email: userFromSlack.user?.profile?.email ?? 'N/A',
           name: userFromSlack.user?.real_name ?? 'N/A',
           workspaceId: workspace.workspaceId,
-          externalId: eventPayload.user.id,
+          externalId: event.eventPayload.user.id,
           avatarUrl: userFromSlack.user?.profile?.image_192 ?? null,
           title: userFromSlack.user?.profile?.title ?? null,
         },
       ]);
     }
 
-    if (eventType === SlackEventTypes.USER_CHANGE) {
+    if (event.eventType === SlackEventTypes.USER_CHANGE) {
       const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: externalWorkspaceId,
+        externalId: event.externalWorkspaceId,
       });
       if (!workspace) {
         throw new ConflictError({
@@ -405,7 +421,7 @@ export class SlackService {
       }
 
       const workspaceMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
-        externalUserId: eventPayload.user.id,
+        externalUserId: event.eventPayload.user.id,
         workspaceId: workspace.workspaceId,
       });
 
@@ -426,7 +442,7 @@ export class SlackService {
 
       const userFromSlack = await this.slackWebClientService.getUser(
         workspaceToken.accessToken,
-        eventPayload.user.id,
+        event.eventPayload.user.id,
       );
 
       await this.workspaceMemberService.updateWorkspaceMember({
@@ -449,15 +465,15 @@ export class SlackService {
       if (!preferences) {
         await this.workspaceMemberPreferencesService.createWorkspaceMemberPreferences({
           workspaceMemberId: workspaceMember.workspaceMemberId,
-          timezone: eventPayload.user.tz_label ?? 'UTC',
-          locale: (eventPayload.user.locale as Locale | null) ?? Locale.EN_US,
+          timezone: event.eventPayload.user.tz_label ?? 'UTC',
+          locale: (event.eventPayload.user.locale as Locale | null) ?? Locale.EN_US,
         });
       }
     }
 
-    if (eventType === SlackEventTypes.DND_UPDATED_USER) {
+    if (event.eventType === SlackEventTypes.DND_UPDATED_USER) {
       const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: externalWorkspaceId,
+        externalId: event.externalWorkspaceId,
       });
 
       if (!workspace) {
@@ -467,7 +483,7 @@ export class SlackService {
       }
 
       const workspaceMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
-        externalUserId: eventPayload.user,
+        externalUserId: event.eventPayload.user,
         workspaceId: workspace.workspaceId,
       });
 
@@ -493,21 +509,59 @@ export class SlackService {
       await this.workspaceMemberPreferencesService.updateWorkspaceMemberPreferences({
         workspaceMemberPreferencesId: preferences.workspaceMemberPreferencesId,
         memberPreferences: {
-          isDndEnabled: eventPayload.dnd_status.dnd_enabled,
+          isDndEnabled: event.eventPayload.dnd_status.dnd_enabled,
         },
       });
 
       await this.slackTemporalRawEventsRepository.saveSlackTemporalRawEvent({
-        eventId,
-        eventPayload,
-        eventType,
+        eventId: event.eventId,
+        eventPayload: event.eventPayload,
+        eventType: event.eventType,
         workspaceMemberId: workspaceMember.workspaceMemberId,
       });
     }
 
-    if (eventType === SlackEventTypes.APP_UNINSTALLED) {
+    if (event.eventType === SlackEventTypes.TEAM_RENAME) {
       const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: externalWorkspaceId,
+        externalId: event.externalWorkspaceId,
+      });
+
+      if (!workspace) {
+        throw new ConflictError({
+          message: 'Workspace not found. Workspace not installed.',
+        });
+      }
+
+      await this.workspaceService.updateWorkspace({
+        workspaceId: workspace.workspaceId,
+        workspace: {
+          name: event.eventPayload.name.trim(),
+        },
+      });
+    }
+
+    if (event.eventType === SlackEventTypes.TEAM_DOMAIN_CHANGE) {
+      const workspace = await this.workspaceService.getWorkspaceByExternalId({
+        externalId: event.externalWorkspaceId,
+      });
+
+      if (!workspace) {
+        throw new ConflictError({
+          message: 'Workspace not found. Workspace not installed.',
+        });
+      }
+
+      await this.workspaceService.updateWorkspace({
+        workspaceId: workspace.workspaceId,
+        workspace: {
+          domain: event.eventPayload.domain,
+        },
+      });
+    }
+
+    if (event.eventType === SlackEventTypes.APP_UNINSTALLED) {
+      const workspace = await this.workspaceService.getWorkspaceByExternalId({
+        externalId: event.externalWorkspaceId,
       });
 
       if (!workspace) {
@@ -530,9 +584,9 @@ export class SlackService {
       });
     }
 
-    if (eventType === SlackEventTypes.TOKENS_REVOKED) {
+    if (event.eventType === SlackEventTypes.TOKENS_REVOKED) {
       const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: externalWorkspaceId,
+        externalId: event.externalWorkspaceId,
       });
 
       if (!workspace) {

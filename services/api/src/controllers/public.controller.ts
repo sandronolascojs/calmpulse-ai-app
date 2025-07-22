@@ -13,7 +13,9 @@ import {
   MessageEventSchema,
   SlackEventTypes,
   SlackEventsBodySchema,
+  TeamDomainChangeEventSchema,
   TeamJoinEventSchema,
+  TeamRenameEventSchema,
   TokensRevokedEventSchema,
   UserChangeEventSchema,
 } from '@calmpulse-app/types';
@@ -146,6 +148,36 @@ export const publicController = server.router(contract.publicContract, {
             });
           }
 
+          if (event.event.type === SlackEventTypes.DND_UPDATED_USER.toLowerCase()) {
+            const dndUpdatedUserEvent = DndUpdatedUserEventSchema.parse(event.event);
+            await slackService.handleEvent({
+              externalWorkspaceId: bodyParsed.team_id,
+              eventId: event.event_id,
+              eventType: SlackEventTypes.DND_UPDATED_USER,
+              eventPayload: dndUpdatedUserEvent,
+            });
+          }
+
+          if (event.event.type === SlackEventTypes.TEAM_RENAME.toLowerCase()) {
+            const teamRenameEvent = TeamRenameEventSchema.parse(event.event);
+            await slackService.handleEvent({
+              externalWorkspaceId: bodyParsed.team_id,
+              eventId: event.event_id,
+              eventType: SlackEventTypes.TEAM_RENAME,
+              eventPayload: teamRenameEvent,
+            });
+          }
+
+          if (event.event.type === SlackEventTypes.TEAM_DOMAIN_CHANGE.toLowerCase()) {
+            const teamDomainChangeEvent = TeamDomainChangeEventSchema.parse(event.event);
+            await slackService.handleEvent({
+              externalWorkspaceId: bodyParsed.team_id,
+              eventId: event.event_id,
+              eventType: SlackEventTypes.TEAM_DOMAIN_CHANGE,
+              eventPayload: teamDomainChangeEvent,
+            });
+          }
+
           if (event.event.type === SlackEventTypes.APP_UNINSTALLED.toLowerCase()) {
             const appUninstalledEvent = AppUninstalledEventSchema.parse(event.event);
             await slackService.handleEvent({
@@ -163,16 +195,6 @@ export const publicController = server.router(contract.publicContract, {
               eventId: event.event_id,
               eventType: SlackEventTypes.TOKENS_REVOKED,
               eventPayload: tokensRevokedEvent,
-            });
-          }
-
-          if (event.event.type === SlackEventTypes.DND_UPDATED_USER.toLowerCase()) {
-            const dndUpdatedUserEvent = DndUpdatedUserEventSchema.parse(event.event);
-            await slackService.handleEvent({
-              externalWorkspaceId: bodyParsed.team_id,
-              eventId: event.event_id,
-              eventType: SlackEventTypes.DND_UPDATED_USER,
-              eventPayload: dndUpdatedUserEvent,
             });
           }
         });

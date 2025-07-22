@@ -184,6 +184,21 @@ export const DndUpdatedUserEventSchema = BaseEvent.extend({
   dnd_status: DndStatusSchema,
 });
 
+// — Event team rename
+export const TeamRenameEventSchema = BaseEvent.extend({
+  type: z.literal('team_rename'),
+  name: z.string(),
+  team_id: z.string(),
+});
+
+// — Event team domain change
+export const TeamDomainChangeEventSchema = BaseEvent.extend({
+  type: z.literal('team_domain_change'),
+  url: z.string().url(),
+  domain: z.string(),
+  team_id: z.string(),
+});
+
 // — Full event callback
 export const EventCallbackSchema = SlackBaseSchema.extend({
   type: z.literal('event_callback'),
@@ -196,6 +211,8 @@ export const EventCallbackSchema = SlackBaseSchema.extend({
     AppUninstalledEventSchema,
     TokensRevokedEventSchema,
     DndUpdatedUserEventSchema,
+    TeamRenameEventSchema,
+    TeamDomainChangeEventSchema,
   ]),
 });
 
@@ -220,4 +237,6 @@ export type UserChangeEvent = z.infer<typeof UserChangeEventSchema>;
 export type AppUninstalledEvent = z.infer<typeof AppUninstalledEventSchema>;
 export type TokensRevokedEvent = z.infer<typeof TokensRevokedEventSchema>;
 export type DndUpdatedUserEvent = z.infer<typeof DndUpdatedUserEventSchema>;
+export type TeamRenameEvent = z.infer<typeof TeamRenameEventSchema>;
+export type TeamDomainChangeEvent = z.infer<typeof TeamDomainChangeEventSchema>;
 export type EventCallback = z.infer<typeof EventCallbackSchema>;
