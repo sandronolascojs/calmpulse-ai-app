@@ -81,6 +81,7 @@ export class WorkspaceRepository extends BaseRepository {
       .update(workspaces)
       .set({
         ...workspace,
+        updatedAt: new Date(),
       })
       .where(eq(workspaces.workspaceId, workspaceId));
   }

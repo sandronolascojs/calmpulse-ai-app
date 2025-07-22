@@ -65,7 +65,6 @@ export class WorkspaceService {
       workspaceId,
       workspace: {
         ...workspace,
-        updatedAt: new Date(),
       },
     });
   }
