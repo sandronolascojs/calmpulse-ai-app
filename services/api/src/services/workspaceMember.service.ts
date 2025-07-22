@@ -25,7 +25,7 @@ export class WorkspaceMemberService {
   }
 
   async createWorkspaceMembers(values: InsertWorkspaceMember[]) {
-    return this.workspaceMemberRepository.createWorkspaceMembersBulk(values);
+    return await this.workspaceMemberRepository.createWorkspaceMembersBulk(values);
   }
 
   async getWorkspaceMemberByExternalUserId({
@@ -48,9 +48,10 @@ export class WorkspaceMemberService {
     workspaceMemberId: string;
     workspaceMember: UpdateWorkspaceMember;
   }) {
-    return this.workspaceMemberRepository.updateWorkspaceMember({
+    const updatedWorkspaceMember = await this.workspaceMemberRepository.updateWorkspaceMember({
       workspaceMemberId,
       workspaceMember,
     });
+    return updatedWorkspaceMember;
   }
 }

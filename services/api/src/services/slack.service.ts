@@ -3,7 +3,10 @@ import type { AuthenticatedUser } from '@/plugins/auth.plugin';
 import { SlackTemporalRawEventsRepository } from '@/repositories/slackTemporalRawEventsRepository';
 import { ConflictError } from '@/utils/errors/ConflictError';
 import type { DB } from '@calmpulse-app/db';
-import type { InsertWorkspaceMember } from '@calmpulse-app/db/schema';
+import type {
+  InsertWorkspaceMember,
+  InsertWorkspaceMemberPreferences,
+} from '@calmpulse-app/db/schema';
 import type { Logger } from '@calmpulse-app/shared';
 import { generateSlug } from '@calmpulse-app/shared';
 import {
@@ -224,7 +227,52 @@ export class SlackService {
       workspaceId,
       memberCount: sanitizedWorkspaceMembers.length,
     });
-    await this.workspaceMemberService.createWorkspaceMembers(sanitizedWorkspaceMembers);
+    const createdWorkspaceMembers =
+      await this.workspaceMemberService.createWorkspaceMembers(sanitizedWorkspaceMembers);
+    this.logger.info('Workspace members synced', {
+      workspaceId,
+      memberCount: createdWorkspaceMembers.length,
+    });
+
+    const preferences: InsertWorkspaceMemberPreferences[] = [];
+
+    for (const member of createdWorkspaceMembers) {
+      if (!member.workspaceMemberId) {
+        throw new ConflictError({
+          message: 'Workspace member id not found',
+        });
+      }
+
+      const preferencesFromSlack = slackUsers.members?.find(
+        (slackMember) => slackMember.id === member.externalId,
+      );
+
+      if (!preferencesFromSlack) {
+        throw new ConflictError({
+          message: `User not found for workspace member SLACK_ID: ${member.externalId}`,
+        });
+      }
+
+      if (preferencesFromSlack.is_bot || BOT_NAMES.includes(preferencesFromSlack.name ?? '')) {
+        this.logger.info('Skipping bot user', {
+          userId: preferencesFromSlack.id,
+        });
+        continue;
+      }
+
+      preferences.push({
+        workspaceMemberId: member.workspaceMemberId,
+        timezone: preferencesFromSlack.tz ?? 'America/New_York',
+        locale: (preferencesFromSlack.locale as Locale | null) ?? Locale.EN_US,
+      });
+    }
+
+    await this.workspaceMemberPreferencesService.createWorkspaceMemberPreferencesBulk(preferences);
+
+    this.logger.info('Workspace member preferences synced', {
+      workspaceId,
+      memberCount: preferences.length,
+    });
   }
 
   async installApp(authenticatedUser: AuthenticatedUser) {
@@ -256,16 +304,46 @@ export class SlackService {
     };
   }
 
+  private async getWorkspaceOrThrow(externalWorkspaceId: string) {
+    const workspace = await this.workspaceService.getWorkspaceByExternalId({
+      externalId: externalWorkspaceId,
+    });
+    if (!workspace) {
+      throw new ConflictError({
+        message: 'Workspace not found. Workspace not installed.',
+      });
+    }
+    return workspace;
+  }
+
+  private async getWorkspaceMemberOrThrow(externalUserId: string, workspaceId: string) {
+    const workspaceMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
+      externalUserId,
+      workspaceId,
+    });
+    if (!workspaceMember) {
+      throw new ConflictError({
+        message: 'Workspace member not found',
+      });
+    }
+    return workspaceMember;
+  }
+
+  private async getWorkspaceTokenOrThrow(workspaceId: string) {
+    const workspaceToken = await this.slackRepository.getWorkspaceTokenByWorkspaceId({
+      workspaceId,
+    });
+    if (!workspaceToken) {
+      throw new ConflictError({
+        message: 'Workspace token not found. Workspace not installed.',
+      });
+    }
+    return workspaceToken;
+  }
+
   async handleEvent(event: SlackEvent) {
     if (event.eventType === SlackEventTypes.MESSAGE) {
-      const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: event.externalWorkspaceId,
-      });
-      if (!workspace) {
-        throw new ConflictError({
-          message: 'Workspace not found. Workspace not installed.',
-        });
-      }
+      const workspace = await this.getWorkspaceOrThrow(event.externalWorkspaceId);
 
       if (!event.eventPayload.user) {
         throw new ConflictError({
@@ -273,16 +351,10 @@ export class SlackService {
         });
       }
 
-      const workspaceMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
-        externalUserId: event.eventPayload.user,
-        workspaceId: workspace.workspaceId,
-      });
-
-      if (!workspaceMember) {
-        throw new ConflictError({
-          message: 'Workspace member not found',
-        });
-      }
+      const workspaceMember = await this.getWorkspaceMemberOrThrow(
+        event.eventPayload.user,
+        workspace.workspaceId,
+      );
 
       await this.slackTemporalRawEventsRepository.saveSlackTemporalRawEvent({
         eventId: event.eventId,
@@ -293,14 +365,7 @@ export class SlackService {
     }
 
     if (event.eventType === SlackEventTypes.MEMBER_JOINED_CHANNEL) {
-      const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: event.externalWorkspaceId,
-      });
-      if (!workspace) {
-        throw new ConflictError({
-          message: 'Workspace not found. Workspace not installed.',
-        });
-      }
+      const workspace = await this.getWorkspaceOrThrow(event.externalWorkspaceId);
 
       if (!event.eventPayload.user) {
         throw new ConflictError({
@@ -314,16 +379,10 @@ export class SlackService {
         });
       }
 
-      const workspaceMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
-        externalUserId: event.eventPayload.user,
-        workspaceId: workspace.workspaceId,
-      });
-
-      if (!workspaceMember) {
-        throw new ConflictError({
-          message: 'Workspace member not found.',
-        });
-      }
+      const workspaceMember = await this.getWorkspaceMemberOrThrow(
+        event.eventPayload.user,
+        workspace.workspaceId,
+      );
 
       await this.slackTemporalRawEventsRepository.saveSlackTemporalRawEvent({
         eventId: event.eventId,
@@ -334,14 +393,7 @@ export class SlackService {
     }
 
     if (event.eventType === SlackEventTypes.APP_MENTION) {
-      const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: event.externalWorkspaceId,
-      });
-      if (!workspace) {
-        throw new ConflictError({
-          message: 'Workspace not found. Workspace not installed.',
-        });
-      }
+      const workspace = await this.getWorkspaceOrThrow(event.externalWorkspaceId);
 
       if (!event.eventPayload.user) {
         throw new ConflictError({
@@ -349,16 +401,10 @@ export class SlackService {
         });
       }
 
-      const workspaceMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
-        externalUserId: event.eventPayload.user,
-        workspaceId: workspace.workspaceId,
-      });
-
-      if (!workspaceMember) {
-        throw new ConflictError({
-          message: 'Workspace member not found',
-        });
-      }
+      const workspaceMember = await this.getWorkspaceMemberOrThrow(
+        event.eventPayload.user,
+        workspace.workspaceId,
+      );
 
       await this.slackTemporalRawEventsRepository.saveSlackTemporalRawEvent({
         eventId: event.eventId,
@@ -369,23 +415,8 @@ export class SlackService {
     }
 
     if (event.eventType === SlackEventTypes.TEAM_JOIN) {
-      const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: event.externalWorkspaceId,
-      });
-      if (!workspace) {
-        throw new ConflictError({
-          message: 'Workspace not found. Workspace not installed.',
-        });
-      }
-
-      const workspaceToken = await this.slackRepository.getWorkspaceTokenByWorkspaceId({
-        workspaceId: workspace.workspaceId,
-      });
-      if (!workspaceToken) {
-        throw new ConflictError({
-          message: 'Workspace token not found. Workspace not installed.',
-        });
-      }
+      const workspace = await this.getWorkspaceOrThrow(event.externalWorkspaceId);
+      const workspaceToken = await this.getWorkspaceTokenOrThrow(workspace.workspaceId);
 
       const userFromSlack = await this.slackWebClientService.getUser(
         workspaceToken.accessToken,
@@ -396,6 +427,13 @@ export class SlackService {
         throw new ConflictError({
           message: 'Failed to fetch user from Slack',
         });
+      }
+
+      if (userFromSlack.user?.is_bot || BOT_NAMES.includes(userFromSlack.user?.name ?? '')) {
+        this.logger.info('Skipping bot user', {
+          userId: event.eventPayload.user.id,
+        });
+        return;
       }
 
       await this.workspaceMemberService.createWorkspaceMembers([
@@ -411,39 +449,24 @@ export class SlackService {
     }
 
     if (event.eventType === SlackEventTypes.USER_CHANGE) {
-      const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: event.externalWorkspaceId,
-      });
-      if (!workspace) {
-        throw new ConflictError({
-          message: 'Workspace not found. Workspace not installed.',
-        });
-      }
-
-      const workspaceMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
-        externalUserId: event.eventPayload.user.id,
-        workspaceId: workspace.workspaceId,
-      });
-
-      if (!workspaceMember) {
-        throw new ConflictError({
-          message: 'Workspace member not found',
-        });
-      }
-
-      const workspaceToken = await this.slackRepository.getWorkspaceTokenByWorkspaceId({
-        workspaceId: workspace.workspaceId,
-      });
-      if (!workspaceToken) {
-        throw new ConflictError({
-          message: 'Workspace token not found. Workspace not installed.',
-        });
-      }
+      const workspace = await this.getWorkspaceOrThrow(event.externalWorkspaceId);
+      const workspaceMember = await this.getWorkspaceMemberOrThrow(
+        event.eventPayload.user.id,
+        workspace.workspaceId,
+      );
+      const workspaceToken = await this.getWorkspaceTokenOrThrow(workspace.workspaceId);
 
       const userFromSlack = await this.slackWebClientService.getUser(
         workspaceToken.accessToken,
         event.eventPayload.user.id,
       );
+
+      if (userFromSlack.user?.is_bot || BOT_NAMES.includes(userFromSlack.user?.name ?? '')) {
+        this.logger.info('Skipping bot user', {
+          userId: event.eventPayload.user.id,
+        });
+        return;
+      }
 
       await this.workspaceMemberService.updateWorkspaceMember({
         workspaceMemberId: workspaceMember.workspaceMemberId,
@@ -465,33 +488,18 @@ export class SlackService {
       if (!preferences) {
         await this.workspaceMemberPreferencesService.createWorkspaceMemberPreferences({
           workspaceMemberId: workspaceMember.workspaceMemberId,
-          timezone: event.eventPayload.user.tz_label ?? 'UTC',
+          timezone: event.eventPayload.user.tz_label ?? 'America/New_York',
           locale: (event.eventPayload.user.locale as Locale | null) ?? Locale.EN_US,
         });
       }
     }
 
     if (event.eventType === SlackEventTypes.DND_UPDATED_USER) {
-      const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: event.externalWorkspaceId,
-      });
-
-      if (!workspace) {
-        throw new ConflictError({
-          message: 'Workspace not found. Workspace not installed.',
-        });
-      }
-
-      const workspaceMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
-        externalUserId: event.eventPayload.user,
-        workspaceId: workspace.workspaceId,
-      });
-
-      if (!workspaceMember) {
-        throw new ConflictError({
-          message: 'Workspace member not found',
-        });
-      }
+      const workspace = await this.getWorkspaceOrThrow(event.externalWorkspaceId);
+      const workspaceMember = await this.getWorkspaceMemberOrThrow(
+        event.eventPayload.user,
+        workspace.workspaceId,
+      );
 
       const preferences =
         await this.workspaceMemberPreferencesService.getWorkspaceMemberPreferencesByWorkspaceMemberId(
@@ -522,15 +530,7 @@ export class SlackService {
     }
 
     if (event.eventType === SlackEventTypes.TEAM_RENAME) {
-      const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: event.externalWorkspaceId,
-      });
-
-      if (!workspace) {
-        throw new ConflictError({
-          message: 'Workspace not found. Workspace not installed.',
-        });
-      }
+      const workspace = await this.getWorkspaceOrThrow(event.externalWorkspaceId);
 
       await this.workspaceService.updateWorkspace({
         workspaceId: workspace.workspaceId,
@@ -542,15 +542,7 @@ export class SlackService {
     }
 
     if (event.eventType === SlackEventTypes.TEAM_DOMAIN_CHANGE) {
-      const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: event.externalWorkspaceId,
-      });
-
-      if (!workspace) {
-        throw new ConflictError({
-          message: 'Workspace not found. Workspace not installed.',
-        });
-      }
+      const workspace = await this.getWorkspaceOrThrow(event.externalWorkspaceId);
 
       await this.workspaceService.updateWorkspace({
         workspaceId: workspace.workspaceId,
@@ -561,15 +553,7 @@ export class SlackService {
     }
 
     if (event.eventType === SlackEventTypes.APP_UNINSTALLED) {
-      const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: event.externalWorkspaceId,
-      });
-
-      if (!workspace) {
-        throw new ConflictError({
-          message: 'Workspace not found. Workspace not installed.',
-        });
-      }
+      const workspace = await this.getWorkspaceOrThrow(event.externalWorkspaceId);
 
       await this.slackRepository.deleteWorkspaceTokenByWorkspaceId({
         workspaceId: workspace.workspaceId,
@@ -586,15 +570,7 @@ export class SlackService {
     }
 
     if (event.eventType === SlackEventTypes.TOKENS_REVOKED) {
-      const workspace = await this.workspaceService.getWorkspaceByExternalId({
-        externalId: event.externalWorkspaceId,
-      });
-
-      if (!workspace) {
-        throw new ConflictError({
-          message: 'Workspace not found. Workspace not installed.',
-        });
-      }
+      const workspace = await this.getWorkspaceOrThrow(event.externalWorkspaceId);
 
       await this.workspaceService.updateWorkspace({
         workspaceId: workspace.workspaceId,

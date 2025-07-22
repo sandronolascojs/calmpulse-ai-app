@@ -26,6 +26,15 @@ export class WorkspaceMemberPreferencesRepository extends BaseRepository {
     return preferences;
   }
 
+  async createWorkspaceMemberPreferencesBulk(values: InsertWorkspaceMemberPreferences[]) {
+    const createdPreferences = await this.db
+      .insert(workspaceMemberPreferences)
+      .values(values)
+      .onConflictDoNothing()
+      .returning();
+    return createdPreferences;
+  }
+
   async updateWorkspaceMemberPreferences({
     workspaceMemberPreferencesId,
     memberPreferences,

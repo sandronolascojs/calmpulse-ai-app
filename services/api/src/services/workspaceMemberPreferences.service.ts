@@ -21,6 +21,12 @@ export class WorkspaceMemberPreferencesService {
     return await this.workspaceMemberPreferencesRepository.createWorkspaceMemberPreferences(values);
   }
 
+  async createWorkspaceMemberPreferencesBulk(values: InsertWorkspaceMemberPreferences[]) {
+    return await this.workspaceMemberPreferencesRepository.createWorkspaceMemberPreferencesBulk(
+      values,
+    );
+  }
+
   async getWorkspaceMemberPreferencesByWorkspaceMemberId({
     workspaceMemberId,
   }: {

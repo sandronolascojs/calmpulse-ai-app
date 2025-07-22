@@ -36,7 +36,12 @@ export class WorkspaceMemberRepository extends BaseRepository {
   }
 
   async createWorkspaceMembersBulk(values: InsertWorkspaceMember[]) {
-    await this.db.insert(workspaceMembers).values(values).onConflictDoNothing();
+    const createdMembers = await this.db
+      .insert(workspaceMembers)
+      .values(values)
+      .onConflictDoNothing()
+      .returning();
+    return createdMembers;
   }
 
   async getWorkspaceMemberByExternalUserId({
@@ -62,12 +67,14 @@ export class WorkspaceMemberRepository extends BaseRepository {
     workspaceMemberId: string;
     workspaceMember: UpdateWorkspaceMember;
   }) {
-    await this.db
+    const [updatedWorkspaceMember] = await this.db
       .update(workspaceMembers)
       .set({
         ...workspaceMember,
         updatedAt: new Date(),
       })
-      .where(eq(workspaceMembers.workspaceMemberId, workspaceMemberId));
+      .where(eq(workspaceMembers.workspaceMemberId, workspaceMemberId))
+      .returning();
+    return updatedWorkspaceMember;
   }
 }
