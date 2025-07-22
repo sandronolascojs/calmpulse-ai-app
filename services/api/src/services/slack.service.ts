@@ -436,6 +436,20 @@ export class SlackService {
         return;
       }
 
+      // Check if member already exists
+      const existingMember = await this.workspaceMemberService.getWorkspaceMemberByExternalUserId({
+        externalUserId: event.eventPayload.user.id,
+        workspaceId: workspace.workspaceId,
+      });
+
+      if (existingMember) {
+        this.logger.info('Workspace member already exists', {
+          userId: event.eventPayload.user.id,
+          workspaceId: workspace.workspaceId,
+        });
+        return;
+      }
+
       await this.workspaceMemberService.createWorkspaceMembers([
         {
           email: userFromSlack.user?.profile?.email ?? 'N/A',
