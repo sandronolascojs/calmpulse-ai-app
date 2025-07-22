@@ -5,7 +5,7 @@ import { users } from '../user/users';
 import { createdAtField, updatedAtField } from '../utils/timestamp';
 import { workspaces } from './workspaces';
 
-const userRolesEnum = pgEnum('user_roles', [UserRole.OWNER, UserRole.USER]);
+export const userRolesEnum = pgEnum('user_roles', [UserRole.OWNER, UserRole.USER]);
 
 export const userWorkspaces = pgTable(
   'user_workspaces',

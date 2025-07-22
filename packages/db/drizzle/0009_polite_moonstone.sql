@@ -1,0 +1,1 @@
+CREATE TYPE "public"."workspace_deactivation_reason" AS ENUM('TOKEN_REVOKED', 'APP_UNINSTALLED');

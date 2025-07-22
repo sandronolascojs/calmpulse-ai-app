@@ -18,7 +18,7 @@ export class SlackRepository extends BaseRepository {
     const workspaceToken = await this.db
       .insert(schema.workspaceTokens)
       .values({
-        provider: WorkspaceExternalProviderType.Slack,
+        provider: WorkspaceExternalProviderType.SLACK,
         workspaceId,
         accessToken,
         refreshToken,

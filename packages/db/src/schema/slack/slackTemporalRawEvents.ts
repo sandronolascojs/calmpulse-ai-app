@@ -5,7 +5,7 @@ import { generateIdField } from '../utils/id';
 import { createdAtField } from '../utils/timestamp';
 import { workspaceMembers } from '../workspace/index';
 
-const slackEventTypes = pgEnum('slack_event_types', [
+export const slackEventTypes = pgEnum('slack_event_types', [
   SlackEventTypes.TEAM_JOIN,
   SlackEventTypes.MESSAGE,
   SlackEventTypes.APP_MENTION,

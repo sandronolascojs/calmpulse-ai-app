@@ -181,7 +181,7 @@ export class SlackService {
           logoUrl: slackWorkspaceInfo.icon?.image_230,
           externalId: slackWorkspaceInfo.id,
           domain: slackWorkspaceInfo.domain,
-          externalProviderType: WorkspaceExternalProviderType.Slack,
+          externalProviderType: WorkspaceExternalProviderType.SLACK,
         },
         authenticatedUser,
       });

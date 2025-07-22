@@ -4,7 +4,7 @@ import { index, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { users } from '../user/index';
 import { generateIdField } from '../utils/id';
 import { createdAtField, updatedAtField } from '../utils/timestamp';
-import { workspaceExternalProviderType } from './workspaceExternalProviderEnum';
+import { workspaceExternalProviderType } from './workspaceExternalProviderTypeEnum';
 import { workspaces } from './workspaces';
 
 export const workspaceTokens = pgTable(
@@ -17,7 +17,7 @@ export const workspaceTokens = pgTable(
       .unique(),
     provider: workspaceExternalProviderType('provider')
       .notNull()
-      .default(WorkspaceExternalProviderType.Slack),
+      .default(WorkspaceExternalProviderType.SLACK),
     accessToken: text('access_token').notNull(),
     refreshToken: text('refresh_token'),
     expiresAt: timestamp('expires_at'),

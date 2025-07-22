@@ -4,14 +4,14 @@ import { boolean, pgEnum, pgTable, text, timestamp, varchar } from 'drizzle-orm/
 import { generateIdField } from '../utils/id';
 import { MAX_NAME_LENGTH } from '../utils/maxLengths';
 import { createdAtField, updatedAtField } from '../utils/timestamp';
-import { workspaceExternalProviderType } from './workspaceExternalProviderEnum';
+import { workspaceExternalProviderType } from './workspaceExternalProviderTypeEnum';
 import { workspaceMembers } from './workspaceMembers';
 import { workspaceTokens } from './workspaceTokens';
 
 const MAX_SLUG_LENGTH = 100;
 const MAX_DOMAIN_LENGTH = 255;
 
-const workspaceDeactivationReasonEnum = pgEnum('workspace_deactivation_reason', [
+export const workspaceDeactivationReasonEnum = pgEnum('workspace_deactivation_reason', [
   WorkspaceDisableReason.TOKEN_REVOKED,
   WorkspaceDisableReason.APP_UNINSTALLED,
 ]);
@@ -25,7 +25,7 @@ export const workspaces = pgTable('workspaces', {
   domain: varchar('domain', { length: MAX_DOMAIN_LENGTH }),
   externalProviderType: workspaceExternalProviderType('external_provider_type')
     .notNull()
-    .default(WorkspaceExternalProviderType.Slack),
+    .default(WorkspaceExternalProviderType.SLACK),
   isDisabled: boolean('is_disabled').notNull().default(false),
   deactivationReason: workspaceDeactivationReasonEnum('deactivation_reason'),
   deactivatedAt: timestamp('deactivated_at'),

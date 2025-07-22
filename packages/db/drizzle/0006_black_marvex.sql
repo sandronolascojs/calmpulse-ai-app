@@ -1,4 +1,3 @@
-CREATE TYPE "locale" AS ENUM ('en_US', 'es_ES', 'fr_FR', 'de_DE', 'it_IT', 'pt_PT', 'ru_RU', 'zh_CN', 'ja_JP', 'ko_KR', 'pt_BR', 'ar_SA', 'zh_TW', 'nl_NL', 'pl_PL', 'sv_SE', 'tr_TR', 'uk_UA', 'vi_VN', 'id_ID', 'ms_MY', 'th_TH', 'ms_SG');--> statement-breakpoint
 CREATE TABLE "workspace_member_preferences" (
 	"workspace_member_preferences_id" text PRIMARY KEY NOT NULL,
 	"workspace_member_id" text NOT NULL,

@@ -1,4 +1,5 @@
 export * from './user_workspaces';
+export * from './workspaceExternalProviderTypeEnum';
 export * from './workspaceGoogleCalendarIntegrations';
 export * from './workspaceGoogleCalendarSyncTokens';
 export * from './workspaceGoogleCalendarWatchChannels';

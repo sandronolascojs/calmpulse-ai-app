@@ -1,0 +1,3 @@
+CREATE TYPE "public"."locale" AS ENUM('en_US', 'es_ES', 'fr_FR', 'de_DE', 'it_IT', 'pt_PT', 'ru_RU', 'zh_CN', 'ja_JP', 'ko_KR', 'pt_BR', 'ar_SA', 'zh_TW', 'nl_NL', 'pl_PL', 'sv_SE', 'tr_TR', 'uk_UA', 'vi_VN', 'id_ID', 'ms_MY', 'th_TH', 'ms_SG');--> statement-breakpoint
+ALTER TABLE "workspace_member_preferences" DROP COLUMN "time_zone_label";--> statement-breakpoint
+ALTER TABLE "workspace_member_preferences" DROP COLUMN "time_zone_offset";

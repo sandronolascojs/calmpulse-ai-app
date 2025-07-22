@@ -1,7 +1,3 @@
---> enums
-CREATE TYPE "user_roles" AS ENUM ('OWNER', 'USER');
-CREATE TYPE "workspace_external_provider_type" AS ENUM ('SLACK', 'MICROSOFT_TEAMS', 'GOOGLE_CALENDAR');
-
 --> tables
 CREATE TABLE "daily_features" (
 	"workspace_member_id" text NOT NULL,
