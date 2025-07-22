@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { index, pgTable, text, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, text, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { generateIdField } from '../utils/id';
 import { MAX_NAME_LENGTH } from '../utils/maxLengths';
 import { createdAtField, updatedAtField } from '../utils/timestamp';
@@ -21,7 +21,6 @@ export const workspaceMembers = pgTable(
     updatedAt: updatedAtField,
   },
   (table) => [
-    index('workspace_member_workspace_id_idx').on(table.workspaceId),
     uniqueIndex('workspace_member_workspace_email_unique_idx').on(table.workspaceId, table.email),
     uniqueIndex('workspace_member_workspace_external_id_unique_idx').on(
       table.workspaceId,
