@@ -109,105 +109,109 @@ export const publicController = server.router(contract.publicContract, {
           }
 
           const slackService = new SlackService(trx, logger);
+          const eventType = event.event.type.toLowerCase();
 
-          if (event.event.type === SlackEventTypes.MESSAGE.toLowerCase()) {
-            const messageEvent = MessageEventSchema.parse(event.event);
-            await slackService.handleEvent({
-              externalWorkspaceId: bodyParsed.team_id,
-              eventId: event.event_id,
-              eventType: SlackEventTypes.MESSAGE,
-              eventPayload: messageEvent,
-            });
-          }
-
-          if (event.event.type === SlackEventTypes.MEMBER_JOINED_CHANNEL.toLowerCase()) {
-            const memberJoinedChannelEvent = MemberJoinedChannelEventSchema.parse(event.event);
-            await slackService.handleEvent({
-              externalWorkspaceId: bodyParsed.team_id,
-              eventId: event.event_id,
-              eventType: SlackEventTypes.MEMBER_JOINED_CHANNEL,
-              eventPayload: memberJoinedChannelEvent,
-            });
-          }
-
-          if (event.event.type === SlackEventTypes.APP_MENTION.toLowerCase()) {
-            const appMentionEvent = AppMentionEventSchema.parse(event.event);
-            await slackService.handleEvent({
-              externalWorkspaceId: bodyParsed.team_id,
-              eventId: event.event_id,
-              eventType: SlackEventTypes.APP_MENTION,
-              eventPayload: appMentionEvent,
-            });
-          }
-
-          if (event.event.type === SlackEventTypes.TEAM_JOIN.toLowerCase()) {
-            const teamJoinEvent = TeamJoinEventSchema.parse(event.event);
-            await slackService.handleEvent({
-              externalWorkspaceId: bodyParsed.team_id,
-              eventId: event.event_id,
-              eventType: SlackEventTypes.TEAM_JOIN,
-              eventPayload: teamJoinEvent,
-            });
-          }
-
-          if (event.event.type === SlackEventTypes.USER_CHANGE.toLowerCase()) {
-            const userChangeEvent = UserChangeEventSchema.parse(event.event);
-            await slackService.handleEvent({
-              externalWorkspaceId: bodyParsed.team_id,
-              eventId: event.event_id,
-              eventType: SlackEventTypes.USER_CHANGE,
-              eventPayload: userChangeEvent,
-            });
-          }
-
-          if (event.event.type === SlackEventTypes.DND_UPDATED_USER.toLowerCase()) {
-            const dndUpdatedUserEvent = DndUpdatedUserEventSchema.parse(event.event);
-            await slackService.handleEvent({
-              externalWorkspaceId: bodyParsed.team_id,
-              eventId: event.event_id,
-              eventType: SlackEventTypes.DND_UPDATED_USER,
-              eventPayload: dndUpdatedUserEvent,
-            });
-          }
-
-          if (event.event.type === SlackEventTypes.TEAM_RENAME.toLowerCase()) {
-            const teamRenameEvent = TeamRenameEventSchema.parse(event.event);
-            await slackService.handleEvent({
-              externalWorkspaceId: bodyParsed.team_id,
-              eventId: event.event_id,
-              eventType: SlackEventTypes.TEAM_RENAME,
-              eventPayload: teamRenameEvent,
-            });
-          }
-
-          if (event.event.type === SlackEventTypes.TEAM_DOMAIN_CHANGE.toLowerCase()) {
-            const teamDomainChangeEvent = TeamDomainChangeEventSchema.parse(event.event);
-            await slackService.handleEvent({
-              externalWorkspaceId: bodyParsed.team_id,
-              eventId: event.event_id,
-              eventType: SlackEventTypes.TEAM_DOMAIN_CHANGE,
-              eventPayload: teamDomainChangeEvent,
-            });
-          }
-
-          if (event.event.type === SlackEventTypes.APP_UNINSTALLED.toLowerCase()) {
-            const appUninstalledEvent = AppUninstalledEventSchema.parse(event.event);
-            await slackService.handleEvent({
-              externalWorkspaceId: bodyParsed.team_id,
-              eventId: event.event_id,
-              eventType: SlackEventTypes.APP_UNINSTALLED,
-              eventPayload: appUninstalledEvent,
-            });
-          }
-
-          if (event.event.type === SlackEventTypes.TOKENS_REVOKED.toLowerCase()) {
-            const tokensRevokedEvent = TokensRevokedEventSchema.parse(event.event);
-            await slackService.handleEvent({
-              externalWorkspaceId: bodyParsed.team_id,
-              eventId: event.event_id,
-              eventType: SlackEventTypes.TOKENS_REVOKED,
-              eventPayload: tokensRevokedEvent,
-            });
+          switch (eventType) {
+            case SlackEventTypes.MESSAGE.toLowerCase(): {
+              const parsedEvent = MessageEventSchema.parse(event.event);
+              await slackService.handleEvent({
+                externalWorkspaceId: bodyParsed.team_id,
+                eventId: event.event_id,
+                eventType: SlackEventTypes.MESSAGE,
+                eventPayload: parsedEvent,
+              });
+              break;
+            }
+            case SlackEventTypes.MEMBER_JOINED_CHANNEL.toLowerCase(): {
+              const parsedEvent = MemberJoinedChannelEventSchema.parse(event.event);
+              await slackService.handleEvent({
+                externalWorkspaceId: bodyParsed.team_id,
+                eventId: event.event_id,
+                eventType: SlackEventTypes.MEMBER_JOINED_CHANNEL,
+                eventPayload: parsedEvent,
+              });
+              break;
+            }
+            case SlackEventTypes.APP_MENTION.toLowerCase(): {
+              const parsedEvent = AppMentionEventSchema.parse(event.event);
+              await slackService.handleEvent({
+                externalWorkspaceId: bodyParsed.team_id,
+                eventId: event.event_id,
+                eventType: SlackEventTypes.APP_MENTION,
+                eventPayload: parsedEvent,
+              });
+              break;
+            }
+            case SlackEventTypes.TEAM_JOIN.toLowerCase(): {
+              const parsedEvent = TeamJoinEventSchema.parse(event.event);
+              await slackService.handleEvent({
+                externalWorkspaceId: bodyParsed.team_id,
+                eventId: event.event_id,
+                eventType: SlackEventTypes.TEAM_JOIN,
+                eventPayload: parsedEvent,
+              });
+              break;
+            }
+            case SlackEventTypes.USER_CHANGE.toLowerCase(): {
+              const parsedEvent = UserChangeEventSchema.parse(event.event);
+              await slackService.handleEvent({
+                externalWorkspaceId: bodyParsed.team_id,
+                eventId: event.event_id,
+                eventType: SlackEventTypes.USER_CHANGE,
+                eventPayload: parsedEvent,
+              });
+              break;
+            }
+            case SlackEventTypes.DND_UPDATED_USER.toLowerCase(): {
+              const parsedEvent = DndUpdatedUserEventSchema.parse(event.event);
+              await slackService.handleEvent({
+                externalWorkspaceId: bodyParsed.team_id,
+                eventId: event.event_id,
+                eventType: SlackEventTypes.DND_UPDATED_USER,
+                eventPayload: parsedEvent,
+              });
+              break;
+            }
+            case SlackEventTypes.TEAM_RENAME.toLowerCase(): {
+              const parsedEvent = TeamRenameEventSchema.parse(event.event);
+              await slackService.handleEvent({
+                externalWorkspaceId: bodyParsed.team_id,
+                eventId: event.event_id,
+                eventType: SlackEventTypes.TEAM_RENAME,
+                eventPayload: parsedEvent,
+              });
+              break;
+            }
+            case SlackEventTypes.TEAM_DOMAIN_CHANGE.toLowerCase(): {
+              const parsedEvent = TeamDomainChangeEventSchema.parse(event.event);
+              await slackService.handleEvent({
+                externalWorkspaceId: bodyParsed.team_id,
+                eventId: event.event_id,
+                eventType: SlackEventTypes.TEAM_DOMAIN_CHANGE,
+                eventPayload: parsedEvent,
+              });
+              break;
+            }
+            case SlackEventTypes.APP_UNINSTALLED.toLowerCase(): {
+              const parsedEvent = AppUninstalledEventSchema.parse(event.event);
+              await slackService.handleEvent({
+                externalWorkspaceId: bodyParsed.team_id,
+                eventId: event.event_id,
+                eventType: SlackEventTypes.APP_UNINSTALLED,
+                eventPayload: parsedEvent,
+              });
+              break;
+            }
+            case SlackEventTypes.TOKENS_REVOKED.toLowerCase(): {
+              const parsedEvent = TokensRevokedEventSchema.parse(event.event);
+              await slackService.handleEvent({
+                externalWorkspaceId: bodyParsed.team_id,
+                eventId: event.event_id,
+                eventType: SlackEventTypes.TOKENS_REVOKED,
+                eventPayload: parsedEvent,
+              });
+              break;
+            }
           }
         });
 
