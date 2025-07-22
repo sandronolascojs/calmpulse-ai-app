@@ -49,6 +49,18 @@ export const publicController = server.router(contract.publicContract, {
         };
       }
 
+      // Prevent replay attacks: reject requests older than 5 minutes
+      const requestTimestamp = Number(timestamp);
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      if (Math.abs(currentTimestamp - requestTimestamp) > 300) {
+        return {
+          status: 400,
+          body: {
+            message: 'Request timestamp expired',
+          },
+        };
+      }
+
       const bodyRaw = JSON.stringify(request.body);
 
       if (!bodyRaw) {
