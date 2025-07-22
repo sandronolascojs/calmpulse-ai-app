@@ -1,6 +1,6 @@
-import { WorkspaceExternalProviderType } from '@calmpulse-app/types';
+import { WorkspaceDisableReason, WorkspaceExternalProviderType } from '@calmpulse-app/types';
 import { relations } from 'drizzle-orm';
-import { pgTable, text, varchar } from 'drizzle-orm/pg-core';
+import { boolean, pgEnum, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 import { generateIdField } from '../utils/id';
 import { MAX_NAME_LENGTH } from '../utils/maxLengths';
 import { createdAtField, updatedAtField } from '../utils/timestamp';
@@ -10,6 +10,11 @@ import { workspaceTokens } from './workspaceTokens';
 
 const MAX_SLUG_LENGTH = 100;
 const MAX_DOMAIN_LENGTH = 255;
+
+const workspaceDeactivationReasonEnum = pgEnum('workspace_deactivation_reason', [
+  WorkspaceDisableReason.TOKEN_REVOKED,
+  WorkspaceDisableReason.APP_UNINSTALLED,
+]);
 
 export const workspaces = pgTable('workspaces', {
   workspaceId: generateIdField({ name: 'workspace_id' }),
@@ -21,6 +26,9 @@ export const workspaces = pgTable('workspaces', {
   externalProviderType: workspaceExternalProviderType('external_provider_type')
     .notNull()
     .default(WorkspaceExternalProviderType.Slack),
+  isDisabled: boolean('is_disabled').notNull().default(false),
+  deactivationReason: workspaceDeactivationReasonEnum('deactivation_reason'),
+  deactivatedAt: timestamp('deactivated_at'),
   createdAt: createdAtField,
   updatedAt: updatedAtField,
 });
@@ -32,3 +40,4 @@ export const workspaceRelations = relations(workspaces, ({ many }) => ({
 
 export type InsertWorkspace = typeof workspaces.$inferInsert;
 export type SelectWorkspace = typeof workspaces.$inferSelect;
+export type UpdateWorkspace = Partial<InsertWorkspace>;
