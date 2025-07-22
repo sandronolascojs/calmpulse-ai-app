@@ -23,6 +23,9 @@ export const env = createEnv({
     SLACK_CLIENT_SECRET: z.string({
       required_error: 'SLACK_CLIENT_SECRET is required',
     }),
+    SLACK_SIGNING_SECRET: z.string({
+      required_error: 'SLACK_SIGNING_SECRET is required',
+    }),
     OAUTH_SCOPES: z.string({
       required_error: 'OAUTH_SCOPES is required',
     }),
@@ -60,6 +63,7 @@ export const env = createEnv({
     ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
     SLACK_CLIENT_ID: process.env.SLACK_CLIENT_ID,
     SLACK_CLIENT_SECRET: process.env.SLACK_CLIENT_SECRET,
+    SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET,
     OAUTH_SCOPES: process.env.OAUTH_SCOPES,
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,

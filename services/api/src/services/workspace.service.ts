@@ -48,4 +48,9 @@ export class WorkspaceService {
     const workspace = await this.workspaceRepository.getWorkspaceByUserId({ userId });
     return workspace;
   }
+
+  async getWorkspaceByExternalId({ externalId }: { externalId: string }) {
+    const workspace = await this.workspaceRepository.getWorkspaceByExternalId({ externalId });
+    return workspace;
+  }
 }

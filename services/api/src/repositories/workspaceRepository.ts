@@ -1,4 +1,9 @@
-import { userWorkspaces, workspaces, type InsertWorkspace } from '@calmpulse-app/db/schema';
+import {
+  userWorkspaces,
+  workspaces,
+  workspaceTokens,
+  type InsertWorkspace,
+} from '@calmpulse-app/db/schema';
 import { BaseRepository } from '@calmpulse-app/shared';
 import { UserRole } from '@calmpulse-app/types';
 import { eq } from 'drizzle-orm';
@@ -45,5 +50,19 @@ export class WorkspaceRepository extends BaseRepository {
       .where(eq(userWorkspaces.userId, userId));
 
     return workspace;
+  }
+
+  async getWorkspaceByExternalId({ externalId }: { externalId: string }) {
+    const workspace = await this.db.query.workspaces.findFirst({
+      where: eq(workspaces.externalId, externalId),
+    });
+    return workspace;
+  }
+
+  async getWorkspaceTokenByWorkspaceId({ workspaceId }: { workspaceId: string }) {
+    const workspaceToken = await this.db.query.workspaceTokens.findFirst({
+      where: eq(workspaceTokens.workspaceId, workspaceId),
+    });
+    return workspaceToken;
   }
 }

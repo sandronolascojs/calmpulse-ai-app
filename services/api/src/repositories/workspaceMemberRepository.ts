@@ -34,4 +34,20 @@ export class WorkspaceMemberRepository extends BaseRepository {
   async createWorkspaceMembersBulk(values: InsertWorkspaceMember[]) {
     await this.db.insert(workspaceMembers).values(values).onConflictDoNothing();
   }
+
+  async getWorkspaceMemberByExternalUserId({
+    externalUserId,
+    workspaceId,
+  }: {
+    externalUserId: string;
+    workspaceId: string;
+  }) {
+    const member = await this.db.query.workspaceMembers.findFirst({
+      where: and(
+        eq(workspaceMembers.workspaceId, workspaceId),
+        eq(workspaceMembers.externalId, externalUserId),
+      ),
+    });
+    return member;
+  }
 }

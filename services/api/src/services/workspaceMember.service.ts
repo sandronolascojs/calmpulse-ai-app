@@ -27,4 +27,17 @@ export class WorkspaceMemberService {
   async createWorkspaceMembers(values: InsertWorkspaceMember[]) {
     return this.workspaceMemberRepository.createWorkspaceMembersBulk(values);
   }
+
+  async getWorkspaceMemberByExternalUserId({
+    externalUserId,
+    workspaceId,
+  }: {
+    externalUserId: string;
+    workspaceId: string;
+  }) {
+    return this.workspaceMemberRepository.getWorkspaceMemberByExternalUserId({
+      externalUserId,
+      workspaceId,
+    });
+  }
 }
