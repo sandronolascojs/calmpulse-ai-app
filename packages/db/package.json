@@ -37,6 +37,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@types/pg": "^8.15.2",
     "drizzle-kit": "^0.31.1",
     "eslint": "catalog:",
