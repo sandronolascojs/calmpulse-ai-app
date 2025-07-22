@@ -4,12 +4,17 @@ import { WorkspaceExternalProviderType } from '@calmpulse-app/types';
 import { eq } from 'drizzle-orm';
 
 export class SlackRepository extends BaseRepository {
-  async upsertWorkspaceToken(
-    workspaceId: string,
-    accessToken: string,
-    refreshToken: string | null,
-    expiresAt: Date | null,
-  ) {
+  async upsertWorkspaceToken({
+    workspaceId,
+    accessToken,
+    refreshToken,
+    expiresAt,
+  }: {
+    workspaceId: string;
+    accessToken: string;
+    refreshToken: string | null;
+    expiresAt: Date | null;
+  }) {
     const workspaceToken = await this.db
       .insert(schema.workspaceTokens)
       .values({
@@ -27,7 +32,7 @@ export class SlackRepository extends BaseRepository {
     return workspaceToken;
   }
 
-  async getWorkspaceToken(workspaceId: string) {
+  async getWorkspaceTokenByWorkspaceId({ workspaceId }: { workspaceId: string }) {
     const workspaceToken = await this.db.query.workspaceTokens.findFirst({
       where: eq(schema.workspaceTokens.workspaceId, workspaceId),
     });
