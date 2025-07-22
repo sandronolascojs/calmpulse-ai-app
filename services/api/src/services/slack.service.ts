@@ -8,8 +8,10 @@ import type { Logger } from '@calmpulse-app/shared';
 import { generateSlug } from '@calmpulse-app/shared';
 import {
   SlackEventTypes,
+  WorkspaceDisableReason,
   WorkspaceExternalProviderType,
   type AppMentionEvent,
+  type AppUninstalledEvent,
   type MemberJoinedChannelEvent,
   type MessageEvent,
   type TeamJoinEvent,
@@ -214,6 +216,12 @@ export class SlackService {
         eventId: string;
         eventType: SlackEventTypes.USER_CHANGE;
         eventPayload: UserChangeEvent;
+      }
+    | {
+        externalWorkspaceId: string;
+        eventId: string;
+        eventType: SlackEventTypes.APP_UNINSTALLED;
+        eventPayload: AppUninstalledEvent;
       }) {
     if (eventType === SlackEventTypes.MESSAGE) {
       const workspace = await this.workspaceService.getWorkspaceByExternalId({
@@ -409,6 +417,31 @@ export class SlackService {
         email: userFromSlack.user?.profile?.email ?? 'N/A',
         avatarUrl: userFromSlack.user?.profile?.image_192 ?? null,
         title: userFromSlack.user?.profile?.title ?? null,
+      });
+    }
+
+    if (eventType === SlackEventTypes.APP_UNINSTALLED) {
+      const workspace = await this.workspaceService.getWorkspaceByExternalId({
+        externalId: externalWorkspaceId,
+      });
+
+      if (!workspace) {
+        throw new ConflictError({
+          message: 'Workspace not found. Workspace not installed.',
+        });
+      }
+
+      await this.slackRepository.deleteWorkspaceTokenByWorkspaceId({
+        workspaceId: workspace.workspaceId,
+      });
+
+      await this.workspaceService.updateWorkspace({
+        workspaceId: workspace.workspaceId,
+        workspace: {
+          isDisabled: true,
+          deactivationReason: WorkspaceDisableReason.APP_UNINSTALLED,
+          deactivatedAt: new Date(),
+        },
       });
     }
   }

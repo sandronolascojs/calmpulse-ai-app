@@ -3,7 +3,7 @@ import { WorkspaceRepository } from '@/repositories/workspaceRepository';
 import { ConflictError } from '@/utils/errors/ConflictError';
 import { NotFoundError } from '@/utils/errors/NotFoundError';
 import type { DB } from '@calmpulse-app/db';
-import type { InsertWorkspace } from '@calmpulse-app/db/schema';
+import type { InsertWorkspace, UpdateWorkspace } from '@calmpulse-app/db/schema';
 import type { Logger } from '@calmpulse-app/shared';
 
 export class WorkspaceService {
@@ -52,5 +52,21 @@ export class WorkspaceService {
   async getWorkspaceByExternalId({ externalId }: { externalId: string }) {
     const workspace = await this.workspaceRepository.getWorkspaceByExternalId({ externalId });
     return workspace;
+  }
+
+  async updateWorkspace({
+    workspaceId,
+    workspace,
+  }: {
+    workspaceId: string;
+    workspace: UpdateWorkspace;
+  }) {
+    await this.workspaceRepository.updateWorkspace({
+      workspaceId,
+      workspace: {
+        ...workspace,
+        updatedAt: new Date(),
+      },
+    });
   }
 }

@@ -155,6 +155,11 @@ export const UserChangeEventSchema = z.object({
   event_ts: z.string(),
 });
 
+// — Event app uninstalled
+export const AppUninstalledEventSchema = BaseEvent.extend({
+  type: z.literal('app_uninstalled'),
+});
+
 // — Full event callback
 export const EventCallbackSchema = SlackBaseSchema.extend({
   type: z.literal('event_callback'),
@@ -164,6 +169,7 @@ export const EventCallbackSchema = SlackBaseSchema.extend({
     MemberJoinedChannelEventSchema,
     TeamJoinEventSchema,
     UserChangeEventSchema,
+    AppUninstalledEventSchema,
   ]),
 });
 
@@ -185,4 +191,5 @@ export type AppMentionEvent = z.infer<typeof AppMentionEventSchema>;
 export type MemberJoinedChannelEvent = z.infer<typeof MemberJoinedChannelEventSchema>;
 export type AppRateLimitedEvent = z.infer<typeof AppRateLimitedEventSchema>;
 export type UserChangeEvent = z.infer<typeof UserChangeEventSchema>;
+export type AppUninstalledEvent = z.infer<typeof AppUninstalledEventSchema>;
 export type EventCallback = z.infer<typeof EventCallbackSchema>;

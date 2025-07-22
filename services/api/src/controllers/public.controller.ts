@@ -6,6 +6,7 @@ import { db } from '@calmpulse-app/db';
 import { contract } from '@calmpulse-app/ts-rest';
 import {
   AppMentionEventSchema,
+  AppUninstalledEventSchema,
   EventCallbackSchema,
   MemberJoinedChannelEventSchema,
   MessageEventSchema,
@@ -140,6 +141,16 @@ export const publicController = server.router(contract.publicContract, {
               eventId: event.event_id,
               eventType: SlackEventTypes.USER_CHANGE,
               eventPayload: userChangeEvent,
+            });
+          }
+
+          if (event.event.type === SlackEventTypes.APP_UNINSTALLED.toLowerCase()) {
+            const appUninstalledEvent = AppUninstalledEventSchema.parse(event.event);
+            await slackService.handleEvent({
+              externalWorkspaceId: bodyParsed.team_id,
+              eventId: event.event_id,
+              eventType: SlackEventTypes.APP_UNINSTALLED,
+              eventPayload: appUninstalledEvent,
             });
           }
         });

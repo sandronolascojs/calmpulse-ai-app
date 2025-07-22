@@ -46,4 +46,10 @@ export class SlackRepository extends BaseRepository {
 
     return workspaceToken;
   }
+
+  async deleteWorkspaceTokenByWorkspaceId({ workspaceId }: { workspaceId: string }) {
+    await this.db
+      .delete(schema.workspaceTokens)
+      .where(eq(schema.workspaceTokens.workspaceId, workspaceId));
+  }
 }
