@@ -30,7 +30,7 @@
     "@calmpulse-app/ts-rest": "workspace:*",
     "@calmpulse-app/types": "workspace:*",
     "@fastify/aws-lambda": "^5.1.4",
-    "@fastify/cors": "^11.0.1",
+    "@fastify/cors": "^11.1.0",
     "@fastify/rate-limit": "^10.3.0",
     "@slack/oauth": "^3.0.3",
     "@slack/web-api": "^7.9.3",
