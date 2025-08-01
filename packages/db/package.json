@@ -37,7 +37,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@types/pg": "^8.15.2",
+    "@types/pg": "^8.15.5",
     "drizzle-kit": "^0.31.1",
     "eslint": "catalog:",
     "npm-run-all": "catalog:",
