@@ -25,7 +25,7 @@ catalog:
   pg: ^8.16.0
   '@ts-rest/core': ^3.52.1
   limax: ^4.1.0
-  '@mastra/core': ^0.10.10
+  '@mastra/core': ^0.15.2
   '@mastra/libsql': ^0.11.0
   '@mastra/loggers': ^0.10.3
   '@mastra/memory': ^0.11.1
