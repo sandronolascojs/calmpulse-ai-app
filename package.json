@@ -20,7 +20,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
-    "@typescript-eslint/parser": "^8.32.1",
+    "@typescript-eslint/parser": "^8.45.0",
     "eslint": "^9.27.0",
     "husky": "^8.0.0",
     "lint-staged": "^16.0.0",
