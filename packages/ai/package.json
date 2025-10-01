@@ -27,7 +27,7 @@
   "types": "./src/mastra/index.ts",
   "dependencies": {
     "@ai-sdk/anthropic": "^1.2.12",
-    "@ai-sdk/google": "^1.2.18",
+    "@ai-sdk/google": "^2.0.17",
     "@ai-sdk/openai": "^1.3.22",
     "@calmpulse-app/config": "workspace:*",
     "@calmpulse-app/types": "workspace:*",
